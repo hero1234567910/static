@@ -316,8 +316,8 @@
                 layer.confirm('真的删除吗！', function (index) {
                     //console.log(value.rowId);
                     $.ajax({
-                        data: {rowId: value.rowId},
-                        url: '/sys/configCategory/deleteConfigCategory/' + value.rowId,
+                        data: {rowGuid: value.rowGuid},
+                        url: '/sys/configCategory/deleteConfigCategory/' + value.rowGuid,
                         type: 'POST',
                         dataType: 'json',
                         success: function (res) {
