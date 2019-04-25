@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户编辑框</title>
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="example">
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-input-block">
+            <input type="text" name="rowId" id="rowId" lay-verify="name" autocomplete="off" placeholder=""
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">身份证号码<font color="red">*</font></label>
+        <div class="layui-input-block">
+            <input type="text" name="idCard" id="idCard" lay-verify="name" autocomplete="off" placeholder="请输入身份证号码"
+                   class="layui-input-bloc">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">输入生日<font color="red">*</font></label>
+        <div class="layui-input-block">
+            <input type="date" name="birthday"  id="birthday" autocomplete="off" placeholder="请输入生日"
+                   class="layui-input-bloc">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">输入地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="address"  id="address" autocomplete="off" placeholder="请输入地址"
+                   class="layui-input-bloc">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">输入QQ</label>
+        <div class="layui-input-block">
+            <input type="text" name="qq"  id="qq" placeholder="请输入QQ" autocomplete="off" class="layui-input-bloc">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">微信</label>
+        <div class="layui-input-block">
+            <input type="text" name="weiXin" id="weiXin" autocomplete="off" placeholder="请输入微信"
+                   class="layui-input-bloc">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">车牌号码</label>
+        <div class="layui-input-block">
+            <input type="text" name="carNumber" id="carNumber" autocomplete="off" placeholder="请输入车牌号码"
+                   class="layui-input-bloc">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">Email</label>
+        <div class="layui-input-block">
+            <input type="text" name="email" id="email" autocomplete="off" placeholder="请输入Email"
+                   class="layui-input-bloc">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">USB密钥</label>
+        <div class="layui-input-block">
+            <input type="text" name="usbKey" id="usbKey" autocomplete="off" placeholder="请输入USB密钥"
+                   class="layui-input-bloc">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="demo1">立即提交</button>
+        </div>
+    </div>
+</form>
+
+<p></p>
+
+<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+
+    function inputDataHandle(data) {
+        console.log(data);
+        //新增
+        if (data == 'add') {
+            layui.use('form', function () {
+                var form = layui.form();
+
+                //监听提交
+                form.on('submit(demo1)', function (data) {
+                    console.log(data.field)
+                    $.ajax({
+                        url: '/sys/userExtra/insertExtra',
+                        contentType: 'application/json;charset=utf-8',
+                        method: 'post',
+                        data: JSON.stringify(data.field),
+                        dataType: 'JSON',
+                        success: function (res) {
+                            console.log(res)
+                            if (res.code = '0') {
+                                parent.layer.close(parent.layer.index);
+                            }
+                            else
+                                alert(res.msg);
+                        },
+                        error: function (data) {
+                            if(data.status == 0){
+                                parent.layer.close(parent.layer.index);
+                            }
+                        }
+                    });
+
+                });
+
+
+            });
+        }
+
+        if(data == 'edit'){
+            console.log("edit")
+            layui.use('form', function(){
+                var form = layui.form();
+                //监听提交
+                form.on('submit(demo1)', function(data){
+                    $.ajax({
+                        url:'/sys/userExtra/updateExtra/'+data.field.rowId,
+                        contentType: 'application/json;charset=utf-8',
+                        method:'put',
+                        data:JSON.stringify(data.field),
+                        dataType:'JSON',
+                        success:function(res){
+
+                            console.log("edit")
+                            if(res.code='0'){
+                                parent.layer.close(parent.layer.index);
+                            }
+                            else
+                                alert(res.msg);
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            parent.layer.close(parent.layer.index);
+                        }
+                    }) ;
+                });
+            });
+        }
+    }
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form()
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //创建一个编辑器
+        // var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+
+        //监听指定开关
+    });
+
+</script>
+<style>
+    .layui-input-block {
+        margin-left: 120px;
+        min-height: 36px;
+    }
+    .layui-form-label {
+        width: 90px;
+    }
+    .layui-form-item{
+        margin-top:1px;
+        width:320px;
+        margin-bottom:1px;
+        margin-right:1px;
+        margin-left:2px;
+    }
+    .layui-input-bloc{
+        min-height: 36px;
+        padding-left:10px;
+        width:220px;
+        border-radius: 0 2px 2px 0;
+        border: 1px solid #e6e6e6;
+    }
+    .layui-btn{
+        font-size: 14px;
+        margin-top:2px;
+    }
+
+    .layui-btn-normal{
+        margin-left: 10px;
+    }
+
+    .layui-btn+.layui-btn{
+        margin-left: 10px;
+        margin-top:3px;
+        margin-bottom:0px;
+    }
+    .layui-form-pane{
+        width:320px;
+        margin-right:2px;
+
+    }
+</style>
+</body>
+</html>

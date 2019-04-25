@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../Content/font/iconfont.css"/>
+    <title>部门选择</title>
+</head>
+<body>
+<form>            
+	<table>
+        <tr>
+            <td>
+                <i class="iconfont icon-wenzhang" onclick="SetFileName('icon-wenzhang')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-shuaxin" onclick="SetFileName('icon-shuaxin')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-caidan" onclick="SetFileName('icon-caidan')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-pinglun" onclick="SetFileName('icon-pinglun')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-qingchuhuancun" onclick="SetFileName('icon-qingchuhuancun')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-weixin" onclick="SetFileName('icon-weixin')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-tianjiayonghu" onclick="SetFileName('icon-tianjiayonghu')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-tianjia" onclick="SetFileName('icon-tianjia')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-caidan1" onclick="SetFileName('icon-caidan1')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-sousuo" onclick="SetFileName('icon-sousuo')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-exit" onclick="SetFileName('icon-exit')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-home" onclick="SetFileName('icon-home')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-QQ" onclick="SetFileName('icon-QQ')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-11" onclick="SetFileName('icon-11')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-shanchu" onclick="SetFileName('icon-shanchu')"></i>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <i class="iconfont icon-chatlist" onclick="SetFileName('icon-chatlist')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-mima" onclick="SetFileName('icon-mima')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-caidan2" onclick="SetFileName('icon-caidan2')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-yonghu" onclick="SetFileName('icon-yonghu')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-shezhi" onclick="SetFileName('icon-shezhi')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-iconfontzhuce" onclick="SetFileName('icon-iconfontzhuce')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-shanchu1" onclick="SetFileName('icon-shanchu1')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-tags" onclick="SetFileName('icon-tags')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-shezhi1" onclick="SetFileName('icon-shezhi1')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-daohang" onclick="SetFileName('icon-daohang')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-denglu" onclick="SetFileName('icon-denglu')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-sousuo1" onclick="SetFileName('icon-sousuo1')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-huishouzhan" onclick="SetFileName('icon-huishouzhan')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-tianjia1" onclick="SetFileName('icon-tianjia1')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-circularrefresh" onclick="SetFileName('icon-circularrefresh')"></i>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i class="iconfont icon-diannao" onclick="SetFileName('icon-diannao')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-llalbumshopselectorcreate" onclick="SetFileName('icon-llalbumshopselectorcreate')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-daohang1" onclick="SetFileName('icon-daohang1')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-iconfuzhi01" onclick="SetFileName('icon-iconfuzhi01')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-home1" onclick="SetFileName('icon-home1')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-sousuo2" onclick="SetFileName('icon-sousuo2')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-refurbish" onclick="SetFileName('icon-refurbish')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-iconfontsousuo1" onclick="SetFileName('icon-iconfontsousuo1')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-zhuceguanli" onclick="SetFileName('icon-zhuceguanli')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-shanchu2" onclick="SetFileName('icon-shanchu2')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-shezhi2" onclick="SetFileName('icon-shezhi2')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-shezhi3" onclick="SetFileName('icon-shezhi3')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-liuyanicon" onclick="SetFileName('icon-liuyanicon')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-jiahao" onclick="SetFileName('icon-jiahao')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-weixin1" onclick="SetFileName('icon-weixin1')"></i>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i class="iconfont icon-shezhi4" onclick="SetFileName('icon-shezhi4')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-chaxun" onclick="SetFileName('icon-chaxun')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-iconfontqq" onclick="SetFileName('icon-iconfontqq')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-diannao1" onclick="SetFileName('icon-diannao1')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-huanyuan" onclick="SetFileName('icon-huanyuan')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-beifen" onclick="SetFileName('icon-beifen')"></i></td>
+            <td>
+                <i class="iconfont icon-shanchu3" onclick="SetFileName('icon-shanchu3')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-xinxicaiji" onclick="SetFileName('icon-xinxicaiji')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-msnui-copy" onclick="SetFileName('icon-msnui-copy')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-gengxin" onclick="SetFileName('icon-gengxin')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-gengxin1" onclick="SetFileName('icon-gengxin1')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-sms" onclick="SetFileName('icon-sms')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-duanxin" onclick="SetFileName('icon-duanxin')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-jian" onclick="SetFileName('icon-jian')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-xitong" onclick="SetFileName('icon-xitong')"></i>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <i class="iconfont icon-lanmudaohang" onclick="SetFileName('icon-lanmudaohang')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-shenhe" onclick="SetFileName('icon-shenhe')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-duanxin1" onclick="SetFileName('icon-duanxin1')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-neirong" onclick="SetFileName('icon-neirong')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-zhucechenggong" onclick="SetFileName('icon-zhucechenggong')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-iconfontmokuai" onclick="SetFileName('icon-iconfontmokuai')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-geren" onclick="SetFileName('icon-geren')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-password" onclick="SetFileName('icon-password')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-pinglun01" onclick="SetFileName('icon-pinglun01')"></i>
+            </td>
+            <td>
+                <i class="iconfont icon-liuyan" onclick="SetFileName('icon-liuyan')"></i>
+            </td>
+            <td><i class="iconfont icon-yonghu1 " onclick="SetFileName('icon-yonghu1')"></i></td>
+            <td><i class="iconfont icon-denglu1 " onclick="SetFileName('icon-denglu1')"></i></td>
+            <td><i class="iconfont icon-xitonghuancun " onclick="SetFileName('icon-xitonghuancun')"></i></td>
+            <td><i class="iconfont icon-chat " onclick="SetFileName('icon-chat')"></i></td>
+            <td><i class="iconfont icon-iconwendang " onclick="SetFileName('icon-iconwendang')"></i></td>
+        </tr>
+        <tr>
+            <td><i class="iconfont icon-qqdenglu " onclick="SetFileName('icon-qqdenglu')"></i></td>
+            <td><i class="iconfont icon-denglu2 " onclick="SetFileName('icon-denglu2')"></i></td>
+            <td><i class="iconfont icon-shuaxin1 " onclick="SetFileName('icon-shuaxin1')"></i></td>
+            <td><i class="iconfont icon-quanxian " onclick="SetFileName('icon-quanxian')"></i></td>
+            <td><i class="iconfont icon-neirong1 " onclick="SetFileName('icon-neirong1')"></i></td>
+            <td><i class="iconfont icon-wangzhanguanli " onclick="SetFileName('icon-wangzhanguanli')"></i></td>
+            <td><i class="iconfont icon-iconfonthuishouzhan " onclick="SetFileName('icon-iconfonthuishouzhan')"></i></td>
+            <td><i class="iconfont icon-pinglun1 " onclick="SetFileName('icon-pinglun1')"></i></td>
+            <td><i class="iconfont icon-daohanglanmu " onclick="SetFileName('icon-daohanglanmu')"></i></td>
+            <td><i class="iconfont icon-quanxianxiugai " onclick="SetFileName('icon-quanxianxiugai')"></i></td>
+            <td><i class="iconfont icon-jianhao " onclick="SetFileName('icon-jianhao')"></i></td>
+            <td><i class="iconfont icon-icon1 " onclick="SetFileName('icon-icon1')"></i></td>
+            <td><i class="iconfont icon-zoomout " onclick="SetFileName('icon-zoomout')"></i></td>
+            <td><i class="iconfont icon-piliangicon " onclick="SetFileName('icon-piliangicon')"></i></td>
+            <td><i class="iconfont icon-xitongguanli " onclick="SetFileName('icon-xitongguanli')"></i></td>
+        </tr>
+        <tr>
+            <td><i class="iconfont icon-comiisqqdenglu " onclick="SetFileName('icon-comiisqqdenglu')"></i></td>
+            <td><i class="iconfont icon-youqinglianjie " onclick="SetFileName('icon-youqinglianjie')"></i></td>
+            <td><i class="iconfont icon-jiaoseguanli " onclick="SetFileName('icon-jiaoseguanli')"></i></td>
+            <td><i class="iconfont icon-database " onclick="SetFileName('icon-database')"></i></td>
+            <td><i class="iconfont icon-denglutubiao " onclick="SetFileName('icon-denglutubiao')"></i></td>
+            <td><i class="iconfont icon-02 " onclick="SetFileName('icon-02')"></i></td>
+            <td><i class="iconfont icon-30wangzhanguanli " onclick="SetFileName('icon-30wangzhanguanli')"></i></td>
+            <td><i class="iconfont icon-o5 " onclick="SetFileName('icon-o5')"></i></td>
+            <td><i class="iconfont icon-yuncaiji " onclick="SetFileName('icon-yuncaiji')"></i></td>
+            <td><i class="iconfont icon-iconfontkucunchaxun01 " onclick="SetFileName('icon-iconfontkucunchaxun01')"></i></td>
+            <td><i class="iconfont icon-zhifu " onclick="SetFileName('icon-zhifu')"></i></td>
+            <td><i class="iconfont icon-sql " onclick="SetFileName('icon-sql')"></i></td>
+            <td><i class="iconfont icon-icon " onclick="SetFileName('icon-icon')"></i></td>
+            <td><i class="iconfont icon-c-databackup " onclick="SetFileName('icon-c-databackup')"></i></td>
+            <td><i class="iconfont icon-3beifen " onclick="SetFileName('icon-3beifen')"></i></td>
+        </tr>
+        <tr>
+            <td><i class="iconfont icon-m-members " onclick="SetFileName('icon-m-members')"></i></td>
+            <td><i class="iconfont icon-jiaoseguanli1 " onclick="SetFileName('icon-jiaoseguanli1')"></i></td>
+            <td><i class="iconfont icon-a130 " onclick="SetFileName('icon-a130')"></i></td>
+            <td><i class="iconfont icon-zhandianpeizhi " onclick="SetFileName('icon-zhandianpeizhi')"></i></td>
+            <td><i class="iconfont icon-huiyuan " onclick="SetFileName('icon-huiyuan')"></i></td>
+            <td><i class="iconfont icon-dianyuan01 " onclick="SetFileName('icon-dianyuan01')"></i></td>
+            <td><i class="iconfont icon-huanyuan2 " onclick="SetFileName('icon-huanyuan2')"></i></td>
+            <td><i class="iconfont icon-weibiaoti46 " onclick="SetFileName('icon-weibiaoti46')"></i></td>
+            <td><i class="iconfont icon-xiugai " onclick="SetFileName('icon-xiugai')"></i></td>
+            <td><i class="iconfont icon-i " onclick="SetFileName('icon-i')"></i></td>
+            <td><i class="iconfont icon-yumingguanli " onclick="SetFileName('icon-yumingguanli')"></i></td>
+            <td><i class="iconfont icon-useradd " onclick="SetFileName('icon-useradd')"></i></td>
+            <td><i class="iconfont icon-zhandianguanli " onclick="SetFileName('icon-zhandianguanli')"></i></td>
+            <td><i class="iconfont icon-gongyingshangfuwu " onclick="SetFileName('icon-gongyingshangfuwu')"></i></td>
+            <td><i class="iconfont icon-weibiaoti1 " onclick="SetFileName('icon-weibiaoti1')"></i></td>
+        </tr>
+        <tr>
+            <td><i class="iconfont icon-anquanshezhi " onclick="SetFileName('icon-anquanshezhi')"></i></td>
+            <td><i class="iconfont icon-odpssql " onclick="SetFileName('icon-odpssql')"></i></td>
+            <td><i class="iconfont icon-ht_expand " onclick="SetFileName('icon-ht_expand')"></i></td>
+            <td><i class="iconfont icon-gongzhonghao " onclick="SetFileName('icon-gongzhonghao')"></i></td>
+            <td><i class="iconfont icon-beifenyuhuifu " onclick="SetFileName('icon-beifenyuhuifu')"></i></td>
+            <td><i class="iconfont icon-dengdaishenhe " onclick="SetFileName('icon-dengdaishenhe')"></i></td>
+            <td><i class="iconfont icon-jiaoseguanli2 " onclick="SetFileName('icon-jiaoseguanli2')"></i></td>
+            <td><i class="iconfont icon-zixuntousu " onclick="SetFileName('icon-zixuntousu')"></i></td>
+            <td><i class="iconfont icon-zhandianguanli1 " onclick="SetFileName('icon-zhandianguanli1')"></i></td>
+            <td><i class="iconfont icon-anquanshezhi1 " onclick="SetFileName('icon-anquanshezhi1')"></i></td>
+            <td><i class="iconfont icon-liuyan1 " onclick="SetFileName('icon-liuyan1')"></i></td>
+            <td><i class="iconfont icon-beifenguanli " onclick="SetFileName('icon-beifenguanli')"></i></td>
+            <td><i class="iconfont icon-icon56-copy " onclick="SetFileName('icon-icon56-copy')"></i></td>
+            <td><i class="iconfont icon-pinglunguanli " onclick="SetFileName('icon-pinglunguanli')"></i></td>
+            <td><i class="iconfont icon-chaxun1 " onclick="SetFileName('icon-chaxun1')"></i></td>
+        </tr>
+        <tr>
+            <td><i class="iconfont icon-quanxianwodequanxiancha " onclick="SetFileName('icon-quanxianwodequanxiancha')"></i></td>
+            <td><i class="iconfont icon-quanxianwodequanxiangou " onclick="SetFileName('icon-quanxianwodequanxiangou')"></i></td>
+            <td><i class="iconfont icon-anquanshezhi2 " onclick="SetFileName('icon-anquanshezhi2')"></i></td>
+            <td><i class="iconfont icon-xiugai1 " onclick="SetFileName('icon-xiugai1')"></i></td>
+            <td><i class="iconfont icon-tubiao3 " onclick="SetFileName('icon-tubiao3')"></i></td>
+            <td><i class="iconfont icon-wangzhanpeizhiguanli " onclick="SetFileName('icon-wangzhanpeizhiguanli')"></i></td>
+            <td><i class="iconfont icon-neirong2 " onclick="SetFileName('icon-neirong2')"></i></td>
+            <td><i class="iconfont icon-rizhi " onclick="SetFileName('icon-rizhi')"></i></td>
+            <td><i class="iconfont icon-anquanshezhi3 " onclick="SetFileName('icon-anquanshezhi3')"></i></td>
+            <td><i class="iconfont icon-pay " onclick="SetFileName('icon-pay')"></i></td>
+            <td><i class="iconfont icon-guanlijiaose " onclick="SetFileName('icon-guanlijiaose')"></i></td>
+            <td><i class="iconfont icon-xitongguanli1 " onclick="SetFileName('icon-xitongguanli1')"></i></td>
+            <td><i class="iconfont icon-liuyan2 " onclick="SetFileName('icon-liuyan2')"></i></td>
+            <td><i class="iconfont icon-zhuce-copy " onclick="SetFileName('icon-zhuce-copy')"></i></td>
+            <td><i class="iconfont icon-lanmuguanli " onclick="SetFileName('icon-lanmuguanli')"></i></td>
+        </tr>
+        <tr>
+            <td><i class="iconfont icon-pingmusuoding " onclick="SetFileName('icon-pingmusuoding')"></i></td>
+            <td><i class="iconfont icon-word " onclick="SetFileName('icon-word')"></i></td>
+            <td><i class="iconfont icon-geren1 " onclick="SetFileName('icon-geren1')"></i></td>
+            <td><i class="iconfont icon-zhifu1 " onclick="SetFileName('icon-zhifu1')"></i></td>
+            <td><i class="iconfont icon-sql1 " onclick="SetFileName('icon-sql1')"></i></td>
+            <td><i class="iconfont icon-shujukuguanli " onclick="SetFileName('icon-shujukuguanli')"></i></td>
+            <td><i class="iconfont icon-role " onclick="SetFileName('icon-role')"></i></td>
+            <td><i class="iconfont icon-zhandian " onclick="SetFileName('icon-zhandian')"></i></td>
+            <td><i class="iconfont icon-30wangzhanguanli1 " onclick="SetFileName('icon-30wangzhanguanli1')"></i></td>
+            <td><i class="iconfont icon-xitong1 " onclick="SetFileName('icon-xitong1')"></i></td>
+            <td><i class="iconfont icon-neirongguanli " onclick="SetFileName('icon-neirongguanli')"></i></td>
+            <td><i class="iconfont icon-shengchengbaogao " onclick="SetFileName('icon-shengchengbaogao')"></i></td>
+            <td><i class="iconfont icon-zengjia " onclick="SetFileName('icon-zengjia')"></i></td>
+            <td><i class="iconfont icon-wenzhang1 " onclick="SetFileName('icon-wenzhang1')"></i></td>
+            <td><i class="iconfont icon-kuozhan " onclick="SetFileName('icon-kuozhan')"></i></td>
+        </tr>
+        <tr>
+            <td><i class="iconfont icon-xitongguanli2 " onclick="SetFileName('icon-xitongguanli2')"></i></td>
+            <td><i class="iconfont icon-anquanshezhi4 " onclick="SetFileName('icon-anquanshezhi4')"></i></td>
+            <td><i class="iconfont icon-power " onclick="SetFileName('icon-power')"></i></td>
+            <td><i class="iconfont icon-weizhuce " onclick="SetFileName('icon-weizhuce')"></i></td>
+            <td><i class="iconfont icon-jiaoseguanli3 " onclick="SetFileName('icon-jiaoseguanli3')"></i></td>
+            <td><i class="iconfont icon-zhifu2 " onclick="SetFileName('icon-zhifu2')"></i></td>
+            <td><i class="iconfont icon-zengjia1 " onclick="SetFileName('icon-zengjia1')"></i></td>
+            <td><i class="iconfont icon-zhuti " onclick="SetFileName('icon-zhuti')"></i></td>
+            <td><i class="iconfont icon-jianhao1 " onclick="SetFileName('icon-jianhao1')"></i></td>
+            <td><i class="iconfont icon-weixin3 " onclick="SetFileName('icon-weixin3')"></i></td>
+            <td><i class="iconfont icon-shujuku " onclick="SetFileName('icon-shujuku')"></i></td>
+            <td><i class="iconfont icon-gengxin-copy-copy " onclick="SetFileName('icon-gengxin-copy-copy')"></i></td>
+            <td><i class="iconfont icon-icon114 " onclick="SetFileName('icon-icon114')"></i></td>
+            <td><i class="iconfont icon-yuming " onclick="SetFileName('icon-yuming')"></i></td>
+            <td><i class="iconfont icon-gerenkuozhan " onclick="SetFileName('icon-gerenkuozhan')"></i></td>
+        </tr>
+        <tr>
+            <td><i class="iconfont icon-gongnengkuozhan " onclick="SetFileName('icon-gongnengkuozhan')"></i></td>
+            <td><i class="iconfont icon-tianjiayonghu1 " onclick="SetFileName('icon-tianjiayonghu1')"></i></td>
+            <td><i class="iconfont icon-gengxin2 " onclick="SetFileName('icon-gengxin2')"></i></td>
+            <td><i class="iconfont icon-SQLServershujuku " onclick="SetFileName('icon-SQLServershujuku')"></i></td>
+            <td><i class="iconfont icon-suoping " onclick="SetFileName('icon-suoping')"></i></td>
+            <td><i class="iconfont icon-wenzhang2 " onclick="SetFileName('icon-wenzhang2')"></i></td>
+            <td><i class="iconfont icon-anquanshezhi5 " onclick="SetFileName('icon-anquanshezhi5')"></i></td>
+            <td><i class="iconfont icon-pinglunguanli1 " onclick="SetFileName('icon-pinglunguanli1')"></i></td>
+            <td><i class="iconfont icon-huishouzhan1 " onclick="SetFileName('icon-huishouzhan1')"></i></td>
+            <td><i class="iconfont icon-16 " onclick="SetFileName('icon-16')"></i></td>
+            <td><i class="iconfont icon-gengxin3 " onclick="SetFileName('icon-gengxin3')"></i></td>
+            <td><i class="iconfont icon-quanxian1 " onclick="SetFileName('icon-quanxian1')"></i></td>
+            <td><i class="iconfont icon-quanxian2 " onclick="SetFileName('icon-quanxian2')"></i></td>
+            <td><i class="iconfont icon-huishouzhan2 " onclick="SetFileName('icon-huishouzhan2')"></i></td>
+            <td><i class="iconfont icon-daishenhe " onclick="SetFileName('icon-daishenhe')"></i></td>
+        </tr>
+        <tr>
+            <td><i class="iconfont icon-anquanshezhi6 " onclick="SetFileName('icon-anquanshezhi6')"></i></td>
+            <td><i class="iconfont icon-sousuo-sousuo " onclick="SetFileName('icon-sousuo-sousuo')"></i></td>
+            <td><i class="iconfont icon-shujuquanxian " onclick="SetFileName('icon-shujuquanxian')"></i></td>
+            <td><i class="iconfont icon-shengchengbaogao1 " onclick="SetFileName('icon-shengchengbaogao1')"></i></td>
+            <td><i class="iconfont icon-weishengcheng " onclick="SetFileName('icon-weishengcheng')"></i></td>
+            <td><i class="iconfont icon-duanxin2 " onclick="SetFileName('icon-duanxin2')"></i></td>
+            <td><i class="iconfont icon-chajian " onclick="SetFileName('icon-chajian')"></i></td>
+            <td><i class="iconfont icon-liebiaoye_liebiao " onclick="SetFileName('icon-liebiaoye_liebiao')"></i></td>
+            <td><i class="iconfont icon-jiaoseguanli4 " onclick="SetFileName('icon-jiaoseguanli4')"></i></td>
+            <td><i class="iconfont icon-system " onclick="SetFileName('icon-system')"></i></td>
+            <td><i class="iconfont icon-shujucaiji " onclick="SetFileName('icon-shujucaiji')"></i></td>
+            <td><i class="iconfont icon-xitongguanli3 " onclick="SetFileName('icon-xitongguanli3')"></i></td>
+            <td><i class="iconfont icon-neirong3 " onclick="SetFileName('icon-neirong3')"></i></td>
+            <td><i class="iconfont icon-tags1 " onclick="SetFileName('icon-tags1')"></i></td>
+            <td><i class="iconfont icon-sousuo-sousuo1 " onclick="SetFileName('icon-sousuo-sousuo1')"></i></td>
+        </tr>
+    </table>
+</form>
+
+<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script src="../../Scripts/layui/layui.all.js" charset="utf-8"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    })
+    var local_data;
+    function SetFileName(data){
+      	window.parent.$("#layui-layer-iframe" + local_data).contents().find("#smallIcon").val(data);
+      	parent.layer.close(parent.layer.index);
+    }
+    
+    function brotherInvokeMethod(data){
+    	local_data = data;
+        //给兄弟页面元素赋值
+//		window.parent.$("#layui-layer-iframe" + data).contents().find("#pmoduleName").val(node.name);
+//		window.parent.$("#layui-layer-iframe" + data).contents().find("#pmoduleCode").val(node.moduleCode);
+//      $('#pmoduleName', parent.$("#layui-layer" + data)).val(node.name)//获取父页面dom
+//      $('#pmoduleCode', parent.document).val(node.moduleCode)
+//      parent.layer.close(parent.layer.index);
+    }
+    
+</script>
+	<style>
+        td {
+            width:6%;
+            padding:12px;
+        }
+        td i{
+            cursor:pointer;
+        }
+        tr {
+            height: 25px;
+            height: 25px;
+        }
+    </style>
+</body>
+</html>
+

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>登录</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="" />
+	<!-- Custom Theme files -->
+	<link href="Content/m_login.css" rel="stylesheet" type="text/css" media="all" />
+	<!-- //Custom Theme files -->
+</head>
+<body>
+<!-- main -->
+<div class="main">
+	<div class="login-main">
+		<h1>张家港市网信工作综合业务系统</h1>
+		<!-- login form one -->
+		<div class="login-form">
+			<div class="agile-row">
+				<div class="login-agileits-top">
+					<form action="#" method="post" onsubmit="return false" class="layui-form">
+						<div class="input-row">
+							<div class="layui-form-item">
+								<input type="text" class="user" name="loginId" id="loginId" placeholder="用户名" lay-verify="loginId"/>
+							</div>
+							<div class="layui-form-item">
+								<input type="password" class="password" name="password" id="password" placeholder="密码" lay-verify="password"/>
+							</div>
+						</div>
+						<div class="layui-form-item" style="margin-top: 40px;">
+							<input type="submit" value="LOGIN" class="submit_btn" lay-submit lay-filter="formDemo">
+						</div>
+						<!--<div class="layui-form-item">
+                            <div class="layui-submit larry-login">
+                                <input class="submit_btn" value="立即登陆" type="button" lay-submit lay-filter="formDemo"></input>
+                               </div>
+                        </div>-->
+					</form>
+					<!--<div class="agileits-row2" style="position: relative;bottom: 45px;">
+                            <input type="checkbox" id="brand" value="">
+                            <label for="brand"><span></span> 记住密码</label>
+                    </div>	-->
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"> </div>
+	</div>
+</div>
+
+<style>
+</style>
+<script type="text/javascript" src="Scripts/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="Scripts/layui/layui.js"></script>
+<script>
+    layui.use(['form','layer'], function(){
+        var form = layui.form();
+        var layer = layui.layer;
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            if($('#loginId').val() == ''){
+                layer.tips('不能为空', '#loginId');
+                return false;
+            }
+            if($('#password').val() == ''){
+                layer.tips('不能为空','#password')
+                return false;
+            }
+            $.ajax({
+                url:'/sys/login',
+                contentType: 'application/json;charset=utf-8',
+                method:'post',
+                data:JSON.stringify(data.field),
+                dataType:'JSON',
+                success:function(res){
+                    if(res.code == 0){
+                        //获取token，并存储在localstorage
+                        console.log(res.data.user)
+                        window.localStorage.setItem('m_token',res.data.token);
+                        window.localStorage.setItem('m_user_rowGuid',JSON.stringify(res.data.userRowGuid));
+                        window.localStorage.setItem('m_user_userName',JSON.stringify(res.data.userName));
+                        window.localStorage.setItem('m_sex',JSON.stringify(res.data.sex));
+                        window.localStorage.setItem('m_mobile',JSON.stringify(res.data.mobile));
+                        window.localStorage.setItem('m_deptGuid',JSON.stringify(res.data.deptGuid));
+                        window.localStorage.setItem('m_deptName',JSON.stringify(res.data.deptName));
+                        window.localStorage.setItem('m_loginId',JSON.stringify(res.data.loginId));
+                        //跳转至主页
+                        location.href = 'index.html';
+                    }
+                    else
+                        layer.msg(res.msg);
+                },
+                error:function (data) {
+                    if(data.status == 0){
+                    }
+                }
+            }) ;
+            console.log(data.field)
+        });
+//		     //自定义验证规则
+//	        form.verify({
+//	            'loginId': function (value,item) {
+//	            	console.log(item)
+//	            	console.log(value)
+//	                if(value == ''){
+//	                	layer.tips('不能为空', '#loginId');
+//	                	return;
+//	                }
+//	            }
+//	        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>系统参数编辑框</title>
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="example">
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-input-block">
+            <input type="hidden" name="rowId" id="rowId" lay-verify="name" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-input-block">
+            <input type="hidden" name="rowGuid" id="rowGuid" lay-verify="name" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">参数名称<font color="red">*</font></label>
+        <div class="layui-input-block">
+            <input type="text" name="configName" id="configName" lay-verify="configName" required autocomplete="off"
+                   placeholder="请输入参数名称"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">参数分类<font color="red">*</font></label>
+        <div class="layui-input-inline">
+            <!--<input type="hidden" name="categoryGuid" id="categoryGuid" autocomplete="off">-->
+            <!--<input type="text" name = "categoryName" id="categoryName" autocomplete="off" placeholder="请选择参数分类"-->
+            <!--class="layui-input">-->
+            <select id="categoryGuid" name="categoryGuid" lay-verify="required" lay-filter="cateFilter">
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">参数值<font color="red">*</font></label>
+        <div class="layui-input-block">
+            <input type="text" name="configValue" id="configValue" lay-verify="title" autocomplete="off"
+                   placeholder="请输入参数值"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">排序号</label>
+        <div class="layui-input-block">
+            <input type="text" name="sortSq" id="sortSq" lay-verify="title" autocomplete="off"
+                   placeholder="请输入排序号"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane layui-form-text">
+        <label class="layui-form-label">参数描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容" id="description" class="layui-textarea" name="description"></textarea>
+        </div>
+    </div>
+
+
+    <div class="layui-form-button">
+        <div class="layui-input-block" style="margin-left:120px;">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="demo1">立即提交</button>
+
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script src="../../Scripts/layui/layui.all.js" charset="UTF-8"></script>
+<script>
+
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            //console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+
+    function inputDataHandle(data) {
+        //新增
+        if (data == 'add') {
+            layui.use('form', function () {
+                var form = layui.form;
+
+                //监听提交
+                form.on('submit(demo1)', function (data) {
+                    console.log(data.field)
+                    $.ajax({
+                        url: '/sys/config/insertConfig',
+                        contentType: 'application/json;charset=utf-8',
+                        method: 'post',
+                        data: JSON.stringify(data.field),
+                        dataType: 'JSON',
+                        success: function (res) {
+                            if (res.code = '0') {
+                                parent.layer.close(parent.layer.index);
+                            } else
+                                alert(res.msg);
+                        },
+                        error: function (data) {
+                            if (data.status == 0) {
+                                parent.layer.close(parent.layer.index);
+                            }
+                        }
+                    });
+
+                });
+
+
+            });
+        }
+
+        if (data == 'edit') {
+            layui.use('form', function () {
+                var form = layui.form;
+                //监听提交
+                form.on('submit(demo1)', function (data) {
+                    $.ajax({
+                        url: '/sys/config/updateConfig/' + data.field.rowId,
+                        contentType: 'application/json;charset=utf-8',
+                        method: 'put',
+                        data: JSON.stringify(data.field),
+                        dataType: 'JSON',
+                        success: function (res) {
+                            console.log(data.field.rowId);
+                            console.log("updateConfig");
+                            if (res.code = '0') {
+                                parent.layer.close(parent.layer.index);
+                            } else
+                                alert(res.msg);
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            parent.layer.close(parent.layer.index);
+                        }
+                    });
+                });
+            });
+        }
+    }
+
+
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //下拉框列表
+        $().ready(function () {
+            //$("select[name=categoryGuid]").empty();
+            $.ajax({
+                async: 'false',
+                url: '/sys/configCategory/getAllCategory',
+                contentType: 'application/json;charset=utf-8',
+                method: 'get',
+                data: {},
+                dataType: 'JSON',
+                success: function (res) {
+                    var opt = "<option value='' selected = \'selected\'>请选择</option>";
+                    $("select[name=categoryGuid]").append(opt);
+                    for (var i = 0; i < res.data.length; i++) {
+                        var option = "<option value=\"" + res.data[i].rowGuid + "\">" + res.data[i].categoryName + "</option>";
+                        //option += ">"+res.data[i].categoryName+"</option>"; //动态添加数据
+                        $("#categoryGuid").append(option);
+                    }
+                    form.render("select");
+                },
+                error: function () {
+                    alert("查询失败");
+                }
+            });
+
+        });
+        //创建一个编辑器
+        // var editIndex = layedit.build('LAY_demo_editor');
+
+        form.verify({
+
+            'configName': function (value, item) {
+                var check;
+                var param2 =$("#rowGuid").val();
+                var param = {};
+                param['configNameValue'] = value;
+                param['rowGuid'] = param2;
+                if(value==""){
+                    return '参数名未填写'
+                }else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+                    return '参数名不能有特殊字符';
+                }
+                $.ajax({
+                    url: '/sys/config/checkConfigName',
+                    contentType: 'application/json;charset=utf-8',
+                    type: 'post',
+                    data: JSON.stringify(param),
+                    dataType: 'JSON',
+                    async: false,
+                    success: function (result) {
+                        if (result.code == 500) {
+                            check = true;
+                        }
+                    },
+                    error: function (error) {
+
+                    }
+                });
+                if (check) {
+                    return '该参数名称已存在';
+                }
+            }
+        });
+        //自定义验证规则
+        //监听指定开关
+    });
+</script>
+<style>
+    .layui-input-block {
+        margin-left: 120px;
+        min-height: 36px;
+        width: 400px;
+    }
+
+    .layui-form-label {
+        width: 90px;
+    }
+
+    .layui-button-style {
+        margin-left: 200px;
+    }
+
+    .layui-form-item {
+        margin-top: 7px;
+        margin-left: 3px;
+        margin-bottom: 0px;
+    }
+
+    .layui-form-pane {
+        flex: 1;
+    }
+
+    .layui-select-title {
+        width: 400px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 1px;
+        height: 1px;
+    }
+
+    .layui-form-button {
+        margin-top: 5px;
+    }
+
+    .layui-btn {
+        font-size: 14px;
+        background-color: #3398E5;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: .9;
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 13px;
+        margin-left: 10px;
+    }
+</style>
+</body>
+</html>

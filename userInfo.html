@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="Scripts/layui/css/layui.css"/>
+</head>
+<body>
+
+<form class="layui-form">
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label ">姓名</label>
+        <div class="layui-input-block  ">
+            <input type="text" id= "userName" name="userName" lay-verify="userName" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label ">登录名</label>
+        <div class="layui-input-block  ">
+            <input type="text" name="loginId" id="loginId" lay-verify="loginId" autocomplete="off" class="layui-input" disabled="disabled">
+
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label  ">性别</label>
+        <div class="layui-input-bloc "
+             style="border-color:#e6e6e6!important;height:38px;">
+            <input type="radio" name="sex" value="男" title="男" checked="" id="sex0">
+            <input type="radio" name="sex" value="女" title="女" id ="sex1">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label ">手机</label>
+        <div class="layui-input-block">
+            <input type="text" name="mobile" id="mobile" lay-verify="title" autocomplete="off"  class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label ">固话</label>
+        <div class="layui-input-block">
+            <input type="text" name="tel" id="tel" lay-verify="title" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-button">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">保存</button>
+            <button id="reset" class="layui-btn layui-btn-primary">修改密码</button>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="upload">上传头像</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="../../Scripts/jquery-3.3.1.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script src="../../Scripts/layui/layui.all.js" charset="utf-8"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = 'login.html';
+            }
+        }
+    });
+
+    $().ready(function () {
+        var loginId = JSON.parse(window.localStorage.getItem('m_loginId'));
+        var userName = JSON.parse(window.localStorage.getItem('m_user_userName'));
+        var sex = JSON.parse(window.localStorage.getItem('m_sex'));
+        var mobile = JSON.parse(window.localStorage.getItem('m_mobile'));
+        $("#mobile").val(mobile);
+        $("#loginId").val(loginId);
+        $("#userName").val(userName);
+        if(sex==='男')
+            $("#sex0").attr("checked",true);
+        else
+            $("#sex1").attr("checked",true);
+    });
+
+
+    layui.use('form', function(){
+        var form = layui.form;
+        var rowGuid = JSON.parse(window.localStorage.getItem('m_user_rowGuid'));
+        //监听提交
+        form.on('submit(formDemo)', function(){
+            var map = {};
+            map['userName'] = $("#userName").val();
+            map['sex'] = $("input[type='radio']:checked").val();
+            map['mobile'] = $("#mobile").val();
+            map['tel'] = $('#tel').val();
+            map["rowGuid"]=rowGuid;
+            $.ajax({
+                async:false,
+                url:'/sys/user/updateAdmin',
+                contentType: 'application/json;charset=utf-8',
+                method:'put',
+                data:JSON.stringify(map),
+                dataType:'JSON',
+                success:function(res){
+                     if(res.code == '0'){
+                         parent.layer.close(parent.layer.index);
+                     }
+                     else
+                         layer.msg(res.msg);
+                },
+                //谷歌浏览器出现Provisional headers are shown警告     
+                error:function (data) {
+
+                }
+            }) ;
+        });
+    });
+
+    //修改密码
+    $('#reset').on('click', function () {
+        layer.open({
+            type: 2,
+            title: '修改密码',
+            maxmin: true,
+            shadeClose: true, //点击遮罩关闭层
+            area: ['400px', '250px'],
+            content: 'changePassWord.html',
+            success: function (layero, index) {
+                var body = layer.getChildFrame('body', index);
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+            },
+            end: function () {
+                //刷新页面
+                window.location.reload()
+            }
+        });
+        return false;
+    });
+
+</script>
+<style>
+    .layui-input-block {
+        min-height: 36px;
+    }
+
+    .layui-form-label {
+        margin-left: 2px;
+        width: 90px;
+    }
+
+    .layui-form-item {
+        margin-top: 3px;
+        margin-bottom: 0px;
+        width: 100%;
+    }
+
+    .layui-form-pane {
+        flex: 1;
+        width: 100%;
+    }
+
+    .layui-form-button {
+        margin-top: 5px;
+    }
+
+    .layui-btn {
+
+        font-size: 14px;
+        background-color: #3398E5;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: .9;
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 13px;
+        margin-left: 10px;
+    }
+
+    .layui-btn-normal {
+        margin-left: 10px;
+    }
+
+    .layui-btn + .layui-btn {
+        margin-left: 10px;
+        margin-top: 3px;
+        margin-bottom: 0px;
+    }
+
+    .layui-input-bloc {
+        min-height: 35px;
+        padding-left: 9px;
+        width: 94%;
+        border-radius: 0 2px 2px 0;
+        border: 1px solid #e6e6e6;
+    }
+
+    .layui-input, .layui-textarea {
+        display: block;
+        width: 95%;
+        padding-left: 10px;
+    }
+</style>
+</body>
+</html>

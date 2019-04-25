@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+    <title>部门选择</title>
+</head>
+<body>
+<ul id="deptShu"></ul>
+
+<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script src="../../Scripts/layui/layui.all.js" charset="utf-8"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    })
+    function brotherInvokeMethod(data){
+    		$().ready(function () {
+		        $.ajax({
+		            url: '/sys/modular/getTrees',
+		            contentType: 'application/json;charset=utf-8',
+		            method: 'get',
+		            dataType: 'JSON',
+		            success: function (res) {
+		                if (res.code = '0') {
+		                    layui.tree({
+		                        elem: '#deptShu'
+		                        , nodes: [{ //节点数据
+		                            name: '根目录'
+		                            , children: res.data
+		                        }]
+		                        , click: function (node) {
+		                            //给兄弟页面元素赋值
+									window.parent.$("#layui-layer-iframe" + data).contents().find("#pmoduleName").val(node.name);
+									window.parent.$("#layui-layer-iframe" + data).contents().find("#pmoduleCode").val(node.moduleCode);
+//		                            $('#pmoduleName', parent.$("#layui-layer" + data)).val(node.name)//获取父页面dom
+//		                            $('#pmoduleCode', parent.document).val(node.moduleCode)
+		                            parent.layer.close(parent.layer.index);
+		                        }
+		                    });
+		                } else
+		                    alert(res.msg);
+		            },
+		            error: function (jqXHR, textStatus, errorThrown) {
+		
+		            }
+		        });
+		    });
+    }
+    
+</script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>角色权限</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+</head>
+<body>
+<div class="container" style="overflow: hidden;">
+    <div class="left">
+        <div class="userRole">
+            <div class="userRole-header">
+                用户角色
+            </div>
+            <div>
+                <table class="layui-hide" id="roleTable" lay-filter="modularToolbar"></table>
+                <script type="text/html" id="barDemo">
+                    <img src="../../Scripts/layui/images/face/round_check.png" lay-event="edit"
+                         style="cursor: pointer;height:23px;width:23px;">
+                </script>
+            </div>
+        </div>
+        　
+    </div>
+    　
+    <div class="right">
+        <div class="userRole">
+            <div class="userRole-header">操作权限
+                <a href="javascript:void(0)" title="保存修改" id="saveTree">
+                    <i class="layui-icon" style="font-size: 20px; color: #1E9FFF;">&#xe618;</i>
+                </a>
+            </div>
+        </div>
+        <div style="height: 100%;">
+            <form class="layui-form" style="height: 100%;">
+                <div id="xtree1" style="width:100%;height:100%;padding: 10px 0 25px 5px;"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../../Scripts/jquery-3.3.1.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script src="../../Scripts/layui/layui.all.js" charset="utf-8"></script>
+<script type="text/javascript" src="../../Scripts/layui-xtree.js"></script>
+
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            //console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    })
+    var checkedBtn;
+    $().ready(function () {
+        $.ajax({
+            url: '/sys/modular/getModuleTrees',
+            contentType: 'application/json;charset=utf-8',
+            method: 'post',
+            dataType: 'JSON',
+            success: function (res) {
+                if (res.code = '0') {
+                    layui.use(['form'], function () {
+                        var myForm = layui.form;
+                        //创建tree
+                        var xtree = new layuiXtree({
+                            elem: 'xtree1' //放xtree的容器（必填，只能为id，注意不带#号）
+                            , form: myForm              //layui form对象 （必填）
+                            , data: res.data   //数据，数据结构下面会介绍 （必填）
+                        });
+                        $('#saveTree').on('click', function () {
+                            //获取所有被选中的dom，取值
+                            var arr = xtree.GetAllCheckBox();
+                            var paramArray = new Array;
+                            for (var i = 0; i < arr.length; i++) {
+                                if (arr[i].checked == true) {
+                                    paramArray.push(arr[i].value)
+                                }
+                            }
+                            //传参保存
+                            var param = {};
+                            param['checkedBtn'] = checkedBtn;
+                            param['paramArray'] = paramArray;
+                            $.ajax({
+                                url: '/sys/role/insertModuleRightBatch',
+                                contentType: 'application/json;charset=utf-8',
+                                method: 'post',
+                                data: JSON.stringify(param),
+                                dataType: 'JSON',
+                                success: function (res) {
+                                    if (res.code == '0') {
+                                        layer.msg('保存成功');
+                                    }
+                                    if (res.code == '500') {
+                                        layer.msg(res.msg);
+                                    }
+                                },
+                                error: function (data) {
+
+                                }
+                            });
+                        })
+                    })
+                } else
+                    alert(res.msg);
+            },
+            error: function (data) {
+
+            }
+        });
+    });
+
+
+    //				var xtree3 = new layuiXtree({
+    //				       elem: 'xtree1'                  //必填
+    //				       , form: myForm                    //必填
+    //				       , data: json //必填
+    //				       , isopen: false  //加载完毕后的展开状态，默认值：true
+    //				       , ckall: true    //启用全选功能，默认值：false
+    //				       , ckallback: function () { } //全选框状态改变后执行的回调函数
+    //				       , icon: {        //三种图标样式，更改几个都可以，用的是layui的图标
+    //				           open: "图标代号"       //节点打开的图标
+    //				           , close: "图标代号"    //节点关闭的图标
+    //				           , end: "图标代号"      //末尾节点的图标
+    //				       }
+    //				       , color: {       //三种图标颜色，独立配色，更改几个都可以
+    //				           open: "#EE9A00"        //节点图标打开的颜色
+    //				           , close: "#EEC591"     //节点图标关闭的颜色
+    //				           , end: "#828282"       //末级节点图标的颜色
+    //				       }
+    //				       , click: function (data) {  //节点选中状态改变事件监听，全选框有自己的监听事件
+    //				           console.log(data.elem); //得到checkbox原始DOM对象
+    //				           console.log(data.elem.checked); //开关是否开启，true或者false
+    //				           console.log(data.value); //开关value值，也可以通过data.elem.value得到
+    //				           console.log(data.othis); //得到美化后的DOM对象
+    //				       }
+    //				});
+
+
+    layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+            elem: '#roleTable'
+            , height: 'full-31'
+            , even: true
+            , url: '/sys/role/getRole'
+            , toolbar: '#toolbarDemo'
+            , method: 'get'
+            , cols: [[
+                {field: 'roleName', width: 80, title: '角色'}
+                // , {field: 'createTime', width: 150, title: '创建时间'}
+                , {field: 'right', title: '选择',toolbar: '#barDemo'}
+            ]]
+            , page: false
+            , id: 'testReload'
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.rows.item //解析数据列表
+                };
+            }
+        });
+
+        //监听行工具事件
+        table.on('tool(modularToolbar)', function (obj) {
+            var value = obj.data;
+            if (obj.event === 'edit') {
+                checkedBtn = value.rowGuid;
+                //传给后台获取被选中的
+                var ii = layer.load();
+                $(obj.tr).siblings().css("background-color","");
+                obj.tr.css("background-color","#7DBDE2");
+                $.ajax({
+                    url: '/sys/role/selectModule',
+                    contentType: 'application/json;charset=utf-8',
+                    method: 'post',
+                    data: value.rowGuid,
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if (res.code = '0') {
+                            layui.use(['form'], function () {
+                                layer.close(ii);
+                                var myForm = layui.form;
+                                //创建tree
+                                var xtree = new layuiXtree({
+                                    elem: 'xtree1' //放xtree的容器（必填，只能为id，注意不带#号）
+                                    , form: myForm              //layui form对象 （必填）
+                                    , data: res.data              //数据，数据结构下面会介绍 （必填）
+                                });
+                            })
+                        } else
+                            alert(res.msg);
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            }
+        });
+    })
+
+
+</script>
+
+<style>
+    html, body {
+        height: 100%
+    }
+
+    .layui-table-body {
+        overflow: overlay;
+    }
+
+    .layui-table {
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+
+    .layui-form-checkbox i {
+        margin-right: 3px;
+        float: left;
+        text-align: center;
+        height: 16px;
+    }
+
+    .userRole {
+        background-color: #f3f3f3;
+        background: -webkit-linear-gradient(top, #F8F8F8 0, #eeeeee 100%);
+        background: -moz-linear-gradient(top, #F8F8F8 0, #eeeeee 100%);
+        background: -o-linear-gradient(top, #F8F8F8 0, #eeeeee 100%);
+        background: linear-gradient(to bottom, #F8F8F8 0, #eeeeee 100%);
+        background-repeat: repeat-x;
+    }
+
+    .userRole-header {
+        /*width: 300px;*/
+        border: 1px solid #c2c2c2;
+        font-size: 12px;
+        font-weight: bold;
+        color: #575765;
+        height: 30px;
+        line-height: 30px;
+        padding-left: 5px;
+    }
+
+    .layui-table td, .layui-table th {
+        padding: 2px 8px;
+        min-height: 20px;
+        line-height: 20px;
+        border: 1px solid #e2e2e2;
+        font-size: 14px;
+    }
+
+    .layui-table-cell {
+        height: auto;
+        line-height: 20px;
+    }
+
+    /*修改xtree样式*/
+    .layui-form-checked[lay-skin="primary"] i {
+        background-color: #01AAED;
+        color: white;
+    }
+
+    /*.layui-form-checkbox[lay-skin="primary"] i {
+        position: relative;
+        float: left;
+        top: 0;
+        width: 16px;
+        line-height: 16px;
+        border: 1px solid #d2d2d2;
+        border-top-color: rgb(210, 210, 210);
+        border-right-color: rgb(210, 210, 210);
+        border-bottom-color: rgb(210, 210, 210);
+        border-left-color: rgb(210, 210, 210);
+        font-size: 12px;
+        border-radius: 2px;
+        background-color: #fff;
+        -webkit-transition: .1s linear;
+        transition: .1s linear;
+    }*/
+    .container {
+        display: flex; /*设为伸缩容器*/
+        height: 100%;
+    }
+
+    .left {
+        flex-shrink: 0;
+        border-right-width: 1px;
+        border-right-style: solid;
+        border-right-color: rgb(238, 238, 238);
+        width: 420px;
+        /*border: 2px solid blue;*/
+    }
+
+    .right {
+        height: 100%;
+        overflow: hidden;
+        border-left-width: 1px;
+        border-left-style: solid;
+        border-left-color: rgb(238, 238, 238);
+        /*border: 2px solid #c2c2c2;*/
+        flex: 1; /*这里设置为占比1，填充满剩余空间*/
+    }
+
+    .layui-table-cell {
+        height: auto;
+        line-height: 30px;
+    }
+</style>
+</body>
+</html>

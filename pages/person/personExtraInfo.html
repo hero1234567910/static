@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body style="height: 100%">
+<div class="container">
+    <div class="left">
+        <ul id="deptShu"></ul>
+    </div>
+    <div class="right" style="background-color: #F8F8F8;">
+        <div class="myRow">
+            <div>
+            <label class="tb_1 layui-form-label">身份证号码:</label>
+            <div class="layui-input-block">
+                <input id="idKeyword" type="text" name="title" placeholder="请输入" class="layui-input">
+            </div>
+            </div>
+            <div class="tb_1" style="width: 100%;"></div>
+        </div>
+        <fieldset class="layui-elem-field site-demo-button">
+            <!--<legend>还可以是圆角按钮</legend>-->
+            <div>
+                <button id="extraInfoSel" class="layui-btn  layui-btn-normal" data-type="reload">查询
+                </button>
+                <button id="personExtraInfoiframe" class="layui-btn layui-btn-normal">新增</button>
+                <button id="extraInfoDel" class="layui-btn layui-btn-normal">删除</button>
+            </div>
+        </fieldset>
+        <table class="layui-hide layui-table" id="extraTable" lay-filter="extraToolbar"></table>
+
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-normal" lay-event="edit" id="personExtraEditInfoiframe">编辑</a>
+        </script>
+    </div>
+
+</div>
+
+
+<script type="text/javascript" src="../../Scripts/jquery-3.3.1.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script src="../../Scripts/layui/layui.all.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+
+    $().ready(function () {
+        $.ajax({
+            url: '/sys/dept/getDeptTrees',
+            contentType: 'application/json;charset=utf-8',
+            method: 'post',
+            dataType: 'JSON',
+            success: function (res) {
+                if (res.code = '0') {
+                    layui.tree({
+                        elem: '#deptShu'
+                        , nodes: [{
+                            name: '根目录'
+                            , children: res.data
+                        }]
+                        , click: function (node) {
+                            console.log(node)
+                            layui.table.reload('testReload', {
+                                where: {
+                                    pdeptCode: node.deptCode
+                                }
+                            });
+                        }
+                    });
+                } else
+                    alert(res.msg);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    });
+
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#extraTable'
+            ,even:true
+            , url: '/sys/userExtra/getAllExtra'
+            , toolbar: '#toolbarDemo'
+            , method: 'get'
+            , cols: [[
+                {checkbox: true}
+                , {field: 'rowId', width: 40, title: '序号', sort: true}
+                //               , {field: 'rowGuid', width: 80, title: '记录唯一标识'}
+                , {field: 'delFlag', width: 70, title: '删除标识', sort: true}
+//                , {field: 'createTime', width: 150, title: '创建时间'}
+//                , {field: 'userGuid', title: '用户唯一标识', minWidth: 150}
+                , {field: 'idCard', width: 100, title: '身份证号码', sort: true}
+                , {field: 'birthday', width: 130, title: '生日', sort: true}
+                , {field: 'address', width: 80, title: '地址'}
+                , {field: 'qq', width: 90, title: 'QQ', sort: true}
+                , {field: 'weiXin', width: 70, title: '微信', sort: true}
+                , {field: 'carNumber', width: 60, title: '车牌号', sort: true}
+                , {field: 'email', width: 100, title: '电子邮箱', sort: true}
+                , {field: 'loginip', width: 90, title: '登录IP', sort: true}
+                , {field: 'usbKey', width: 80, title: 'USB密钥', sort: true}
+                , {field: 'qrCode', width: 80, title: '二维码UUID', sort: true}
+                , {field: 'right', title: '操作', toolbar: '#barDemo', width: 70}
+            ]]
+            , page: true
+            , limit: 9 //默认十条数据一页
+            , id: 'testReload'
+//		    ,response: {
+//		      statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+//		    }
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.rows.item //解析数据列表
+                };
+            }
+        });
+
+        var $ = layui.$, active = {
+            reload: function () {
+                var idKeyword = $('#idKeyword');
+
+                table.reload('testReload', {
+                    where: {
+                        idCard: idKeyword.val()
+                    }
+                });
+            }
+        };
+        //搜索绑定
+        $('#extraInfoSel').on('click', function () {
+            console.log("search!")
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //头工具栏事件
+        $('#extraInfoDel').on('click', function () {
+            layer.confirm('真的删除行么', function (index) {
+//		    	console.log(table.checkStatus('deptTable'))新版本才有
+                var cache = table.cache;
+                var params = new Array;
+                $.each(cache.testReload, function (index, value) {
+                    if (value.LAY_CHECKED != undefined && value.LAY_CHECKED == true) {
+                        params.push(value.rowId);
+                    }
+                });
+                if (params.length == 0) {
+                    layer.msg("请先选择");
+                    return;
+                }
+                $.ajax({
+                    url: '/sys/userExtra/deleteExtraS/' + params,
+                    contentType: 'application/json;charset=utf-8',
+                    method: 'post',
+                    data: JSON.stringify(params),
+                    dataType: 'JSON',
+                    success: function (res) {
+                        console.log(res)
+                        if (res.code = '0') {
+                            layer.msg('删除成功')
+                            window.location.reload();
+                        } else
+                            alert(res.msg);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+                layer.close(index);
+            });
+        });
+
+        //新增人员
+        $('#personExtraInfoiframe').on('click', function () {
+            var data = 'add';
+            layer.open({
+                type: 2,
+                title: '添加',
+                maxmin: true,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['350px', '450px'],
+                content: 'personExtraEdit.html',
+                success: function (layero, index) {
+                    var body = layer.getChildFrame('body', index);
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    iframeWin.inputDataHandle(data);
+                },
+                end: function () {
+                    window.location.reload()
+                }
+            });
+        });
+
+        //编辑用户
+        table.on('tool(extraToolbar)', function (obj) {
+            var value = obj.data;
+            if (obj.event === 'edit') {
+                //更新
+                var data = 'edit';
+                layer.open({
+                    type: 2,
+                    title: '人员修改',
+                    maxmin: true,
+                    shadeClose: true, //点击遮罩关闭层
+                    area: ['350px', '450px'],
+                    content: 'personExtraEdit.html',
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.inputDataHandle(data);
+                        body.find("#rowId").val(value.rowId);
+                        body.find("#idCard").val(value.idCard);
+                        body.find("#birthday").val(value.birthday);
+                        body.find("#address").val(value.address);
+                        body.find("#qq").val(value.qq);
+                        body.find("#weiXin").val(value.weiXin);
+                        body.find("#carNumber").val(value.carNumber);
+                        body.find("#email").val(value.email);
+                        body.find("#usbKey").val(value.usbKey);
+                    },
+                    end: function () {
+                        //刷新页面
+                        window.location.reload()
+                    }
+                });
+            }
+        });
+
+    });
+</script>
+
+<style>
+    .layui-table-tool {
+        position: absolute;
+        bottom: 0px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    .layui-table-cell {
+        height: auto;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .layui-table-tips-main{
+        margin-top: 0px !important;
+    }
+
+    .layui-inline {
+        position: relative;
+        display: inline-block;
+        margin-right: 5px;
+        /* bottom: -40px;*/
+    }
+
+    .layui-table td, .layui-table th {
+        padding: 2px 8px;
+        min-height: 20px;
+        line-height: 20px;
+        border: 1px solid #e2e2e2;
+        font-size: 14px;
+    }
+
+    .layui-form-checked[lay-skin="primary"] i {
+        background-color: #01AAED;
+        color: white;
+    }
+
+    .layui-input, .layui-textarea {
+        display: block;
+        width: 300px;
+        padding-left: 10px;
+        margin-right: 2px;
+        height: 38px;
+        font-size: 14px;
+    }
+
+    .container {
+        overflow: auto;
+        display: flex;
+        height: 100%;
+    }
+
+    .left {
+        flex-shrink: 0;
+        width: 150px;
+    }
+
+    .right {
+        border: 2px solid #c2c2c2;
+        flex: 1;
+    }
+
+    .layui-laypage button, .layui-laypage input {
+        height: 26px;
+        line-height: 26px;
+        border: 1px solid #e2e2e2;
+        border-radius: 2px;
+        vertical-align: top;
+        background-color: #fff;
+        box-sizing: border-box!important;
+    }
+
+    .layui-laypage {
+        display: inline-block;
+        *display: inline;
+        *zoom: 1;
+        vertical-align: middle;
+        margin: 0px 0;
+        font-size: 0
+    }
+
+    .layui-laypage input {
+        width: 50px;
+        margin: 0 5px;
+        text-align: center;
+        padding-left: 0px;
+    }
+
+    .layui-laypage .layui-laypage-curr .layui-laypage-em {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        padding: 1px;
+        width: 100%;
+        height: 100%;
+        background-color: #2299ee;
+    }
+
+    .layui-table td, .layui-table th {
+        padding: 2px 8px;
+        min-height: 20px;
+        line-height: 20px;
+        border: 1px solid #e2e2e2;
+        font-size: 14px;
+    }
+
+    .layui-table {
+        width: 100%;
+        margin: 0px 0;
+        background-color: #fff
+    }
+
+    .layui-elem-field {
+        margin-top: 5px;
+        padding: 0;
+        border: 0px solid #e2e2e2;
+    }
+    .tb_1{
+        font-size: 14px;
+        border-right: #E7E7E7 1px solid;
+        border-top: #E7E7E7 1px solid;
+        border-left: #E7E7E7 1px solid;
+        border-bottom: #E7E7E7 1px solid;
+        background-color: #F8F8F8;
+        color: #28495C;
+        height: 37px;
+        float: left;
+    }
+
+    .layui-form-label{
+        float: left;
+        display: block;
+        width: 80px;
+        font-weight: 400;
+        text-align: right;
+        line-height: 40px;
+        padding-right: 22px;
+        padding-left: 5px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .layui-btn{
+        font-size: 14px;
+    }
+
+    .layui-btn-normal{
+        margin-left: 10px;
+    }
+
+    .layui-btn+.layui-btn{
+        margin-left: 10px;
+        margin-top:3px;
+        margin-bottom:0px;
+    }
+    .myRow{
+        display: flex;
+        height:38px;
+
+    }
+    .layui-table-body{
+        overflow: overlay;
+    }
+    .layui-form select{
+        display: flex;
+    }
+    .layui-table {
+        margin: 0px 0;
+    }
+</style>
+</body>
+</html>

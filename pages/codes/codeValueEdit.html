@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+    <title>表单编辑框</title>
+</head>
+<body>
+
+<form class="layui-form " action="" lay-filter="Codes">
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-input-block">
+            <input type="text" name="rowId" id="rowId"  lay-verify="name" autocomplete="off"  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label ">代码项值<font color="red">*</font></label>
+        <div class="layui-input-block">
+            <input type="text" name="itemValue" id="itemValue" lay-verify="itemValue" placeholder="请输入代码项值" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label ">代码项文本</label>
+        <div class="layui-input-block">
+            <input type="text" name="itemText" id="itemText" lay-verify="itemText" placeholder="请输入代码项文本" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label ">排序号</label>
+        <div class="layui-input-block">
+            <input type="text" name="sortSq" id="sortSq" lay-verify="itemText" placeholder="请输入代码项文本" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-button">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal"  style="margin-top: 7px" lay-submit="" lay-filter="demo1">添加</button>
+
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script>
+
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+
+    //接受父组件的值
+    function inputDataHandle(data,rowGuid){
+        //新增
+        if(data == 'add'){
+            layui.use('form', function(){
+                var form = layui.form();
+                //监听提交
+                form.on('submit(demo1)', function(data){
+                    var map={};
+                    map['field']=data.field;
+                    map['rowGuid']=rowGuid;
+                    $.ajax({
+                        url:'/sys/codeValue/insertCodeValue',
+                        contentType: 'application/json;charset=utf-8',
+                        method:'post',
+                        data:JSON.stringify(map),
+                        dataType:'JSON',
+                        success:function(res){
+                            if(res.code='0'){
+                                parent.layer.close(parent.layer.index);
+                            }
+                            else
+                                alert(res.msg);
+                        },
+                        error:function (data) {
+                            if(data.status == 0){
+                                parent.layer.close(parent.layer.index);
+                            }
+                        }
+                    }) ;
+                });
+            });
+        }
+        if (data == 'edit') {
+            layui.use('form', function () {
+                var form = layui.form();
+                //监听提交
+                form.on('submit(demo1)', function (data) {
+                    $.ajax({
+                        url: '/sys/codeValue/updateCodeValue/' + data.field.rowId,
+                        contentType: 'application/json;charset=utf-8',
+                        method: 'put',
+                        data: JSON.stringify(data.field),
+                        dataType: 'JSON',
+                        success: function (res) {
+                            if (res.code == '0') {
+                                parent.layer.close(parent.layer.index);
+                            } else
+                                alert(res.msg);
+                        },
+                        //谷歌浏览器出现Provisional headers are shown警告     
+                        error: function (data) {
+                            if (data.status == '0') {
+                                parent.layer.close(parent.layer.index);
+                            }
+                        }
+                    });
+                });
+            });
+        }
+
+    }
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form()
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //创建一个编辑器
+        // var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+        form.verify({
+            /* name: function (value) {
+                 if (value.length < 3) {
+                     return '名字至少得3个字符啊';
+                 }
+             }*/
+            codeValue: [
+                /^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$/,
+                '代码不能为空或有特殊字符'
+            ]
+        });
+    });
+
+</script>
+
+<style>
+    .layui-input-block {
+        margin-left: 120px;
+        min-height: 36px;
+        width:400px;
+    }
+    .layui-form-label {
+        width: 90px;
+    }
+    .left{
+        float: left;
+        margin-top:0px;
+        margin-right:0px;
+        width:400px;
+    }
+    .right{
+        float:left;
+        margin-left:0px;
+        margin-top:0px;
+        width:400px;
+
+    }
+    .layui-form-item{
+        margin-top: 3px;
+        margin-left: 3px;
+        margin-bottom: 0px;
+    }
+    .layui-form-pane{
+        flex:1;
+    }
+    .layui-form-button{
+        margin-top:5px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 1px;
+        height: 1px;
+    }
+    .layui-btn {
+
+        font-size: 14px;
+        background-color: #3398E5;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: .9;
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 13px;
+        margin-left: 10px;
+    }
+</style>
+</body>
+
+
+</html>

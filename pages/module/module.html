@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body style="height: 100%;font-size: 0px;overflow: hidden;">
+
+<div class="container">
+    <div class="left">
+        <ul id="deptShu"></ul>
+        　
+    </div>
+    　
+    <div class="right" style="background-color: #f8f8f8;">
+        <div class="myRow">
+            <div style="float: left;">
+                <label class="tb_1 layui-form-label">模块名称</label>
+                <div class="layui-input-block">
+                    <input id="modularKeyword" type="text" name="title" placeholder="请输入" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div>
+            <fieldset class="layui-elem-field site-demo-button" style="clear: both;">
+                <!--<legend>还可以是圆角按钮</legend>-->
+                <div>
+                    <button id="modularInfoSel" class="layui-btn layui-btn-normal" data-type="reload">
+                        查询
+                    </button>
+                    <button id="modularInfoAdd" class="layui-btn  layui-btn-normal">添加</button>
+                    <button id="modularInfoDel" class="layui-btn layui-btn-normal">删除</button>
+                    <!--<button id="modularInfoSave" class="layui-btn  layui-btn-radius">保存</button>-->
+                </div>
+            </fieldset>
+        </div>
+        <table class="layui-hide" id="modularTable" lay-filter="modularToolbar"></table>
+        <script type="text/html" id="barDemo">
+            <img src="../../Scripts/layui/images/face/edit.gif"  lay-event="edit" style="cursor: pointer;">
+        </script>
+    </div>
+</div>
+
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script type="text/javascript" src="../../Scripts/jquery-3.3.1.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script src="../../Scripts/layui/layui.all.js" charset="utf-8"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    })
+    $().ready(function () {
+        $.ajax({
+            url: '/sys/modular/getTrees',
+            method: 'get',
+            dataType: 'JSON',
+            success: function (res) {
+                if (res.code = '0') {
+                    layui.tree({
+                        elem: '#deptShu'
+                        , nodes: [{ //节点数据
+                            name: '根目录'
+                            , children: res.data
+                        }]
+                        , click: function (node) {
+                            if (node.moduleCode == undefined) {
+                                node.moduleCode = 0;
+                            }
+                            console.log(node) //node即为当前点击的节点数据
+                            layui.table.reload('testReload', {
+                                where: {
+                                    moduleCode: node.moduleCode
+                                }
+                            });
+                        }
+                    });
+                } else
+                    alert(res.msg);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            },
+        });
+
+        layui.use('table', function () {
+            var table = layui.table;
+            table.render({
+                elem: '#modularTable'
+                , even:true
+                , height:'full-130'
+                , url: '/sys/modular/getModular'
+                , toolbar: '#toolbarDemo'
+                , method: 'get'
+                //			,height:'420px'
+                , cols: [[
+                    {checkbox: true}
+                    , {field: 'rowId', width: 80, title: 'ID', sort: true}
+                    , {field: 'moduleName', width: 80, title: '模块名称'}
+                    , {field: 'moduleAddr', width: 80, title: '模块地址'}
+                    , {field: 'smallIcon', width: 135, title: '小图标'}
+                    , {field: 'target', width: 80, title: '目标框架'}
+                    , {field: 'isVisible', width: 50, title: '显示'}
+                    , {field: 'sortSq', width: 80, title: '序号', sort: true}
+                    , {field: 'right', title: '修改', toolbar: '#barDemo', width: 80}
+                ]]
+                , page: true
+                //			,limits:[10,20]
+                , limit: 9//默认十条数据一页
+                , id: 'testReload'
+                , done: function (res, page, count) {
+                    $("[data-field='isVisible']").children().each(function () {
+                        if ($(this).text() == '0') {
+                            $(this).text("可见")
+                        } else if ($(this).text() == '1') {
+                            $(this).text("隐藏")
+                        }
+                    });
+                }
+                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.status, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.total, //解析数据长度
+                        "data": res.rows.item //解析数据列表
+                    };
+                }
+            });
+            //关键字搜索
+            var $ = layui.$, active = {
+                reload: function () {
+                    var modularKeyword = $('#modularKeyword');
+
+                    table.reload('testReload', {
+                        where: {
+                            moduleName: modularKeyword.val()
+                        }
+                    });
+                }
+            };
+            //搜索绑定
+            $('#modularInfoSel').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            //监听行工具事件
+            table.on('tool(modularToolbar)', function (obj) {
+                var value = obj.data;
+                var ModuleCode = [];
+                $.ajax({
+                    url: '/sys/modular/getByModuleCode/' + value.pmoduleCode,
+                    contentType: 'application/json;charset=utf-8',
+                    method: 'get',
+                    data: JSON.stringify(value.pmoduleCode),
+                    dataType: 'JSON',
+                    success: function (res) {
+                        //console.log(res.data);
+                        if (res.code = '0') {
+                            ModuleCode =res.data;
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+                if (obj.event === 'edit') {
+                    //更新
+                    var data = 'edit';
+                    layer.open({
+                        type: 2,
+                        title: '模块修改',
+                        maxmin: true,
+                        shadeClose: true, //点击遮罩关闭层
+                        area: ['320px', '310px'],
+                        content: 'modularEdit.html',
+                        success: function (layero, index) {
+                            console.log(value)
+                            var body = layer.getChildFrame('body', index);
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            iframeWin.inputDataHandle(data);
+                            body.find("#rowId").val(value.rowId);
+                            body.find("#moduleName").val(value.moduleName); //要修改的每个td的值存为变量传进去
+                            body.find("#moduleAddr").val(value.moduleAddr);
+                            body.find("#smallIcon").val(value.smallIcon);
+                            body.find("#target").val(value.target);
+                            body.find("#isVisible").val(value.isVisible);
+                            body.find("#sortSq").val(value.sortSq);
+                            body.find("#pmoduleCode").val(value.pmoduleCode);
+                            body.find("#pmoduleName").val(ModuleCode);
+                        },
+                        end: function () {
+                            //刷新页面
+                            window.location.reload()
+                        }
+                    });
+                }
+            });
+
+            //新增模块
+            $('#modularInfoAdd').on('click', function () {
+                var data = 'add';
+                layer.open({
+                    type: 2,
+                    title: '模块添加',
+                    maxmin: true,
+                    shadeClose: true, //点击遮罩关闭层
+                    area: ['320px', '310px'],
+                    content: 'modularEdit.html',
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.inputDataHandle(data);
+                    },
+                    end: function () {
+                        //刷新页面
+                        window.location.reload()
+                    }
+                });
+            });
+
+            //删除部门
+            $('#modularInfoDel').on('click', function () {
+                layer.confirm('真的删除行么', function (index) {
+                    //		    	console.log(table.checkStatus('deptTable'))新版本才有
+                    var cache = table.cache;
+                    var params = new Array;
+                    $.each(cache.testReload, function (index, value) {
+                        if (value.LAY_CHECKED != undefined && value.LAY_CHECKED == true) {
+                            params.push(value.rowId);
+                        }
+                    });
+                    if (params.length == 0) {
+                        layer.msg("清先选择");
+                        return;
+                    }
+                    $.ajax({
+                        url: '/sys/modular/deleteModule/' + params,
+                        contentType: 'application/json;charset=utf-8',
+                        method: 'post',
+                        data: JSON.stringify(params),
+                        dataType: 'JSON',
+                        success: function (res) {
+                            console.log(res)
+                            if (res.code = '0') {
+                                layer.msg('删除成功', {
+                                    icon: 1,
+                                    time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                                }, function () {
+                                    window.location.reload();
+                                });
+                            } else
+                                alert(res.msg);
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+                    layer.close(index);
+                });
+            });
+
+        });
+    });
+
+
+</script>
+
+<style>
+    .layui-table {
+        margin: 0px 0;
+    }
+    .layui-table-body{
+        overflow: overlay;
+    }
+    .layui-form select{
+        display: flex;
+    }
+    .layui-laypage{
+        margin: 0px 0;
+    }
+
+    .layui-laypage button, .layui-laypage input {
+        height: 26px;
+        line-height: 26px;
+        border: 1px solid #e2e2e2;
+        border-radius: 2px;
+        vertical-align: top;
+        background-color: #fff;
+        box-sizing: border-box!important;
+    }
+    .layui-laypage input {
+        width: 50px;
+        margin: 0 5px;
+        text-align: center;
+        padding-left: 0px;
+    }
+    .layui-laypage .layui-laypage-curr .layui-laypage-em {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        padding: 1px;
+        width: 100%;
+        height: 100%;
+        background-color: #2299ee;
+    }
+    .layui-input-block, .layui-input-inline {
+        position: inherit;
+    }
+
+    .layui-elem-field {
+        margin-top: 5px;
+        padding: 0;
+        border: 0px solid #e2e2e2;
+    }
+
+    .layui-table-tool {
+        position: absolute;
+        bottom: 0px;
+    }
+
+    .layui-inline {
+        position: relative;
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+
+    .layui-table td, .layui-table th {
+        padding: 2px 8px;
+        min-height: 20px;
+        line-height: 20px;
+        border: 1px solid #e2e2e2;
+        font-size: 14px;
+    }
+    .layui-table,.layui-table th{
+        text-align:center;
+        height:37px;
+    }
+
+    .layui-table-cell {
+        height: auto;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .layui-table-tips-main {
+        margin-top: 0px !important;
+    }
+
+    .layui-form-checked[lay-skin="primary"] i {
+        background-color: #01AAED;
+        color: white;
+    }
+
+    .layui-input, .layui-textarea {
+        display: block;
+        width: 300px;
+        padding-left: 10px;
+        margin-right: 2px;
+        height: 42px;
+        font-size: 14px;
+    }
+
+    .tb_1{
+        font-size: 14px;
+        border-right: #E7E7E7 1px solid;
+        border-top: #E7E7E7 1px solid;
+        border-left: #E7E7E7 1px solid;
+        border-bottom: #E7E7E7 1px solid;
+        background-color: #F8F8F8;
+        color: #28495C;
+        height: 40px;
+        float: left;
+    }
+    .layui-form-label{
+        float: left;
+        display: block;
+        width: 80px;
+        font-weight: 400;
+        text-align: right;
+        line-height: 40px;
+        padding-right: 22px;
+        padding-left: 5px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+    .myRow{
+        display: flex;
+    }
+    .layui-btn{
+        font-size: 14px;
+        background-color: #3398E5;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: .9;
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 13px;
+        margin-left: 10px;
+    }
+    .layui-btn-normal{
+        margin-left: 10px;
+    }
+    .layui-btn+.layui-btn{
+        margin-left: 10px;
+    }
+    .layui-table-body{
+        font-size: 14px;
+    }
+    .layui-layer{
+        font-size: 14px;
+    }
+
+    .layui-layer-btn a{
+        height: 28px;
+        width: 35px;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .container {
+        overflow: auto;
+        display: flex; /*设为伸缩容器*/
+        height: 100%;
+    }
+
+    .left {
+        flex-shrink: 0;
+        width: 150px;
+        /*border: 2px solid blue;*/
+    }
+
+    .right {
+        border: 2px solid #c2c2c2;
+        flex: 1; /*这里设置为占比1，填充满剩余空间*/
+    }
+    .layui-table tr {
+        transition: all .3s;
+        -webkit-transition: all .3s
+        height:26px;
+    }
+</style>
+
+</body>
+</html>

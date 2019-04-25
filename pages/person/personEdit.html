@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>用户编辑框</title>
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="example">
+    <div class="left">
+        <div class="layui-form-item " style="display: none">
+            <div class="layui-input-block layui-form-pane">
+                <input type="text" name="rowId" id="rowId" lay-verify="name" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item " style="display: none">
+            <div class="layui-input-block layui-form-pane">
+                <input type="text" name="rowGuid" id="rowGuid" lay-verify="name" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane" style="height: 38.5px;">
+            <label class="layui-form-label ">输入姓名<font color="red">*</font></label>
+            <div class="layui-input-block  ">
+                <input type="text" name="userName" id="userName" lay-verify="userName" autocomplete="off"
+                       placeholder="请输入姓名"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane" style="height: 38.5px;">
+            <label class="layui-form-label ">输入登录名<font color="red">*</font></label>
+            <div class="layui-input-block  ">
+                <input type="text" name="loginId" id="loginId" lay-verify="loginId" autocomplete="off"
+                       placeholder="请输入登录名"
+                       class="layui-input">
+
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane" style="height: 38.5px;">
+            <label class="layui-form-label  ">选择性别</label>
+            <div class="layui-input-block "
+                 style="border-color:#e6e6e6!important;height:38px;">
+                <input type="radio" name="sex" value="男" title="男" checked="" id="sex0">
+                <input type="radio" name="sex" value="女" title="女" id ="sex1">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane" style="height: 38.5px;">
+            <label class="layui-form-label ">输入工号</label>
+            <div class="layui-input-block">
+                <input type="text" name="gongHao" id="gongHao" lay-verify="title" autocomplete="off" placeholder="请输入工号"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane" style="height: 38.5px;">
+            <label class="layui-form-label ">输入密码</label>
+            <div class="layui-input-block">
+                <input type="password" name="password" id="password1" lay-verify="pass" placeholder="请输入密码"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane" style="height: 38.5px;">
+            <label class="layui-form-label ">部门</label>
+            <div class="layui-input-block">
+                <input type="text" name="duty" id="duty" autocomplete="off" placeholder="请选择部门"
+                       class="layui-input">
+                <input id="deptGuid" name="deptGuid" type="hidden">
+                <button style="position: absolute;top: 10%;right: 0;
+                        cursor: pointer;" type="button" id="selectDuty"
+                        class="layui-btn layui-btn-normal layui-btn-small">选择部门
+                </button>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane" style="height: 38.5px;">
+            <label class="layui-form-label ">联系电话</label>
+            <div class="layui-input-block">
+                <input type="text" name="tel" id="tel" lay-verify="title" autocomplete="off" placeholder="请输入联系电话"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane" style="height: 38.5px;">
+            <label class="layui-form-label ">排序号</label>
+            <div class="layui-input-block">
+                <input type="text" name="sortSQ" id="sortSQ" lay-verify="title" autocomplete="off" placeholder="请输入排序号"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="demo1">添加</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="right" id="vueConfig">
+        <div class="layui-form-item" style="height: 100%;">
+            <div class="layui-input-block my_input">
+                <ul>
+                    <li v-for="item in roles">
+                        <input type="checkbox" name="like" v-bind:title="item.roleName" v-bind:value="item.rowGuid">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="../../Scripts/jquery-3.3.1.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="../../Scripts/vue.js"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            //console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+
+    $().ready(function () {
+        var myRoles = []
+        //获取
+        $.ajax({
+            async: false,
+            url: '/sys/role/getAllRole',
+            contentType: 'application/json;charset=utf-8',
+            method: 'get',
+            dataType: 'JSON',
+            success: function (res) {
+                if (res.code = '0') {
+                    myRoles = res.data
+                } else
+                    alert(res.msg);
+            },
+            error: function (data) {
+                if (data.status == 0) {
+                    parent.layer.close(parent.layer.index);
+                }
+            }
+        });
+        //创建vue实例化对象
+        var vm = new Vue({
+            el: '#vueConfig',
+            data: {
+                // 数据创建
+                roles: myRoles
+            },
+            methods: {},
+            mounted() {
+
+            }
+        })
+    })
+	
+    function inputDataHandle(data, rowGuid,sex) {
+        //新增
+        if (data == 'add') {
+            layui.use('form', function () {
+                var form = layui.form();
+                //监听提交
+                form.on('submit(demo1)', function (data) {
+                    //form监听事件
+                    var arr = new Array();
+                    $("input:checkbox[name='like']:checked").each(function (i) {
+                        arr[i] = $(this).val();
+                    });
+                    var param = {};
+                    param['user'] = data.field;
+                    param['roles'] = arr;
+                    $.ajax({
+                        async: false,
+                        url: '/sys/user/add',
+                        contentType: 'application/json;charset=utf-8',
+                        method: 'post',
+                        data: JSON.stringify(param),
+                        dataType: 'JSON',
+                        success: function (res) {
+                            //console.log(res)
+                            if (res.code == '0') {
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+                            } else
+                                layer.msg(res.msg);
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+
+                });
+            });
+        }
+
+        if (data == 'edit') {
+            layui.use('form', function () {
+                //先获取该用户所拥有的角色
+                var arr = [];
+                if(sex==='男')
+                    $("#sex0").attr("checked",true);
+                else
+                    $("#sex1").attr("checked",true);
+                $.ajax({
+                    async: false,
+                    url: '/sys/user/getCheckedRole?userGuid=' + rowGuid,
+                    contentType: 'application/json;charset=utf-8',
+                    method: 'get',
+//		                    data: value.rowGuid,
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if (res.code == '0') {
+                            arr = res.data;
+                        } else
+                            layer.msg(res.msg);
+                    },
+                    error: function (data) {
+
+                    }
+                });
+                var form = layui.form();
+                var checkRoleBox = $("input:checkbox[name='like']");
+                for (i = 0; i < checkRoleBox.length; i++) {
+                    for (j = 0; j < arr.length; j++) {
+                        if (checkRoleBox[i].value == arr[j]) {
+                            checkRoleBox[i].checked = true
+                        }
+                    }
+                }
+                form.render();
+                //监听提交
+                form.on('submit(demo1)', function (data) {
+                    var arr = new Array();
+                    $("input:checkbox[name='like']:checked").each(function (i) {
+                        arr[i] = $(this).val();
+                    });
+                    var params = {};
+                    params['roleGuids'] = arr;
+                    params['roleUser'] = data.field;
+                    console.log(JSON.stringify(data.field))
+                    $.ajax({
+                        async: false,
+                        url: '/sys/user/update',
+                        contentType: 'application/json;charset=utf-8',
+                        method: 'put',
+                        data: JSON.stringify(params),
+                        dataType: 'JSON',
+                        success: function (res) {
+                            if (res.code == '0') {
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+                            } else
+                                layer.msg(res.msg);
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+                });
+            });
+        }
+
+        //职业选择
+        $('#selectDuty').on('click', function () {
+            var index = parent.layer.getFrameIndex(window.name);
+            var data = 'add';
+            var DutyName = encodeURIComponent("parent.")
+            layer.open({
+                type: 2,
+                title: '选择职业',
+                maxmin: true,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['250px', '380px'],
+                content: 'deptChoice.html',
+                success: function (layero, index) {
+                    //  parent.layer.close(index);
+
+                    var body = layer.getChildFrame('body', index);
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    //iframeWin.inputDataHandle(data);
+                    $("#deptName").val(iframeWin.duty);
+                    $("#rowGuid").val(iframeWin.deptGuid);
+
+                },
+                end: function () {
+                    //刷新页面
+                    //window.location.reload()
+                }
+            });
+        });
+
+    }
+
+
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form()
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //创建一个编辑器
+        // var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+        form.verify({
+        	'userName': function (value) {
+                if (value.length < 2) {
+                    return '名字至少得2个字符啊';
+                }
+            },
+			'loginId':function(value){
+				if(value == ""){
+					return '登录名未填写'
+				}
+				var check;
+	            if (value != "") {
+	                $.ajax({
+	                    contentType: 'application/json;charset=utf-8',
+	                    url: '/sys/user/checkUserByLoginId',
+	                    method: 'get',
+	                    async: false,
+	                    data: {
+	                        loginId: value
+	                    },
+	                    dataType: 'JSON',
+	                    success: function (result) {
+	                        if (result.code == 500) {
+	                        	check = true;
+	                        }
+	                    }
+	                });
+	            }
+	            if(check){
+	            	return '登录名已经存在';
+	            }
+			},
+            'pass': function (value) {
+                if (value.length < 6 && value.length > 0) {
+                    return '密码不得少于6位';
+                }
+            },
+            tel: [/^1[3|4|5|7|8]\d{9}$/, '手机必须11位，只能是数字！']
+
+        });
+
+        //监听指定开关
+        form.on('switch(switchTest)', function (data) {
+            layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+    });
+</script>
+<style>
+    .layui-form-item {
+        margin-top: 3px;
+        margin-left: 3px;
+        margin-bottom: 0px;
+    }
+
+    .layui-form-checkbox i {
+        left: -5px;
+    }
+
+    .layui-form-checkbox {
+        padding-left: 30px;
+        padding-right: 0px;
+    }
+
+    .my_input {
+        margin-left: 20px;
+    }
+
+    .layui-form-checked i {
+        margin-right: 10px;
+        float: left;
+        text-align: center;
+        color: #2299ee;
+    }
+
+    .layui-table td, .layui-table th {
+        padding: 2px 8px;
+        min-height: 20px;
+        line-height: 20px;
+        border: 1px solid #e2e2e2;
+        font-size: 14px;
+    }
+
+    .layui-form-checked[lay-skin="primary"] i {
+        background-color: #01AAED;
+        color: white;
+    }
+
+    .layui-table-cell {
+        height: auto;
+        line-height: 20px;
+    }
+
+    .layui-input, .layui-textarea {
+        display: block;
+        padding-left: 10px;
+        width: 100%;
+    }
+
+    .left {
+        float: left;
+    }
+
+    .right {
+        height: 100%;
+        overflow: hidden;
+        border-left-color: rgb(238, 238, 238);
+        /*border: 2px solid #c2c2c2;*/
+        flex: 1; /*这里设置为占比1，填充满剩余空间*/
+    }
+    .layui-btn {
+        font-size: 14px;
+        background-color: #3398E5;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: .9;
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 13px;
+        margin-left: 10px;
+    }
+</style>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../../Scripts/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../Content/uploadify/uploadify.css" />
+    <link rel="stylesheet" href="../../../Content/layui-formSelects-master/dist/formSelects-v4.css" />
+    <title></title>
+</head>
+<body>
+
+<form class="layui-form"  lay-filter="layform">
+		<div class="layui-form-item layui-form-pane" style="display: none;">
+	        <div class="layui-input-block" style="width: 90%;">
+	            <input type="text"  id="rowGuid">
+	            <input type="text"  id="attachGuid">
+	            <input type="text" id="categoryGuid" />
+	        </div>
+	     </div>
+	 	<div class="layui-form-item layui-form-pane">
+	        <label class="layui-form-label">标题<font color="red">*</font></label>
+	        <div class="layui-input-block" style="width: 90%;">
+	            <input type="text" name="title" id="title" lay-verify="required" placeholder="请输入栏目名称" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	     <div style="height: 41px;">
+		     <div style="float: left;">
+		     	<div class="layui-form-item layui-form-pane">
+			        <label class="my-block-label">信息类型</label>
+			        <div class="layui-input-block">
+				      <select id="infoType" name="infoType" xm-select="categoryselect" lay-verify="required" xm-select-skin="normal">
+				      </select>
+				    </div>
+		     	</div>
+		     </div>
+		     <div style="float: left;width: 200px;">
+		     	<div class="layui-form-item layui-form-pane">
+			        <label class="layui-form-label">信息日期</label>
+			        <div class="layui-input-block">
+			       		<input type="text" name="infoDate" id="infoDate" readonly="readonly" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input icon">
+			        </div>
+			     </div>
+		     </div>
+	     </div>
+	     <div class="layui-form-item layui-form-pane" style="display: none;" id="addurl">
+	        <label class="my-block-label">外链地址</label>
+	        <div class="layui-input-block" style="width: 90%;">
+		      <input type="text" name="infoUrl" id="infoUrl"  placeholder="请输入外链地址" autocomplete="off" class="layui-input">
+		    </div>
+	     </div>
+	 	<!--<div class="layui-form-item layui-form-pane">
+	        <label class="my-block-label">发布栏目</label>
+	        <div class="layui-input-block">
+		      <select name="categoryGuid" xm-select="xmselect" lay-verify="required" xm-select-skin="normal">
+		      </select>
+		    </div>
+	     </div>-->
+	     <div class="layui-form-item layui-form-pane" id="attach">
+	        <div class="my-label" id="attachment">附件</div>
+	        <div class="my-block layui-input-block">
+		      <div>  
+			     <input type="file" name="uploadify" id="uploadFile" />  
+			     <div id="some_file_queue"></div>  
+			     <div id="fileName"></div>  
+			  </div>  
+		    </div>
+	     </div>
+	     
+	    <div class="layui-form-item layui-form-pane">
+		    <textarea id="editor_id" name="content" style="width:100%;height:300px;">
+			</textarea>
+	    </div>
+	     <div class="layui-form-item" style="text-align: center;">
+	        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+	    </div>
+</form>
+
+<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="../../Content/uploadify/jquery.uploadify.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script src="../../Scripts/layui/layui.all.js"></script>
+<script src="../../Content/kindeditor/kindeditor-all-min.js"></script>
+<script src="../../Content/kindeditor/lang/zh-CN.js"></script>
+<script src="../../Content/layui-formSelects-master/dist/formSelects-v4.min.js"></script>
+<script>
+	$.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+	
+    //layui
+    var formSelects = layui.formSelects;
+    function inputDataHandle(data,content){
+    	//server模式
+		formSelects.data('categoryselect', 'server', {
+			type:'get',
+		    url: '/sys/codeValue/getCodeByValue',
+		    data:{'codeName':'信息类别','val':data}
+		});
+		window.editor.html(content);
+	}
+    formSelects.on('categoryselect', function(id, vals, val, isAdd, isDisabled){
+    	if(val.name == '链接类型'){
+    		$('#infoUrl').val('');
+    		$('#addurl').css('display','');
+    	}else{
+    		$('#infoUrl').val('');
+    	    $('#addurl').css('display','none');
+    	}
+	    //如果return false, 那么将取消本次操作
+	});
+	
+    formSelects.render('categoryselect', {
+		    radio: true            //是否设置为单选模式
+	});
+		
+    formSelects.data('xmselect', 'server', {
+		type:'post',
+	    url: '/sys/informationcategory/getAllCategory'
+	});
+	
+	//富文本编辑器
+    KindEditor.ready(function(K) {
+        window.editor = K.create('#editor_id', {
+            afterBlur: function () { this.sync(); }
+        });
+    });
+	
+    //定义全局变量
+    var local_data_attachGuids = new Array;
+	$(function() {  
+       $("#uploadFile").uploadify({  
+           'swf'           : '../../Content/uploadify/uploadify.swf',  
+           'uploader'      : '/sys/common/uploadFile',  //服务器端方法
+           //'formData'    : {'someKey' : 'someValue', 'someOtherKey' : 1},//传输数据json格式  
+           'height'        : 30,  //按钮高度  
+           'width'         : 100,  //按钮宽度    
+           'fileObjName'   : 'uploadify',//默认 Filedata, $_FILES控件name名称  
+           'multi'         : true,  //设置是否允许一次选择多个文件，true为允许，false不允许  
+           'auto'          : true,  //是否自动上传  
+           'buttonText'    : '选择文件',//按钮显示文字  
+           //'buttonClass' : 'uuid', //按钮辅助class  
+           'buttonCursor'  : 'hand', //设置鼠标移到按钮上的开状，接受两个值'hand'和'arrow'(手形和箭头)  
+           'debug'         : false, //开启或关闭debug模式  
+//         'cancelImg'     : '../../../Content/uploadify/uploadify-cancel.png', //这个没测试出来，默认是放在与uploadify同级的img文件夹下  
+           'fileTypeExts'  : '*.jpg;*.jpge;*.gif;*.psd;*.png;*.txt;*.doc;*.docx;*.ppt;*.pptx;*.pdf', //文件后缀限制 默认：'*.*'  
+           'fileSizeLimit' : '10MB',//接受一个单位（B,KB,MB,GB）。如果是数字则默认单位为KB。设置为0时表示不限制  
+           'fileTypeDesc'  : 'All Files',//可选文件的描述。这个值出现在文件浏览窗口中的文件类型下拉选项中。（chrome下不支持，会显示为'自定义文件',ie and firefox下可显示描述）  
+           'method'        : 'post', //提交上传文件的方法，接受post或get两个值，默认为post  
+           'progressData'  : 'percentage',//设置文件上传时显示数据，有‘percentage’ or ‘speed’两个参数(百分比和速度)  
+           'queueID'       : 'some_file_queue',//设置上传队列DOM元素的ID，上传的项目会增加进这个ID的DOM中。设置为false时则会自动生成队列DOM和ID。默认为false  
+           'queueSizeLimit'  : 5,//一个队列上传文件数限制  
+           'simUploadLimit'  : 5, //一次同步上传的文件数目  
+           'removeCompleted' : true, //完成时是否清除队列 默认true    
+           'removeTimeout'   : 1,   //完成时清除队列显示秒数,默认3秒    
+           'requeueErrors'   : false, //设置上传过程中因为出错导致上传失败的文件是否重新加入队列中上传  
+           'successTimeout'  : 30,   //设置文件上传后等待服务器响应的秒数，超出这个时间，将会被认为上传成功，默认为30秒  
+           'uploadLimit'     : 99,  //允许上传的最多张数   
+           'onUploadSuccess' : function(file, data, response) { //上传成功  
+               var jdata = $.parseJSON(data);
+               var last = jdata.type.substr('1',jdata.type.length);
+               $("#fileName").append("<div style='float:left;margin-right:30px'><a href="+jdata.url+" download="+jdata.fileName+"><em><img class='m-img' src='../../Content/images/uploadico/"+last+".png' /></em><em id="+jdata.attachRowguid+" name='fileName'  style='color:#555555'>"+jdata.fileName+"</em></a><em style='color:red;cursor:pointer;' onclick = 'deleteFile(this)' id="+jdata.attachRowguid+">删除</em></div>");  
+               local_data_attachGuids.push(jdata.attachRowguid);
+            },  
+            'onFallback':function(){  
+               layer.msg("您未安装FLASH控件，无法一次性上传多个文件！请安装FLASH控件后再试。");  
+            },  
+            onSelectError:function(file, errorCode, errorMsg){ //选择失败  
+                   switch(errorCode) {  
+                       case -100:    
+                           layer.msg("上传的文件数量已经超出系统限制的"+$('#uploadFile').uploadify('settings','queueSizeLimit')+"个文件！");      
+                           break;    
+                       case -110:    
+                           layer.msg("文件 ["+file.name+"] 大小超出系统限制的"+$('#uploadFile').uploadify('settings','fileSizeLimit')+"大小！");  
+                           break;    
+                       case -120:    
+                           layer.msg("文件 ["+file.name+"] 大小异常！");  
+                           break;    
+                       case -130:    
+                           layer.msg("文件 ["+file.name+"] 类型不正确！");  
+                           break;  
+                   }  
+               },  
+               //删除时触发   
+              'onCancel' : function(file) { 
+                  layer.msg('a');   
+              }, 
+              /* //上传汇总 
+             'onUploadProgress' : function(file, bytesUploaded, bytesTotal, totalBytesUploaded, totalBytesTotal) {   
+                 $('#progress').html(totalBytesUploaded + ' bytes uploaded of ' + totalBytesTotal + ' bytes.');   
+              }, 
+             'onUploadComplete' : function(file) { //上传完成   
+                  console.log('The file ' + file.name + ' finished processing.');   
+              },   
+              //修改formData数据 ,每个文件即将上传前触发 
+              'onUploadStart' : function(file) { 
+                  $("#uploadFile").uploadify("settings", "someOtherKey", 2); 
+              }, 
+              //清除队列   
+              'onClearQueue' : function(queueItemCount) { 
+                  alert(queueItemCount + ' file(s) were removed from the queue');   
+              }, 
+              //调用destroy是触发   
+              'onDestroy' : function() {   
+                  alert('我被销毁了');   
+              },   
+              //每次初始化一个队列是触发   
+              'onInit' : function(instance){   
+                  alert('The queue ID is ' + instance.settings.queueID);   
+              },  
+              //上传错误   
+              'onUploadError' : function(file, errorCode, errorMsg, errorString) { 
+                  alert('The file ' + file.name + ' could not be uploaded: ' + errorString);   
+              }, */  
+       });  
+	});  
+	
+//	//下载文件
+//	function downLoadFile(ele){
+//		var param = {};
+//		param['guid'] = ele.id;
+//		$.ajax({
+//          url:'/common/downLoadFile',
+//          contentType: 'application/json;charset=utf-8',
+//          method:'get',
+//          data:param,
+//          dataType:'JSON',
+//          success:function(res){
+//              if(res.code=='0'){
+//              	$(ele).append("<a href="+res+"></a>")
+//                  console.log(res.data.url);
+//                  location.href = res.data.url;
+//              }
+//              if(res.code=='500'){
+//              	layer.msg(res.msg)
+//              }
+//          },
+//          error:function (data) {
+//              
+//          }
+//      }) ;
+//	}
+	
+	//删除文件
+	function deleteFile(ele){
+		var guids = new Array;
+		guids.push(ele.id)
+		$.ajax({
+        	async:true,
+            url:'/sys/frameAttach/delete',
+            contentType: 'application/json;charset=utf-8',
+            method:'post',
+            data:JSON.stringify(guids),
+            dataType:'JSON',
+            success:function(res){
+                if(res.code=='0'){
+                	//移除
+                	if(local_data_attachGuids.indexOf(ele.id)>-1){
+                		local_data_attachGuids.splice(local_data_attachGuids.indexOf(ele.id),1);
+                	}
+                	 ele.parentElement.setAttribute('style','display: none;')
+                }
+                if(res.code=='500'){
+                	layer.msg(res.msg)
+                }
+            }
+        }) ;	
+	}
+	
+	
+    layui.use(['form','laydate'], function(){
+        var form = layui.form;
+		var laydate = layui.laydate;
+		
+		  //执行一个laydate实例
+		  laydate.render({
+		    elem: '#infoDate' //指定元素
+		  });
+
+		  //自定义验证规则
+        form.verify({
+            /* name: function (value) {
+                 if (value.length < 3) {
+                     return '名字至少得3个字符啊';
+                 }
+             }*/
+        });
+		  
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+        	var params = {};
+//      	var categoryGuids = data.field.categoryGuid.split(',');
+			//获取该记录所有的栏目
+			var mparam = {};
+			mparam['categoryGuid'] = $('#categoryGuid').val();
+			$.ajax({
+            	async:false,
+                url:'/sys/informationcategory/getCategoryByGuid',
+                contentType: 'application/json;charset=utf-8',
+                method:'get',
+                data:mparam,
+                dataType:'JSON',
+                success:function(res){
+                    if(res.code=='0'){
+                        console.log(res);
+                        obj = res.data;
+                        for (var i=0;i<obj.length;i++) {
+			        		if(obj[i].is_needAudit == 1){
+			        			params['status'] = 2
+			        		}
+			        	}
+                    }
+                    if(res.code=='500'){
+                    	layer.msg(res.msg)
+                    }
+                }
+            }) ;
+        	var html = $('#editor_id').val();
+        	params['rowGuid'] = $('#rowGuid').val();
+        	params['content'] = html;
+        	params['title'] = data.field.title;
+        	params['infoType'] = data.field.infoType;
+        	params['infoDate'] = data.field.infoDate;
+        	params['attachRowGuids'] = local_data_attachGuids;
+        	params['infoUrl'] = data.field.infoUrl;
+        	params['attachGuid'] = $('#attachGuid').val();
+        	console.log($('#attachGuid').val());
+            $.ajax({
+            	async:false,
+                url:'/sys/informationinfo/update',
+                contentType: 'application/json;charset=utf-8',
+                method:'put',
+                data:JSON.stringify(params),
+                dataType:'JSON',
+                success:function(res){
+                    if(res.code=='0'){
+                        layer.msg('更新成功', {
+                            icon: 1,
+                            time: 1000 //2秒关闭（如果不配置，默认是3秒）
+                        }, function () {
+                            parent.layer.close(parent.layer.index);
+                        });
+                    }
+                    if(res.code=='500'){
+                    	layer.msg(res.msg)
+                    }
+                }
+            }) ;
+            return false;
+        });
+    });
+  
+</script>
+<style>
+	#fileName:after{      /*添加一个伪元素选择器，利用CSS让父元素在其最后添加一个块元素，并清除浮动*/
+        content:"";
+        display: block;
+        clear: both;
+    }
+	.m-img{
+		width: 50px;
+	}
+	.my-block-label{
+		width: 80px;
+	    padding: 8px 15px;
+	    line-height: 20px;
+	    border: 1px solid #e6e6e6;
+	    border-radius: 2px 0 0 2px;
+	    text-align: center;
+	    background-color: #FBFBFB;
+	    overflow: hidden;
+	    white-space: nowrap;
+	    text-overflow: ellipsis;
+	    float: left;
+	    height: 20px!important;
+	}
+	.layui-form-select{
+		display: none;
+	}
+	.my-block{
+		border: 1px solid #e6e6e6;
+	    padding-bottom: 10px;
+	    width: 90% !important;
+	}
+	.my-label{
+		width: 80px;
+	    padding: 8px 15px;
+	    line-height: 20px;
+	    border: 1px solid #e6e6e6;
+	    border-radius: 2px 0 0 2px;
+	    text-align: center;
+	    background-color: #FBFBFB;
+	    overflow: hidden;
+	    white-space: nowrap;
+	    text-overflow: ellipsis;
+	    float: left;
+	    height: 100%;
+	}
+    .layui-form-checked i {
+        margin-right: 10px;
+        float: left;
+        text-align: center;
+    }
+
+    .layui-table td, .layui-table th {
+        padding: 2px 8px;
+        min-height: 20px;
+        line-height: 20px;
+        border: 1px solid #e2e2e2;
+        font-size: 14px;
+    }
+
+    .layui-form-checked[lay-skin="primary"] i {
+        background-color: #01AAED;
+        color: white;
+    }
+
+    .layui-table-cell {
+        height: auto;
+        line-height: 20px;
+    }
+
+    .layui-input, .layui-textarea {
+        display: block;
+        padding-left: 10px;
+        width: 100%;
+    }
+
+    .layui-input-block {
+        margin-left: 120px;
+        min-height: 36px;
+        width: 350px;
+    }
+
+    .layui-form-item {
+        margin-top: 3px;
+        margin-left: 3px;
+        margin-bottom: 0px;
+    }
+
+    .layui-form-pane {
+        flex: 1;
+    }
+
+    .layui-form-button {
+        margin-top: 8px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 1px;
+        height: 1px;
+    }
+    .layui-btn {
+        font-size: 14px;
+        background-color: #3398E5;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: .9;
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 13px;
+        margin-left: 10px;
+    }
+	.icon{
+		background-image:url("../../../Scripts/layui/css/modules/laydate/icon.png");
+		background-repeat: no-repeat;
+		background-position: right;
+	}
+</style>
+</body>
+
+
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>详细信息</title>
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+</head>
+<body>
+<div class="layui-form-pane" style="display: none;">
+    <p class="infoTitle"><input type="text" id="attachGuid" readonly/></p>
+</div>
+<div class="layui-form-pane">
+    <p class="infoTitle"><input type="text" id="title" readonly style="border-style:none;width: 70%;text-align: center"/></p>
+</div>
+<div class="layui-form-item " style="display: none">
+    <div class="layui-input-block layui-form-pane">
+        <input type="text" name="rowGuid" id="rowGuid" lay-verify="name" autocomplete="off"
+               class="layui-input">
+    </div>
+</div>
+<div class="layui-form">
+    <p class="infoDate">发布时间：<input type="text" id="infoDate" readonly style="border-style:none "/>发布人：<input type="text" id="createUserName" readonly style="border-style:none "/></p>
+</div>
+<div id="infoContent" style="height: 280px;"></div>
+<hr color="#2B84C8" style="margin-top: 30px; margin: 10px;">
+<div class="attachContainer">
+    <span style="margin-left:40px;">附件下载：</span>
+    <ul id="ulAttachList">
+    </ul>
+</div>
+<div style="text-align:center;padding:5px;margin-top:20px;">
+    <button id="infoPass" class="layui-btn layui-btn-normal" data-type="close">审核通过</button>
+    <button id="infoUnPass" class="layui-btn layui-btn-normal" data-type="close">审核不通过</button>
+</div>
+<script type="text/javascript" src="../../Scripts/jquery-3.3.1.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script src="../../Scripts/layui/layui.all.js" charset="utf-8"></script>
+<script src="../../Content/kindeditor/kindeditor-all-min.js"></script>
+<script src="../../Content/kindeditor/lang/zh-CN.js"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+
+    $().ready(function(){
+        //获取附件url
+        var param = {};
+        param['guid'] = $('#attachGuid').val();
+        $.ajax({
+            url: '/sys/frameAttach/getAttachList',
+            contentType: 'application/json;charset=utf-8',
+            method: 'get',
+            data: param,
+            dataType: 'JSON',
+            success: function (res) {
+                if (res.code = '0' && res.data.length > 0) {
+                    for(var i=0;i<res.data.length;i++){
+                        var mdata = res.data;
+                        var last = mdata[i].contentType.substr('1',mdata[i].contentType.length);
+                		$('#ulAttachList').append("<li><a href="+mdata[i].url+" download="+mdata[i].attachName+"><em><img class='m-img' src='../../../Content/images/uploadico/"+last+".png' /></em>"+mdata[i].attachName+"</a></li>");
+                    }
+
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+
+            }
+        });
+    });
+
+
+    $('#infoPass').on('click',function () {
+        var guid =$('#rowGuid').val();
+        $.ajax({
+            url:'/sys/informationinfo/auditPassInfo/'+guid,
+            contentType: 'application/json;charset=utf-8',
+            method: 'post',
+            data: JSON.stringify(guid),
+            dataType: 'JSON',
+            success:function (res) {
+                if(res.code = '0'){
+                    layer.msg('审核成功！',{
+                        icon: 1,
+                        time: 1000
+                    },function () {
+                        parent.layer.close(parent.layer.index);
+                    });
+                }else {
+                    layer.msg('发生错误');
+                }
+            },error: function (jqXHR, textStatus, errorThrown) {
+
+            }
+
+        });
+    });
+
+    $('#infoUnPass').on('click',function () {
+        var guid =$('#rowGuid').val();
+        $.ajax({
+            url:'/sys/informationinfo/auditFailInfo/'+guid,
+            contentType: 'application/json;charset=utf-8',
+            method: 'post',
+            data: JSON.stringify(guid),
+            dataType: 'JSON',
+            success:function (res) {
+                if(res.code = '0'){
+                    layer.msg('审核成功！',{
+                        icon: 1,
+                        time: 1000
+                    },function () {
+                        parent.layer.close(parent.layer.index);
+                    });
+                }else {
+                    layer.msg('发生错误');
+                }
+            },error: function (jqXHR, textStatus, errorThrown) {
+
+            }
+
+        });
+    });
+
+
+</script>
+</body>
+</html>
+<style>
+	.m-img{
+		width: 50px;
+	}
+	#ulAttachList:after{
+		content: '';
+		display: block;
+        clear: both;
+	}
+    li{
+        float: left;
+        margin-left: 10px;
+    }
+    .infoTitle {
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+        border-bottom: 1px dashed #3398E5;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .infoDate {
+        text-align: center;
+        font-size: 14px;
+        color: blue;
+        margin-left: 10%;
+    }
+
+    .infoContent {
+        min-height: 300px;
+    }
+
+    #ulAttachList {
+        list-style-type: none;
+        line-height: 25px;
+    }
+
+    .layui-btn-normal {
+        margin-left: 10px;
+    }
+    .layui-btn + .layui-btn {
+        margin-left: 10px;
+    }
+</style>

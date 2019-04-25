@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+    <title>${column.comments}编辑</title>
+</head>
+<body>
+
+<form class="layui-form" action="" lay-filter="layform">
+  	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label"><font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="rowId" id="rowId" lay-verify="rowId" placeholder="请输入" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label"><font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="rowGuid" id="rowGuid" lay-verify="rowGuid" placeholder="请输入" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label"><font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="createTime" id="createTime" lay-verify="createTime" placeholder="请输入" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label"><font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="delFlag" id="delFlag" lay-verify="delFlag" placeholder="请输入" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label"><font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="sortSq" id="sortSq" lay-verify="sortSq" placeholder="请输入" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">标题<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="title" id="title" lay-verify="title" placeholder="请输入标题" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">信息类别<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="infoType" id="infoType" lay-verify="infoType" placeholder="请输入信息类别" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">链接地址<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="infoUrl" id="infoUrl" lay-verify="infoUrl" placeholder="请输入链接地址" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">内容<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="content" id="content" lay-verify="content" placeholder="请输入内容" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">信息日期<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="infoDate" id="infoDate" lay-verify="infoDate" placeholder="请输入信息日期" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">创建人<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="createUserName" id="createUserName" lay-verify="createUserName" placeholder="请输入创建人" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">创建人rowguid<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="createUserGuid" id="createUserGuid" lay-verify="createUserGuid" placeholder="请输入创建人rowguid" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">所属部门<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="createDeptName" id="createDeptName" lay-verify="createDeptName" placeholder="请输入所属部门" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">所属部门guid<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="createDeptGuid" id="createDeptGuid" lay-verify="createDeptGuid" placeholder="请输入所属部门guid" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">状态<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="status" id="status" lay-verify="status" placeholder="请输入状态" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">附件<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="attachGuid" id="attachGuid" lay-verify="attachGuid" placeholder="请输入附件" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	 	  	 <div class="layui-form-item">
+	        <label class="layui-form-label">点击次数<font color="red">*</font></label>
+	        <div class="layui-input-block">
+	            <input type="text" name="clickTimes" id="clickTimes" lay-verify="clickTimes" placeholder="请输入点击次数" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	     <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script>
+	$.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+
+    //接受父组件的值
+    function inputDataHandle(data){
+    var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
+        //新增
+        if(data == 'add'){
+            layui.use('form', function(){
+                var form = layui.form();
+                //监听提交
+                form.on('submit(formDemo)', function(data){
+                    $.ajax({
+                        url:m_url+'/informationinfo/add',
+                        contentType: 'application/json;charset=utf-8',
+                        method:'post',
+                        data:JSON.stringify(data.field),
+                        dataType:'JSON',
+                        success:function(res){
+                            console.log(res)
+                            if(res.code=='0'){
+                                parent.layer.close(parent.layer.index);
+                            }
+                            if(res.code=='500'){
+	                        	layer.msg(res.msg)
+	                        }
+                        },
+                        error:function (data) {
+                            if(data.status == 0){
+                                parent.layer.close(parent.layer.index);
+                            }
+                        }
+                    }) ;
+                });
+            });
+        }
+        //编辑
+        if(data == 'edit'){
+            layui.use('form', function(){
+                var form = layui.form();
+                //监听提交
+                form.on('submit(formDemo)', function(data){
+                    $.ajax({
+                        url:m_url+'/informationinfo/update',
+                        contentType: 'application/json;charset=utf-8',
+                        method:'put',
+                        data:JSON.stringify(data.field),
+                        dataType:'JSON',
+                        success:function(res){
+                            if(res.code=='0'){
+                                parent.layer.close(parent.layer.index);
+                            }
+                             if(res.code=='500'){
+	                        	layer.msg(res.msg)
+	                        }
+                        },
+                        //谷歌浏览器出现Provisional headers are shown警告     
+                        error:function (data) {
+                            if(data.status == 0){
+                                parent.layer.close(parent.layer.index);
+                            }
+                        }
+                    }) ;
+                });
+            });
+        }
+    }
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form()
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //创建一个编辑器
+        // var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+        form.verify({
+            /* name: function (value) {
+                 if (value.length < 3) {
+                     return '名字至少得3个字符啊';
+                 }
+             }*/
+        });
+    });
+</script>
+<style>
+    .layui-input-block {
+        margin-left: 120px;
+        min-height: 36px;
+    }
+    .layui-form-label {
+        width: 90px;
+    }
+</style>
+</body>
+
+
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+    <title>表单字段编辑框</title>
+</head>
+<body>
+
+<form class="layui-form " action="" lay-filter="FormField">
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-input-block">
+            <input type="text" name="rowId" id="rowId"  lay-verify="name" autocomplete="off"  class="layui-input">
+        </div>
+    </div>
+    <div class="Row">
+    <div class="left">
+        <div class="layui-form-item  layui-form-pane">
+            <label class="layui-form-label ">显示名称</font></label>
+            <div class="layui-input-block">
+                <input type="text" name="fieldDisplayName" id="fieldDisplayName"  lay-verify="formName" placeholder="请输入" autocomplete="off" class="layui-input-bloc">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-pane"  >
+            <label class="layui-form-label ">字段类型<font color="red">*</font></label>
+            <div class="layui-input-inline ">
+                <select name="fieldType"  id="fieldType" class="layui-select-title">
+                <option value>请选择字段类型</option>
+                <option value="varchar" selected = "selected">字符型（varchar)</option>
+                <option value="DateTime">日期类型（DateTime）</option>
+                <option value="decimal">数字类型（Numeric）</option>
+                <option value="Integer">整数类型（Integer）</option>
+                <option value="text">text</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane"  >
+            <label class="layui-form-label ">字段长度<font color="red">*</font></label>
+            <div class="layui-input-block">
+                <input type="text" name="fieldLength" id="fieldLength" required lay-verify="required" value="50" autocomplete="off" class="layui-input-bloc" >
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane"  >
+            <label class="layui-form-label ">显示界面</label>
+            <div class="layui-input-block " style="margin-left:0px;border:0.2px solid;border-color:#e6e6e6!important;height:38px;width:362px;">
+                <input type="radio" name="showInadd" value="1" title="是" checked="true"  id="showInadd">
+                <input type="radio" name="showInadd" value="0" title="否">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane"  >
+            <label class="layui-form-label " >必填项</label>
+            <div class="layui-input-block " style="margin-left:0px;border:0.2px solid;border-color:#e6e6e6!important;height:38px;width:362px;">
+                <input type="radio" name="mustFill" value="1" title="是" id="mustFill" >
+                <input type="radio" name="mustFill" value="0" title="否"checked="true" >
+            </div>
+        </div>
+    </div>
+    <div class="right">
+        <div class="layui-form-item  layui-form-pane">
+            <label class="layui-form-label ">字段名<font color="red">*</font></label>
+            <div class="layui-input-block">
+                <input type="text" name="fieldName" id="fieldName" required lay-verify="required"  placeholder="请输入" autocomplete="off" class="layui-input-bloc">
+            </div>
+        </div>
+        <div class="layui-form-item  layui-form-pane" >
+            <label class="layui-form-label ">显示方式<font color="red">*</font></label>
+            <div class="layui-input-inline ">
+                <select name="fieldDisplayType"  id="fieldDisplayType">
+                    <option value>请选择显示方式</option>
+                    <option value="0" selected = "selected">文本框输入</option>
+                    <option value="1">下拉菜单</option>
+                    <option value="2">单项选择</option>
+                    <option value="3">多项选择</option>
+                    <option value="4">多行文本</option>
+                    <!--<option value="5">多文件上传</option>
+                    <option value="6">HTML文本</option>-->
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item  layui-form-pane" >
+            <label class="layui-form-label ">小数点长度<font color="red">*</font></label>
+            <div class="layui-input-block">
+                <input type="text" name="decimalLength" id="decimalLength" required   value="0" autocomplete="off" class="layui-input-bloc">
+            </div>
+        </div>
+        <div class="layui-form-item  layui-form-pane" >
+            <label class="layui-form-label ">代码项</label>
+            <div class="layui-input-inline " >
+                <select name="codesGuid" id="codesGuid" lay-filter="codesFilter">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item  layui-form-pane" >
+            <label class="layui-form-label ">查询条件</label>
+            <div class="layui-input-block " style="margin-left:0px;border:0.2px solid;border-color:#e6e6e6!important;height:38px;width:362px;">
+                <input type="radio" name="isQueryCondition" value="1" title="是"   id="isQueryCondition">
+                <input type="radio" name="isQueryCondition" value="0" title="否" checked="true">
+            </div>
+        </div>
+    </div>
+       <div class="layui-btn-style">
+        <button class="layui-btn layui-btn-normal confirm" lay-submit lay-filter="formDemo">立即提交</button>
+       </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script src="../../Scripts/layui/layui.all.js" charset="UTF-8"></script>
+<script>
+
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+
+
+    //接受父组件的值
+    function inputDataHandle(data,physicalName,rowGuid,originalName){
+        console.log(originalName);
+        //新增
+        if(data == 'add'){
+            layui.use('form', function(){
+                var form = layui.form;
+                //监听提交
+                form.on('submit(formDemo)', function(data){
+                    var map = {};
+                    map['field'] = data.field;
+                    map['tableInfo'] = physicalName;
+                    map['rowGuid'] = rowGuid;
+                    $.ajax({
+                        async:false,
+                        url:'/sys/form/parameter/add',
+                        contentType: 'application/json;charset=utf-8',
+                        method:'post',
+                        data:JSON.stringify(map),
+                        dataType:'JSON',
+                        success:function(res){
+                            if(res.code == '0'){
+                                parent.layer.close(parent.layer.index);
+                            }
+                            else
+                                layer.msg(res.msg);
+                        },
+                        error:function (data) {
+
+                        }
+                    }) ;
+                });
+            });
+        }
+        //编辑
+        if(data == 'edit'){
+            layui.use('form', function(){
+                var form = layui.form;
+                var map = {};
+                map['tableName'] = physicalName;
+                map['originalName'] = originalName;
+                //监听提交
+                form.on('submit(formDemo)', function(data){
+                    map['field'] = data.field;
+                    $.ajax({
+                        async:false,
+                        url:'/sys/form/parameter/updateTableField/'+data.field.rowId,
+                        contentType: 'application/json;charset=utf-8',
+                        method:'put',
+                        data:JSON.stringify(map),
+                        dataType:'JSON',
+                        success:function(res){
+                            if(res.code == '0'){
+                                parent.layer.close(parent.layer.index);
+                            }
+                            else
+                                layer.msg(res.msg);
+                        },
+                        //谷歌浏览器出现Provisional headers are shown警告     
+                        error:function (data) {
+
+                        }
+                    }) ;
+                });
+            });
+        }
+    }
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //下拉列框
+        $().ready(function () {
+            $.ajax({
+                async:'true',
+                url:'/sys/codes/getAllCodes',
+                contentType: 'application/json;charset=utf-8',
+                method: 'get',
+                data:{},
+                dataType: 'JSON',
+                success:function (res) {
+                    var opt="<option value='' selected = \'selected\'>请选择</option>";
+                    $("select[name=codesGuid]").append(opt);
+                    for(var i=0;i<res.data.length;i++){
+                        var option="<option value=\""+res.data[i].rowGuid+"\">"+res.data[i].codeName+ "</option>";
+                        //option += ">"+res.data[i].categoryName+"</option>"; //动态添加数据
+                        $("#codesGuid").append(option);
+                    }
+                    form.render("select");
+                },
+                error:function () {
+
+                }
+            });
+
+        });
+
+        //自定义验证规则
+        form.verify({
+            roleName: [
+                /^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$/,
+                '角色名不能为空或有特殊字符'
+            ]
+        });
+    });
+
+</script>
+
+<style>
+    .layui-input-block {
+        margin-right:0px;
+        margin-left:0px;
+        min-height: 36px;
+    }
+    .layui-form-label {
+        width: 90px;
+    }
+    .left{
+        float: left;
+        margin-top:0px;
+        margin-right:0px;
+        height:210px;
+        width:365px;
+    }
+    .confirm{
+        margin-top:2.5px;
+    }
+    .right{
+        float:left;
+        margin-left:0px;
+        margin-top:0px;
+        margin-right:0px;
+        width:365px;
+        height:210px;
+
+    }
+    .layui-select-title{
+     width:500px;
+    }
+    .layui-btn{
+        font-size: 14px;
+        background-color: #3398E5;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: .9;
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 13px;
+        margin-left: 10px;
+    }
+    .layui-btn+.layui-btn{
+        margin-left: 10px;
+        margin-top:3px;
+        margin-bottom:0px;
+    }
+    .layui-input-bloc{
+        min-height: 36px;
+        padding-left:10px;
+        width:238px;
+        border-radius: 0 2px 2px 0;
+        border: 1px solid #e6e6e6;
+    }
+    .layui-form-item{
+        margin-top:2px;
+        margin-left:2px;
+        margin-bottom:2px;
+
+    }
+    .layui-input-inline{
+        min-height: 36px;
+        width:248px;
+    }
+    .Row{
+        float:left;
+        margin-left:2px;
+        margin-right:2px;
+        margin-top:2px;
+        width:730px;
+    }
+    .layui-btn-style{
+        float:left;
+        margin-left:320px;
+        margin-top:2px;
+    }
+    .layui-select-title{
+       width:250px;
+        margin-right:0px;
+    }
+    .layui-input{
+        width:250px;
+        margin-right:0px;
+    }
+</style>
+</body>
+
+
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+    <title>角色编辑框</title>
+</head>
+<body>
+
+<form class="layui-form" action="" lay-filter="roleForm">
+    <div class="layui-form-item" style="display: none">
+        <div class="layui-input-block">
+            <input type="text" name="rowId" id="rowId" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">模块名称<font color="red">*</font></label>
+        <div class="layui-input-block">
+            <input type="text" name="moduleName" id="moduleName" required placeholder="请输入模块名" lay-verify="moduleName"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">模块地址<font color="red">*</font></label>
+        <div class="layui-input-block">
+            <input type="text" name="moduleAddr" id="moduleAddr" required placeholder="请输入模块地址" lay-verify="moduleAddr"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">小图标</label>
+        <div class="layui-input-block">
+            <input type="text" name="smallIcon" id="smallIcon" readonly placeholder="请选择图标" autocomplete="off"
+                   class="layui-input icon1">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">上级目录</label>
+        <div class="layui-input-block">
+            <input type="text" name="pmoduleName" id="pmoduleName" readonly placeholder="请选择上级目录"
+                   autocomplete="off" class="layui-input icon2">
+            <input type="text" name="pmoduleCode" id="pmoduleCode" readonly placeholder="请选择上级目录"
+                   autocomplete="off" class="layui-input" style="display: none;">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-pane">
+        <label class="layui-form-label">排序号</label>
+        <div class="layui-input-block">
+            <input type="text" name="sortSq" id="sortSq" required placeholder="请输入排序号" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-button">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">立即提交</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="../../Scripts/jquery-3.3.1.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script>
+
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            //console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+
+    //接受父组件的值
+    function inputDataHandle(data) {
+        //新增
+        if (data == 'add') {
+            layui.use('form', function () {
+                var form = layui.form();
+                //监听提交
+                form.on('submit(formDemo)', function (data) {
+                    $.ajax({
+                        async: false,
+                        url: '/sys/modular/add',
+                        contentType: 'application/json;charset=utf-8',
+                        method: 'post',
+                        data: JSON.stringify(data.field),
+                        dataType: 'JSON',
+                        success: function (res) {
+                            if (res.code == '0') {
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+                            }
+                            if (res.code == 500) {
+                                layer.msg(res.msg);
+                            }
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+                });
+            });
+        }
+        //编辑
+        if (data == 'edit') {
+            layui.use('form', function () {
+                var form = layui.form();
+                //监听提交
+                form.on('submit(formDemo)', function (data) {
+                    $.ajax({
+                        async: false,
+                        url: '/sys/modular/updateModule/' + data.field.rowId,
+                        contentType: 'application/json;charset=utf-8',
+                        method: 'put',
+                        data: JSON.stringify(data.field),
+                        dataType: 'JSON',
+                        success: function (res) {
+                            if (res.code == '0') {
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+                            }
+                            if (res.code == 500) {
+                                layer.msg(res.msg);
+                            }
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+                });
+            });
+        }
+
+        //模块名重复检测
+
+
+
+        //选择上级部门弹出层
+        $("#pmoduleName").on('click', function () {
+            var idx = parent.layer.getFrameIndex(window.name);
+            parent.layer.open({
+                type: 2,
+                title: '选择目录',
+                zIndex: '19891015',
+                maxmin: true,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['500px', '500px'],
+                content: 'moduleChoice.html',
+                success: function (layero, index) {
+                    //调用兄弟页面方法
+                    var content = $(layero).find('iframe')[0].contentWindow;
+                    content.brotherInvokeMethod(idx);
+                },
+                end: function () {
+
+                }
+            })
+        });
+
+        //选择图标弹出层
+        $("#smallIcon").on('click', function () {
+            var idx = parent.layer.getFrameIndex(window.name);
+            parent.layer.open({
+                type: 2,
+                title: '选择图标',
+                zIndex: '19891015',
+                maxmin: true,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['650px', '600px'],
+                content: 'moduleIcon.html',
+                success: function (layero, index) {
+                    //调用兄弟页面方法
+                    var content = $(layero).find('iframe')[0].contentWindow;
+                    content.brotherInvokeMethod(idx);
+                },
+                end: function () {
+
+                }
+            })
+        });
+
+        layui.use(['form', 'layedit', 'laydate'], function () {
+            var form = layui.form()
+                , layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate;
+
+            //自定义验证规则
+            form.verify({
+
+                'moduleName':function(value){
+                    var check;
+                    if(value==""){
+                        return '模块名未填写'
+                    }else if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+                        return '模块名不能有特殊字符';
+                    }
+                    $.ajax({
+                        contentType: 'application/json;charset=utf-8',
+                        url: '/sys/modular/checkModuleName',
+                        method: 'get',
+                        async: false,
+                        data: {
+                            moduleName:value
+                        },
+                        dataType: 'JSON',
+                        success: function (result) {
+                            if (result.code == 500) {
+                                check=true;
+                            }
+                        }
+                    });
+                    if(check){
+                        return '模块名已经存在';
+                    }
+                },
+
+                'moduleAddr':function(value){
+                    var check;
+                    $.ajax({
+                        contentType: 'application/json;charset=utf-8',
+                        url: '/sys/modular/checkModuleAddr',
+                        method: 'get',
+                        async: false,
+                        data: {
+                            moduleAddr:value
+                        },
+                        dataType: 'JSON',
+                        success: function (result) {
+                            if (result.code == 500) {
+                                check=true;
+                            }
+                        }
+                    });
+                    if(check){
+                        return '模块地址已经存在';
+                    }
+                }
+
+                // moduleName: [
+                //     /^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$/,
+                //     '模块名不能为空或有特殊字符'
+                // ]
+            });
+        });
+    }
+
+
+</script>
+
+<style>
+    .layui-form-item .layui-input-inline {
+        margin-bottom: 0px;
+    }
+
+    .layui-input-block {
+        margin-left: 120px;
+        min-height: 36px;
+        width: 400px;
+    }
+
+    .layui-form-label {
+        width: 90px;
+    }
+
+    .layui-button-style {
+        margin-left: 200px;
+    }
+
+    .layui-form-item {
+        margin-top: 3px;
+        margin-left: 3px;
+        margin-bottom: 0px;
+    }
+
+    .layui-form-pane {
+        flex: 1;
+    }
+
+    .layui-select-title {
+        width: 400px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 1px;
+        height: 1px;
+    }
+
+    .layui-form-button {
+        margin-top: 5px;
+    }
+    .layui-btn{
+        font-size: 14px;
+        background-color: #3398E5;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: .9;
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 13px;
+        margin-left: 10px;
+    }
+    .icon1{
+        background-position: right;
+        background-repeat: no-repeat;
+        background-image: url("../../Content/images/add.png");
+    }
+    .icon2{
+        background-position: right;
+        background-repeat: no-repeat;
+        background-image: url("../../Content/images/dept.png");
+    }
+</style>
+</body>
+
+
+</html>

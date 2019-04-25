@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>系统参数编辑框</title>
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+</head>
+<body>
+<div style="!important;width:600px;height:500px;">
+    <form class="layui-form" action="" lay-filter="example">
+        <div class="layui-form-item" style="display: none">
+            <div class="layui-input-block">
+                <input type="text" name="rowId" id="rowId" lay-verify="name" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane">
+            <label class="layui-form-label">类别名称<font color="red">*</font></label>
+            <div class="layui-input-block">
+                <input type="text" name="categoryName" id="categoryName" lay-verify="categoryName" required autocomplete="off"
+                       placeholder="请输入参数名称"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-pane">
+            <label class="layui-form-label">排序号</label>
+            <div class="layui-input-block">
+                <input type="text" name="sortSq" id="sortSq" lay-verify="title" autocomplete="off"
+                       placeholder="请输入排序号"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-button">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" style="margin-left: 3px" lay-submit="" lay-filter="demo1">立即提交</button>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<p></p>
+
+<script type="text/javascript" src="../../Scripts/jquery-3.3.1.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script>
+
+    $.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            //console.log(JSON.parse(res.responseText).code);
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+
+    function inputDataHandle(data) {
+        //新增
+        if (data == 'add') {
+            layui.use('form', function () {
+                var form = layui.form();
+
+                //监听提交
+                form.on('submit(demo1)', function (data) {
+                    $.ajax({
+                        url: '/sys/configCategory/insertConfigCategory',
+                        contentType: 'application/json;charset=utf-8',
+                        method: 'post',
+                        data: JSON.stringify(data.field),
+                        dataType: 'JSON',
+                        success: function (res) {
+                            if (res.code =='0') {
+                                layer.closeAll('iframe');
+                            } else
+                                layer.msg(res.msg);
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+
+                });
+
+
+            });
+        }
+
+        if (data == 'edit') {
+            layui.use('form', function () {
+                var form = layui.form();
+                //监听提交
+                form.on('submit(demo1)', function (data) {
+                    $.ajax({
+                        url: '/sys/configCategory/updateConfigCategory/' + data.field.rowId,
+                        contentType: 'application/json;charset=utf-8',
+                        method: 'put',
+                        data: JSON.stringify(data.field),
+                        dataType: 'JSON',
+                        success: function (res) {
+                            //console.log("updateCategory")
+                            if (res.code =='0') {
+                                layer.closeAll('iframe');
+                            } else
+                                layer.msg(res.msg);
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+                });
+            });
+        }
+    }
+
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form();
+
+        form.verify({
+
+            'categoryName':function (value) {
+                var check;
+                if(value==""){
+                    return '类别名未填写'
+                }else if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+                    return '类别名不能有特殊字符';
+                }
+                var param ={};
+                param['categoryName'] = value;
+                $.ajax({
+                    contentType: 'application/json;charset=utf-8',
+                    url: '/sys/configCategory/checkCategoryName',
+                    method: 'post',
+                    data:JSON.stringify(param),
+                    dataType:'JSON',
+                    async: false,
+                    success: function (result) {
+                        if (result.code == 500) {
+                            check=true;
+                        }
+                    },
+                    error: function (error) {
+
+                    }
+                });
+                if(check){
+                    return '该参数类别名称已存在';
+                }
+            }
+        });
+        //自定义验证规则
+        //监听指定开关
+    });
+</script>
+<style>
+    .layui-input-block {
+        margin-left: 120px;
+        min-height: 36px;
+        width:380px;
+    }
+
+    .layui-form-label {
+        width: 90px;
+    }
+
+    .layui-form-item{
+        margin-top: 3px;
+        margin-left: 3px;
+        margin-bottom: 0px;
+    }
+    .layui-form-pane{
+        flex:1;
+    }
+    .layui-form-button{
+        margin-top:8px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 1px;
+        height: 1px;
+    }
+    .layui-btn{
+        font-size: 14px;
+        background-color: #3398E5;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: .9;
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 13px;
+        margin-left: 10px;
+    }
+</style>
+</body>
+</html>
