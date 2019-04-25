@@ -516,7 +516,7 @@
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
                         var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.inputDataHandle(data, value.rowGuid,value.sex);
+                        iframeWin.inputDataHandle(data, value.rowGuid,value.sex,value.loginId);
                         body.find("#rowId").val(value.rowId);
                         body.find("#rowGuid").val(value.rowGuid);
                         body.find("#userName").val(value.userName);

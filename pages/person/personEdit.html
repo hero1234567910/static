@@ -158,7 +158,8 @@
         })
     })
 	
-    function inputDataHandle(data, rowGuid,sex) {
+	var LoginId = {};
+    function inputDataHandle(data, rowGuid,sex,loginId) {
         //新增
         if (data == 'add') {
             layui.use('form', function () {
@@ -223,6 +224,7 @@
                     }
                 });
                 var form = layui.form();
+				LoginId = loginId;
                 var checkRoleBox = $("input:checkbox[name='like']");
                 for (i = 0; i < checkRoleBox.length; i++) {
                     for (j = 0; j < arr.length; j++) {
@@ -316,27 +318,30 @@
 				if(value == ""){
 					return '登录名未填写'
 				}
-				var check;
-	            if (value != "") {
-	                $.ajax({
-	                    contentType: 'application/json;charset=utf-8',
-	                    url: '/sys/user/checkUserByLoginId',
-	                    method: 'get',
-	                    async: false,
-	                    data: {
-	                        loginId: value
-	                    },
-	                    dataType: 'JSON',
-	                    success: function (result) {
-	                        if (result.code == 500) {
-	                        	check = true;
-	                        }
-	                    }
-	                });
-	            }
-	            if(check){
-	            	return '登录名已经存在';
-	            }
+				var msg = "";
+				var param = {};
+				param['loginId'] = value;
+				if (value !== LoginId) {
+				    $.ajax({
+				        url: '/sys/user/checkUser',
+				        contentType: 'application/json;charset=utf-8',
+				        type: 'post',
+				        data: JSON.stringify(param),
+				        dataType: 'JSON',
+				        async: false,
+				        success: function (result) {
+				            if (result.code == 500) {
+				                msg = result.code;
+				            }
+				        },
+				        error: function (error) {
+				
+				        }
+				    });
+				    if (msg == 500) {
+				        return '该登录名已存在';
+				    }
+				}
 			},
             'pass': function (value) {
                 if (value.length < 6 && value.length > 0) {
