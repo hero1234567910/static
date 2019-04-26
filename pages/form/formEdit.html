@@ -81,9 +81,11 @@
 	$("#generator").click(function(){
 		var rowGuid = $('#rowGuid').val();
 		var tableName = $('#physicalName').val();
+		var controllerName = $('controllerName').val();
 		var params = {};
 		params['rowGuid'] = rowGuid;
 		params['table'] = tableName;
+		params['controllerName'] = controllerName;
 		$.ajax({
             url:'/sys/form/code',
             contentType: 'application/json;charset=utf-8',
