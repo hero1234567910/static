@@ -23,15 +23,15 @@
 		 <div class="layui-form-item layui-form-pane">
 		     <label class="layui-form-label">食品类型编号</label>
 		     <div class="layui-input-block">
-		         <input type="text" name="goodsTypeCode" id="goodsTypeCode"  lay-verify="goodsTypeCode" placeholder="请输入食品类型编号" autocomplete="off" class="layui-input-bloc">
+		         <input type="text" name="goodsTypeCode" id="goodsTypeCode"  class="layui-input-bloc">
 		     </div>
 		  </div>
 		  
 	    <div class="layui-form-item layui-form-pane">
 	        <label class="layui-form-label">菜品上级类型</label>
-	        <div class="layui-input-block">
+	        <div class="layui-input-block" >
 				<input type="text" name="pgoodsTypeName" id="pgoodsTypeName" required readonly placeholder="请选择菜品类型上级" autocomplete="off"
-				       class="layui-input-bloc icon">
+				       class="layui-input-bloc icon" style="cursor: pointer;">
 	            <input type="text" name="pgoodsTypeCode" id="pgoodsTypeCode" required readonly placeholder="请选择菜品类型上级" autocomplete="off"
 	                   class="layui-input-bloc" style="display: none;">
 	        </div>
@@ -67,10 +67,18 @@
         }
     });
 
+    function guid() {
+        return 'xxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+            return v.toString(16);
+        });
+    }
+
     //接受父组件的值
 	var GoodsTypeName = {};
 	var GoodsTypeCode = {};
     function inputDataHandle(data,goodsTypeCode,typeName){
+        $("#goodsTypeCode").val(guid());
     var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
         //新增
         if(data == 'add'){
@@ -78,16 +86,20 @@
                 var form = layui.form();
                 //监听提交
                 form.on('submit(formDemo)', function(data){
+                    var map = {};
+                    map['field']=data.field;
+                    map['goodsTypeCode'] = $("#goodsTypeCode").val();
                     $.ajax({
 						async: false,
                         url:m_url+'/sys/hosgoodstype/add',
                         contentType: 'application/json;charset=utf-8',
                         method:'post',
-                        data:JSON.stringify(data.field),
+                        data:JSON.stringify(map),
                         dataType:'JSON',
                         success:function(res){
                             if(res.code=='0'){
 								var index = parent.layer.getFrameIndex(window.name);
+
 								parent.layer.close(index);
                             }
                             else
@@ -290,7 +302,7 @@
     .layui-input-bloc {
         min-height: 36px;
         padding-left: 9px;
-        width: 95%;
+        width: 93%;
         border-radius: 0 2px 2px 0;
         border: 1px solid #e6e6e6;
     }
@@ -304,6 +316,9 @@
         background-repeat: no-repeat;
         background-image: url("../../Content/images/dept.png");
     }
+	.layui-form-pane .layui-form-label{
+		width:90px;
+	}
 </style>
 </body>
 
