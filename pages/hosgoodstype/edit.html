@@ -8,6 +8,11 @@
 <body>
 
 <form class="layui-form" action="" lay-filter="layform">
+		<div class="layui-form-item " style="display: none;">
+			<div class="layui-input-block">
+				<input type="text" name="rowGuid" id="rowGuid" placeholder="请输入标题" autocomplete="off" class="layui-input-block">
+			</div>
+		</div>
   	 	<div class="layui-form-item  layui-form-pane"> 	    	    	    	 			    	    	    	    	 			    	    	    	    	 			    	    	    	    	 			    	    	    	    	 			  	 <div class="layui-form-item">
 	        <label class="layui-form-label">类型名称</label>
 	        <div class="layui-input-block">
@@ -25,9 +30,9 @@
 	    <div class="layui-form-item layui-form-pane">
 	        <label class="layui-form-label">菜品上级类型</label>
 	        <div class="layui-input-block">
-				<input type="text" name="pdeptName" id="pgoodsTypeName" required readonly placeholder="请选择菜品类型上级" autocomplete="off"
+				<input type="text" name="pgoodsTypeName" id="pgoodsTypeName" required readonly placeholder="请选择菜品类型上级" autocomplete="off"
 				       class="layui-input-bloc icon">
-	            <input type="text" name="pdeptCode" id="pgoodsTypeCode" required readonly placeholder="请选择菜品类型上级" autocomplete="off"
+	            <input type="text" name="pgoodsTypeCode" id="pgoodsTypeCode" required readonly placeholder="请选择菜品类型上级" autocomplete="off"
 	                   class="layui-input-bloc" style="display: none;">
 	        </div>
 	     </div>
@@ -39,14 +44,15 @@
 		    </div>
 		 </div>
 		
-	    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button class="layui-btn" lay-submit style="margin-left: 21%" lay-filter="formDemo">立即提交</button>
-        </div>
-    </div>
+	    <div class="layui-form-button">
+           <div class="layui-input-block">
+               <button class="layui-btn layui-btn-normal" lay-submit style="margin-left: 21%;margin-top: 30px;" lay-filter="formDemo">立即提交</button>
+           </div>
+		</div>
+	</div>
 </form>
 
-<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="../../Scripts/jquery-3.3.1.min.js"></script>
 <script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
 <script>
 	$.ajaxSetup({
@@ -64,7 +70,7 @@
     //接受父组件的值
 	var GoodsTypeName = {};
 	var GoodsTypeCode = {};
-    function inputDataHandle(data,goodsTypeCode,goodsTypeName){
+    function inputDataHandle(data,goodsTypeCode,typeName){
     var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
         //新增
         if(data == 'add'){
@@ -73,6 +79,7 @@
                 //监听提交
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
+						async: false,
                         url:m_url+'/sys/hosgoodstype/add',
                         contentType: 'application/json;charset=utf-8',
                         method:'post',
@@ -80,16 +87,14 @@
                         dataType:'JSON',
                         success:function(res){
                             if(res.code=='0'){
-                                parent.layer.close(parent.layer.index);
+								var index = parent.layer.getFrameIndex(window.name);
+								parent.layer.close(index);
                             }
-                            if(res.code=='500'){
-	                        	layer.msg(res.msg)
-	                        }
+                            else
+                                layer.msg(res.msg);
                         },
                         error:function (data) {
-                            if(data.status == 0){
-                                parent.layer.close(parent.layer.index);
-                            }
+                            
                         }
                     }) ;
                 });
@@ -100,10 +105,11 @@
             layui.use('form', function(){
                 var form = layui.form();
                 //监听提交
-				GoodsTypeName = goodsTypeName;
+				GoodsTypeName = typeName;
 				GoodsTypeCode = goodsTypeCode;
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
+						async: false,
                         url:m_url+'/sys/hosgoodstype/update',
                         contentType: 'application/json;charset=utf-8',
                         method:'put',
@@ -111,17 +117,15 @@
                         dataType:'JSON',
                         success:function(res){
                             if(res.code=='0'){
-                                parent.layer.close(parent.layer.index);
+                               var index = parent.layer.getFrameIndex(window.name);
+                               parent.layer.close(index);
                             }
-                             if(res.code=='500'){
-	                        	layer.msg(res.msg)
-	                        }
+                             else
+                                 layer.msg(res.msg);
                         },
                         //谷歌浏览器出现Provisional headers are shown警告     
                         error:function (data) {
-                            if(data.status == 0){
-                                parent.layer.close(parent.layer.index);
-                            }
+                           
                         }
                     }) ;
                 });
@@ -148,7 +152,7 @@
                         var param2 = $("#rowGuid").val();
                         param['goodsTypeCode'] = value;
                         param['rowGuid'] = param2;
-                        if (value !== DeptCode) {
+                        if (value !== GoodsTypeCode) {
                             $.ajax({
                                 url: '/sys/hosgoodstype/checkGoodsType',
                                 contentType: 'application/json;charset=utf-8',
@@ -183,7 +187,7 @@
                         if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
                             return '部门名不能有特殊字符';
                         }
-                        if (value !== DeptName) {
+                        if (value !== GoodsTypeName) {
                             $.ajax({
                                 url: '/sys/hosgoodstype/checkGoodsType',
                                 contentType: 'application/json;charset=utf-8',

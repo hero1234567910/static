@@ -43,6 +43,11 @@ $().ready(function () {
         });
     });
 
+$("body").on("mousedown",".layui-tree a cite",function(){
+        $(".layui-tree a cite").css('color','#000000')
+        $(this).css('color','#5d7bdc')
+    });
+
 layui.use('table', function(){
         var table = layui.table;
          var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
@@ -153,7 +158,7 @@ layui.use('table', function(){
 		var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
         table.on('tool(toolbar)', function (obj) {
             var value = obj.data;
-			 var GoodsTypeCode = [];
+			 var GoodsTypeCode = "";
 			 $.ajax({
 			     url: m_url+'/sys/hosgoodstype/getByGoodsTypeCode/' + value.pgoodsTypeCode,
 			     contentType: 'application/json;charset=utf-8',
@@ -161,9 +166,12 @@ layui.use('table', function(){
 			     data: JSON.stringify(value.pgoodsTypeCode),
 			     dataType: 'JSON',
 			     success: function (res) {
-			         console.log(res.data);
 			         if (res.code = '0') {
-			             GoodsTypeCode =res.data;
+						 if(res.data!=null){
+							 GoodsTypeCode =res.data;
+						 }else{
+							 GoodsTypeCode="菜品类别";
+						 }
 			         }
 			     },
 			     error: function (jqXHR, textStatus, errorThrown) {
@@ -183,7 +191,7 @@ layui.use('table', function(){
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
                         var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.inputDataHandle(data,value.goodsTypeCode,value.pgoodsTypeCode);
+                        iframeWin.inputDataHandle(data,value.goodsTypeCode,value.typeName);
                         body.find("#rowId").val(value.rowId);
 						body.find("#rowGuid").val(value.rowGuid);
 						body.find("#goodsTypeCode").val(value.goodsTypeCode); //要修改的每个td的值存为变量传进去
