@@ -9,8 +9,6 @@ $.ajaxSetup({
 		}
 	}
 });
-
-
 $().ready(function () {
 	var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
         $.ajax({
@@ -43,12 +41,10 @@ $().ready(function () {
             }
         });
     });
-
 $("body").on("mousedown",".layui-tree a cite",function(){
         $(".layui-tree a cite").css('color','#000000')
         $(this).css('color','#5d7bdc')
     });
-
 	layui.use('table', function(){
         var table = layui.table;
         var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
@@ -60,20 +56,20 @@ $("body").on("mousedown",".layui-tree a cite",function(){
             ,method:'get'
             ,cols: [[
                 {checkbox:true}
-                                ,{field:'rowId', width:80, title: 'ID', sort: true}
-                                ,{field:'goodsName', width:80, title: '菜品名称', sort: true}
-                                ,{field:'goodsPrice', width:80, title: '菜品价格', sort: true}
-                                ,{field:'goodsImgGuid', width:80, title: '菜品图片标识'}
-                                ,{field:'goodsInfo', width:80, title: '菜品信息', sort: true},
-                                ,{field:'isShelf', width:80, title: '是否上架', sort: true,templet:'#checkShelf'},
-								,{field:'sortSq', width:80, title: '排序号', sort: true}
-                                ,{field:'right',title:'操作',toolbar:'#barDemo',width:150}
+	            ,{field:'rowId', width:80, title: 'ID', sort: true}
+	            ,{field:'goodsName', width:80, title: '菜品名称', sort: true}
+	            ,{field:'goodsPrice', width:80, title: '菜品价格', sort: true}
+	            ,{field:'goodsImgGuid', width:80, title: '菜品图片标识'}
+	            ,{field:'goodsInfo', width:80, title: '菜品信息', sort: true}
+	            ,{field:'isShelf', width:80, title: '是否上架', sort: true,templet:'#checkShelf'}
+				,{field:'sortSq', width:80, title: '排序号', sort: true}
+	            ,{field:'right',title:'操作',toolbar:'#barDemo',width:150}
             ]]
             , page: true
             , limit:10 //默认十条数据一页
             , id:'testReload'
         });
- 
+   
 
         //角色关键字搜索
         var $ = layui.$, active = {
