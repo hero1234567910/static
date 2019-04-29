@@ -22,7 +22,6 @@ layui.use('table', function(){
             ,cols: [[
                 {width: 20, title: '', align: 'center', templet: '#indexTpl'},
                 {checkbox:true}
-                                ,{field:'rowId', width:40, title: 'ID', sort: true}
                                 ,{field:'orderNumber', width:70, title: '订单流水号', sort: true}
                                 ,{field:'consigneeName', width:70, title: '收货人姓名', sort: true}
                                 ,{field:'consigneeInpatient', width:40, title: '病区', sort: true}
@@ -32,7 +31,7 @@ layui.use('table', function(){
                                 ,{field:'orderStatus', width:70, title: '订单状态', sort: true, templet: '#checkStatus'}
                                 ,{field:'createTime', width:80, title: '创建时间', sort: true}
                                 ,{field:'reserveTime', width:80, title: '预定送达时间', sort: true}
-                                ,{field:'reserveTimeSuffix', width:80, title: '预定时间', sort: true}
+                                ,{field:'reserveTimeSuffix', width:60, title: '预定时间', sort: true}
                                 ,{field:'orderMoney', width:50, title: '总金额', sort: true}
                                 ,{field:'merchantNumber', width:70, title: '商户订单号', sort: true}
                                 ,{field:'remark', width:70, title: '备注', sort: true}
@@ -42,6 +41,7 @@ layui.use('table', function(){
             , page: true
             , limit:10 //默认十条数据一页
             , id:'testReload'
+
         });
  
 
@@ -154,7 +154,7 @@ layui.use('table', function(){
                         body.find("#consigneeStorey").val(value.consigneeStorey);
                         body.find("#consigneeBedNumber").val(value.consigneeBedNumber);
                         body.find("#consigneeMobile").val(value.consigneeMobile);
-                        body.find("#reserveTime").val(value.reserveTime);
+                        body.find("#reserveTime").val(layui.laytpl.toDateString(value.reserveTime, "yyyy-MM-dd "));
                         body.find("#reserveTimeSuffix").val(value.reserveTimeSuffix);
                         body.find("#orderMoney").val(value.orderMoney);
                         body.find("#remark").val(value.remark);
@@ -168,4 +168,5 @@ layui.use('table', function(){
     });
 
 });
+
 

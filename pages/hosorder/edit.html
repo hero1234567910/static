@@ -52,7 +52,7 @@
 	    <div class="layui-form-item layui-form-pane">
 	        <label class="layui-form-label">送达时间</label>
 	        <div class="layui-input-block">
-	            <input type="date" name="reserveTime" id="reserveTime"  lay-verify="reserveTime" placeholder="请输入预定时间(送达时间)" autocomplete="off" class="layui-input">
+	            <input type="text" name="reserveTime" id="reserveTime" class="layui-input icon" placeholder="请选择送达时间" style="cursor: pointer;">
 	        </div>
 	     </div>
 	     <div class="layui-form-item layui-form-pane">
@@ -139,7 +139,7 @@
                 //监听提交
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
-                        url:m_url+'/sys/hosorder/update',
+                        url:m_url+'/sys/hosorder/update'+rowGuid,
                         contentType: 'application/json;charset=utf-8',
                         method:'put',
                         data:JSON.stringify(data.field),
@@ -179,7 +179,79 @@
              }*/
         });
     });
-    
+
+    layui.use(['laydate'], function () {
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        var nowTime = new Date().valueOf();
+        var max = null;
+
+        var start = laydate.render({
+            elem: '#reserveTime',
+            type: 'datetime',
+            format: 'yyyy-MM-dd',
+            max: nowTime,
+            btns: ['clear', 'confirm'],
+            done: function (value, date) {
+                endMax = end.config.max;
+                end.config.min = date; //最大时间为结束时间的开始值
+                end.config.min.month = date.month - 1;
+            }
+        });
+
+        var end = laydate.render({
+            elem: '#reserveTime',
+            type: 'datetime',
+            max: 4073558400000,
+            format: 'yyyy-MM-dd',
+            min: nowTime,
+            done: function (value, date) {
+                if ($.trim(value) == '') {
+                    var curDate = new Date();
+                    date = {'date': curDate.getDate(), 'month': curDate.getMonth() + 1, 'year': curDate.getFullYear()};
+                }
+                start.config.max = date;//最小时间为开始时间的最大值
+                start.config.max.month = date.month - 1;
+            }
+        })
+    });
+
+
+    //日期格式
+    layui.laytpl.toDateString = function (d, format) {
+        var date = new Date(d || new Date())
+            , ymd = [
+            this.digit(date.getFullYear(), 4)
+            , this.digit(date.getMonth() + 1)
+            , this.digit(date.getDate())
+        ]
+            , hms = [
+            this.digit(date.getHours())
+            , this.digit(date.getMinutes())
+            , this.digit(date.getSeconds())
+        ];
+
+        format = format || 'yyyy-MM-dd HH:mm:ss';
+
+        return format.replace(/yyyy/g, ymd[0])
+            .replace(/MM/g, ymd[1])
+            .replace(/dd/g, ymd[2])
+            .replace(/HH/g, hms[0])
+            .replace(/mm/g, hms[1])
+            .replace(/ss/g, hms[2]);
+    };
+
+    layui.laytpl.digit = function (num, length, end) {
+        var str = '';
+        num = String(num);
+        length = length || 2;
+        for (var i = num.length; i < length; i++) {
+            str += '0';
+        }
+        return num < Math.pow(10, length) ? str + (num | 0) : num;
+    };
+
+
 </script>
 <style>
     .layui-input, .layui-textarea {
@@ -269,6 +341,11 @@
 	.layui-input-inline{
 		min-height: 36px;
 		width:248px;
+	}
+	.icon{
+		background-position: right;
+		background-repeat: no-repeat;
+		background-image: url("../../Scripts/layui/css/modules/laydate/icon.png");
 	}
 </style>
 </body>
