@@ -31,8 +31,9 @@
 	     </div>
 	    
 		<div class="layui-form-item layui-form-pane">
-            <label class="layui-form-label ">商品图片标识</label>
+            <label class="layui-form-label ">商品图片</label>
             <div class="layui-input-block">
+                <input type="text" name="goodsImgGuid" id="goodsImgGuid"  lay-verify="goodsInfo" placeholder="请输入商品图片" autocomplete="off" class="layui-input-bloc">
             </div>
         </div>
 		
@@ -42,6 +43,13 @@
 	            <input type="text" name="goodsInfo" id="goodsInfo"  lay-verify="goodsInfo" placeholder="请输入商品信息" autocomplete="off" class="layui-input-bloc">
 	        </div>
 	     </div>
+		 
+		 <div class="layui-form-item layui-form-pane">
+		     <label class="layui-form-label">商品价格</label>
+		     <div class="layui-input-block">
+		         <input type="text" name="goodsPrice" id="goodsPrice"  lay-verify="goodsInfo" placeholder="请输入商品价格" autocomplete="off" class="layui-input-bloc icon1" onkeyup="checkMoney(this);">
+		     </div>
+		  </div>
 		 
 	    <div class="layui-form-item layui-form-pane">
 	        <label class="layui-form-label">是否上架<font color="red">*</font></label>
@@ -71,6 +79,16 @@
 
 <script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
 <script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript">
+   function checkMoney(obj)
+   {   
+     if(/^\d+\.?\d{0,2}$/.test(obj.value)){
+        obj.value = obj.value;
+     }else{
+        obj.value = obj.value.substring(0,obj.value.length-1);
+     }     
+   }
+</script>
 <script>
 	$.ajaxSetup({
         headers: {
@@ -85,7 +103,8 @@
     });
 
     //接受父组件的值
-    function inputDataHandle(data){
+	var GoodsName = {};
+    function inputDataHandle(data,goodsName,isShelf){
     var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
         //新增
         if(data == 'add'){
@@ -94,18 +113,19 @@
                 //监听提交
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
-                        url:m_url+'/wxhosgoods/add',
+						async: false,
+                        url:m_url+'/sys/hosgoods/add',
                         contentType: 'application/json;charset=utf-8',
                         method:'post',
                         data:JSON.stringify(data.field),
                         dataType:'JSON',
                         success:function(res){
                             if(res.code=='0'){
-                                parent.layer.close(parent.layer.index);
+                               var index = parent.layer.getFrameIndex(window.name);
+                               parent.layer.close(index);
                             }
-                            if(res.code=='500'){
-	                        	layer.msg(res.msg)
-	                        }
+                            else
+                                layer.msg(res.msg);
                         },
                         error:function (data) {
                             if(data.status == 0){
@@ -119,18 +139,26 @@
         //编辑
         if(data == 'edit'){
             layui.use('form', function(){
+				if(isShelf==0)
+				    $("#isShelf0").attr("checked",true);
+				else
+				    $("#isShelf1").attr("checked",true);
                 var form = layui.form();
+				form.render();
+				GoodsName = goodsName;
                 //监听提交
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
-                        url:m_url+'/wxhosgoods/update',
+						async: false,
+                        url:m_url+'/sys/hosgoods/update',
                         contentType: 'application/json;charset=utf-8',
                         method:'put',
                         data:JSON.stringify(data.field),
                         dataType:'JSON',
                         success:function(res){
                             if(res.code=='0'){
-                                parent.layer.close(parent.layer.index);
+                               var index = parent.layer.getFrameIndex(window.name);
+                               parent.layer.close(index);
                             }
                              if(res.code=='500'){
 	                        	layer.msg(res.msg)
@@ -158,13 +186,60 @@
 
         //自定义验证规则
         form.verify({
-            /* name: function (value) {
-                 if (value.length < 3) {
-                     return '名字至少得3个字符啊';
-                 }
-             }*/
+            'goodsName':function(value,item){
+				if (value == "") {
+				        return '菜品名称不能为空'
+				    }
+				    var msg = "";
+				    var param = {};
+				    param['goodsName'] = value;
+				    if (value !== GoodsName) {
+				        $.ajax({
+				            url: '/sys/hosgoods/checkGoods',
+				            contentType: 'application/json;charset=utf-8',
+				            type: 'post',
+				            data: JSON.stringify(param),
+				            dataType: 'JSON',
+				            async: false,
+				            success: function (result) {
+				                if (result.code == 500) {
+				                    msg = result.code;
+				                }
+				            },
+				            error: function (error) {
+				            
+				            }
+				        });
+				        if (msg == 500) {
+				            return '该菜品名称已存在';
+				        }
+				    }
+				}
+			
         });
     });
+	
+	$("#goodsTypeName").on('click', function () {
+	    layer.open({
+	        type: 2,
+	        title: '选择菜品类型',
+	        zIndex: '19891015',
+	        maxmin: true,
+	        shadeClose: true, //点击遮罩关闭层
+	        area: ['300px', '400px'],
+	        content: 'goodsTypeChoice.html',
+	        success: function (layero, index) {
+				var body = layer.getChildFrame('body', index);
+				var iframeWin = window[layero.find('iframe')[0]['name']];
+				//iframeWin.inputDataHandle(data);
+				$("#typeName").val(iframeWin.goodsTypeName);
+				$("#rowGuid").val(iframeWin.goodsTypeGuid);
+	        },
+	        end: function () {
+	
+	        }
+	    })
+	})
     
 </script>
 <style>
@@ -240,6 +315,12 @@
         background-repeat: no-repeat;
         background-image: url("../../Content/images/dept.png");
     }
+	
+	.icon1 {
+	    background-position: right;
+	    background-repeat: no-repeat;
+	    background-image: url("../../Content/images/money.png");
+	}
 </style>
 </body>
 

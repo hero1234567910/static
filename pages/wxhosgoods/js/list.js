@@ -52,7 +52,7 @@ $("body").on("mousedown",".layui-tree a cite",function(){
             elem: '#table'
             ,height: 'full-130'
             ,even:true
-            ,url:m_url+'/sys/wxhosgoods/listData'
+            ,url:m_url+'/sys/hosgoods/listData'
             ,method:'get'
             ,cols: [[
                 {checkbox:true}
@@ -127,7 +127,7 @@ $("body").on("mousedown",".layui-tree a cite",function(){
                     return;
                 }
                 $.ajax({
-                    url:m_url+'/sys/wxhosgoods/delete',
+                    url:m_url+'/sys/hosgoods/delete',
                     contentType: 'application/json;charset=utf-8',
                     method:'post',
                     data:JSON.stringify(params),
@@ -159,6 +159,26 @@ $("body").on("mousedown",".layui-tree a cite",function(){
 		var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
         table.on('tool(toolbar)', function (obj) {
             var value = obj.data;
+			var GoodsTypeName = "";
+			$.ajax({
+			    url: m_url+'/sys/hosgoods/getTypeNameByGuid/' + value.goodsTypeGuid,
+			    contentType: 'application/json;charset=utf-8',
+			    method: 'get',
+			    data: JSON.stringify(value.goodsTypeGuid),
+			    dataType: 'JSON',
+			    success: function (res) {
+			        if (res.code = '0') {
+						if(res.data!=null){
+							 GoodsTypeName =res.data;
+							}else{
+						     GoodsTypeName="菜品类别";
+						}
+			        }
+			    },
+			    error: function (jqXHR, textStatus, errorThrown) {
+			
+			    }
+			});
             if (obj.event === 'edit') {
                 //更新
                 var data = 'edit';
@@ -172,11 +192,13 @@ $("body").on("mousedown",".layui-tree a cite",function(){
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
                         var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.inputDataHandle(data);
+                        iframeWin.inputDataHandle(data,value.goodsName,value.isShelf);
                        body.find("#rowId").val(value.rowId);
                        body.find("#rowGuid").val(value.rowGuid);
                        body.find("#goodsName").val(value.goodsName);
                        body.find("#goodsTypeGuid").val(value.goodsTypeGuid);
+					   body.find("#goodsTypeName").val(GoodsTypeName);
+					   body.find("#goodsPrice").val(value.goodsPrice);
                        body.find("#goodsImgGuid").val(value.goodsImgGuid);
                        body.find("#goodsInfo").val(value.goodsInfo);
                        body.find("#sortSQ").val(value.sortSq);
