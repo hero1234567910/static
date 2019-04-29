@@ -61,7 +61,7 @@ layui.use('table', function () {
             , {field: 'right', title: '操作', toolbar: '#barDemo', width: 80}
         ]]
         , page: true
-        , limit: 9 //默认十条数据一页
+        , limit: 10 //默认十条数据一页
         , id: 'testReload'
         , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
             return {

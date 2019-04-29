@@ -56,10 +56,10 @@ $("body").on("mousedown",".layui-tree a cite",function(){
             ,method:'get'
             ,cols: [[
                 {checkbox:true}
-	            ,{field:'rowId', width:80, title: 'ID', sort: true}
+	            ,{width: 20, title: '', align: 'center', templet: '#indexTpl'}
 	            ,{field:'goodsName', width:80, title: '菜品名称', sort: true}
 	            ,{field:'goodsPrice', width:80, title: '菜品价格', sort: true}
-	            ,{field:'goodsImgGuid', width:80, title: '菜品图片标识'}
+	            ,{field:'goodsImgGuid', width:90, title: '菜品图片标识'}
 	            ,{field:'goodsInfo', width:80, title: '菜品信息', sort: true}
 	            ,{field:'isShelf', width:80, title: '是否上架', sort: true,templet:'#checkShelf'}
 				,{field:'sortSq', width:80, title: '排序号', sort: true}
