@@ -58,11 +58,11 @@ layui.use('table', function(){
             ,url:m_url+'/sys/hosgoodstype/listData'
             ,method:'get'
             ,cols: [[
-				{width: 20, title: '', align: 'center', templet: '#indexTpl'}
+				{width: 18, title: '', align: 'center', templet: '#indexTpl'}
                 ,{checkbox:true}
 				,{field:'typeName', width:80, title: '类型名称', sort: true}
                 ,{field:'sortSq', width:80, title: '排序号', sort: true}
-                ,{field:'right',title:'操作',toolbar:'#barDemo',width:150}
+                ,{field:'right',title:'操作',toolbar:'#barDemo',width:300}
             ]]
             , page: true
             , limit:10 //默认十条数据一页
