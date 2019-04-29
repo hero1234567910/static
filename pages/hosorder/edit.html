@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+    <title>${column.comments}订单编辑</title>
+</head>
+<body>
+
+<form class="layui-form" action="" lay-filter="layform">
+	<div class="layui-form-item layui-form-pane" style="display: none;">
+		<div class="layui-input-block">
+			<input type="text" name="rowGuid" id="rowGuid" placeholder="请输入标题" autocomplete="off" class="layui-input-block">
+		</div>
+	</div>
+	     <div class="layui-form-item layui-form-pane" style="display: none;">
+	        <label class="layui-form-label ">订单流水号</label>
+	        <div class="layui-input-block">
+	            <input type="text" name="orderNumber" id="orderNumber"  lay-verify="orderNumber" placeholder="请输入订单流水号" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	     <div class="layui-form-item layui-form-pane">
+	        <label class="layui-form-label">收货人姓名</label>
+	        <div class="layui-input-block">
+	            <input type="text" name="consigneeName" id="consigneeName"  lay-verify="consigneeName" placeholder="请输入收货人姓名" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	    <div class="layui-form-item layui-form-pane">
+	        <label class="layui-form-label">病区</label>
+	        <div class="layui-input-block">
+	            <input type="text" name="consigneeInpatient" id="consigneeInpatient"  lay-verify="consigneeInpatient" placeholder="请输入病区" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	     <div class="layui-form-item layui-form-pane">
+	        <label class="layui-form-label">楼层</label>
+	        <div class="layui-input-block">
+	            <input type="text" name="consigneeStorey" id="consigneeStorey"  lay-verify="consigneeStorey" placeholder="请输入楼层" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	     <div class="layui-form-item layui-form-pane">
+	        <label class="layui-form-label">床位号</label>
+	        <div class="layui-input-block">
+	            <input type="text" name="consigneeBedNumber" id="consigneeBedNumber"  lay-verify="consigneeBedNumber" placeholder="请输入床位号" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	     <div class="layui-form-item layui-form-pane">
+	        <label class="layui-form-label">手机号</label>
+	        <div class="layui-input-block">
+	            <input type="text" name="consigneeMobile" id="consigneeMobile"  lay-verify="consigneeMobile" placeholder="请输入收货人手机号" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	    <div class="layui-form-item layui-form-pane">
+	        <label class="layui-form-label">送达时间</label>
+	        <div class="layui-input-block">
+	            <input type="date" name="reserveTime" id="reserveTime"  lay-verify="reserveTime" placeholder="请输入预定时间(送达时间)" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	     <div class="layui-form-item layui-form-pane">
+	        <label class="layui-form-label">预定时间</label>
+			 <div class="layui-input-inline layui-form-select ">
+				 <select name="reserveTimeSuffix"  id="reserveTimeSuffix" class="layui-select-title">
+					 <option value selected = "selected">请选择预定时间</option>
+					 <option value="早餐" >早餐</option>
+					 <option value="中餐">中餐</option>
+					 <option value="晚餐">晚餐</option>
+				 </select>
+			 </div>
+	     </div>
+	    <div class="layui-form-item layui-form-pane">
+	        <label class="layui-form-label">总金额</label>
+	        <div class="layui-input-block">
+	            <input type="text" name="orderMoney" id="orderMoney"  lay-verify="orderMoney" placeholder="请输入总金额" autocomplete="off" class="layui-input">
+	        </div>
+	     </div>
+	<div class="layui-form-item layui-form-pane">
+		<label class="layui-form-label">备注</label>
+		<div class="layui-input-block">
+			<input type="text" name="remark" id="remark"  lay-verify="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit style="margin-left: 21%" lay-filter="formDemo">立即提交</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="../../Scripts/jquery-3.3.1.min.js"></script>
+<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+<script>
+	$.ajaxSetup({
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            "token": window.localStorage.getItem('m_token')
+        },
+        complete: function (res) {
+            if (JSON.parse(res.responseText).code == '401') {
+                window.top.location.href = '../../login.html';
+            }
+        }
+    });
+
+    //接受父组件的值
+    function inputDataHandle(data,rowGuid){
+    var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
+        //新增
+        if(data == 'add'){
+            layui.use('form', function(){
+                var form = layui.form();
+                //监听提交
+                form.on('submit(formDemo)', function(data){
+                    $.ajax({
+                        url:m_url+'/sys/hosorder/add',
+                        contentType: 'application/json;charset=utf-8',
+                        method:'post',
+                        data:JSON.stringify(data.field),
+                        dataType:'JSON',
+                        success:function(res){
+                            if(res.code=='0'){
+                                parent.layer.close(parent.layer.index);
+                            }
+                            if(res.code=='500'){
+	                        	layer.msg(res.msg)
+	                        }
+                        },
+                        error:function (data) {
+                            if(data.status == 0){
+                                parent.layer.close(parent.layer.index);
+                            }
+                        }
+                    }) ;
+                });
+            });
+        }
+        //编辑
+        if(data == 'edit'){
+            layui.use('form', function(){
+                var form = layui.form();
+                //监听提交
+                form.on('submit(formDemo)', function(data){
+                    $.ajax({
+                        url:m_url+'/sys/hosorder/update',
+                        contentType: 'application/json;charset=utf-8',
+                        method:'put',
+                        data:JSON.stringify(data.field),
+                        dataType:'JSON',
+                        success:function(res){
+                            if(res.code=='0'){
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+                            }
+                             if(res.code=='500'){
+	                        	layer.msg(res.msg)
+	                        }
+                        },
+                        //谷歌浏览器出现Provisional headers are shown警告     
+                        error:function (data) {
+                        }
+                    }) ;
+                });
+            });
+        }
+    }
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form()
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //创建一个编辑器
+        // var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+        form.verify({
+            /* name: function (value) {
+                 if (value.length < 3) {
+                     return '名字至少得3个字符啊';
+                 }
+             }*/
+        });
+    });
+    
+</script>
+<style>
+    .layui-input, .layui-textarea {
+	    display: block;
+	    /* width: 50%; */
+	    padding-left: 10px;
+	}
+	.layui-form-checked i {
+        margin-right: 10px;
+        float: left;
+        text-align: center;
+    }
+    .layui-table td, .layui-table th {
+        padding: 2px 8px;
+        min-height: 20px;
+        line-height: 20px;
+        border: 1px solid #e2e2e2;
+        font-size: 14px;
+    }
+
+    .layui-form-checked[lay-skin="primary"] i {
+        background-color: #01AAED;
+        color: white;
+    }
+
+    .layui-table-cell {
+        height: auto;
+        line-height: 20px;
+    }
+
+    .layui-input, .layui-textarea {
+        display: block;
+        padding-left: 10px;
+        width: 100%;
+    }
+
+    .layui-input-block {
+        margin-left: 120px;
+        min-height: 36px;
+        width: 350px;
+    }
+
+    .layui-form-label {
+        width: 90px;
+    }
+
+    .layui-form-item {
+        margin-top: 3px;
+        margin-left: 3px;
+        margin-bottom: 0px;
+    }
+
+    .layui-form-pane {
+        flex: 1;
+    }
+
+    .layui-form-button {
+        margin-top: 8px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 1px;
+        height: 1px;
+    }
+
+    .layui-btn {
+        font-size: 14px;
+        background-color: #3398E5;
+        color: #fff;
+        white-space: nowrap;
+        text-align: center;
+        font-size: 14px;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        opacity: .9;
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        font-size: 13px;
+        margin-left: 10px;
+    }
+	.layui-form-select{
+		width:350px;
+	}
+	.layui-input-inline{
+		min-height: 36px;
+		width:248px;
+	}
+</style>
+</body>
+
+
+</html>
