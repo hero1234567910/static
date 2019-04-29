@@ -30,6 +30,8 @@
 	            <button id="goodsFind" class="layui-btn layui-btn-normal" data-type="reload">查询</button>
 	            <button id="goodsAdd" class="layui-btn layui-btn-normal">添加</button>
 	            <button id="goodsDel" class="layui-btn layui-btn-normal">删除</button>
+				<button id="goodsOn" class="layui-btn layui-btn-normal">批量上架</button>
+				<button id="goodsOff" class="layui-btn layui-btn-normal">批量下架</button>
 	        </div>
 	    	</fieldset>
 	    </div>
@@ -51,6 +53,9 @@
     {{# } else if(d.isShelf == 1) { }}
     <span style="color: red;">下架</span>
     {{# } }}
+</script>
+<script type="text/html" id="indexTpl">
+    {{d.LAY_TABLE_INDEX+1}}
 </script>
 <style>
 	.layui-table {

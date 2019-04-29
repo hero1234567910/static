@@ -56,10 +56,10 @@ $("body").on("mousedown",".layui-tree a cite",function(){
             ,method:'get'
             ,cols: [[
                 {checkbox:true}
-	            ,{field:'rowId', width:80, title: 'ID', sort: true}
+	            ,{width: 20, title: '', align: 'center', templet: '#indexTpl'}
 	            ,{field:'goodsName', width:80, title: '菜品名称', sort: true}
 	            ,{field:'goodsPrice', width:80, title: '菜品价格', sort: true}
-	            ,{field:'goodsImgGuid', width:80, title: '菜品图片标识'}
+	            ,{field:'goodsImgGuid', width:90, title: '菜品图片标识'}
 	            ,{field:'goodsInfo', width:80, title: '菜品信息', sort: true}
 	            ,{field:'isShelf', width:80, title: '是否上架', sort: true,templet:'#checkShelf'}
 				,{field:'sortSq', width:80, title: '排序号', sort: true}
@@ -153,7 +153,87 @@ $("body").on("mousedown",".layui-tree a cite",function(){
             });
         });
 
-
+		$('#goodsOn').on('click', function(){
+		    layer.confirm('你确定上架吗！', function(index){
+		        var cache = table.cache;
+		        var params = new Array;
+		        $.each(cache.testReload,function(index,value){
+		            if(value.LAY_CHECKED != undefined && value.LAY_CHECKED == true){
+		                params.push(value.rowGuid);
+		            }
+		        });
+		        if(params.length == 0){
+		            layer.msg("请先选择");
+		            return;
+		        }
+		        $.ajax({
+		            url:m_url+'/sys/hosgoods/goodsUpShelf',
+		            contentType: 'application/json;charset=utf-8',
+		            method:'post',
+		            data:JSON.stringify(params),
+		            dataType:'JSON',
+		            success:function(res){
+		                if(res.code=='0'){
+		                    layer.msg('上架成功', {
+		                        icon: 1,
+		                        time: 1000 //2秒关闭（如果不配置，默认是3秒）
+		                    },function(){
+		                        window.location.reload();
+		                    });
+		                }
+		                if(res.code=='500'){
+		                	layer.msg(res.msg)
+		                }
+		            },
+					error: function (jqXHR, textStatus, errorThrown) {
+		
+					}
+		        });
+		        layer.close(index);
+		    });
+		});
+		
+		$('#goodsOff').on('click', function(){
+		    layer.confirm('你确定下架吗！', function(index){
+		        var cache = table.cache;
+		        var params = new Array;
+		        $.each(cache.testReload,function(index,value){
+		            if(value.LAY_CHECKED != undefined && value.LAY_CHECKED == true){
+		                params.push(value.rowGuid);
+		            }
+		        });
+		        if(params.length == 0){
+		            layer.msg("请先选择");
+		            return;
+		        }
+		        $.ajax({
+		            url:m_url+'/sys/hosgoods/goodsDownShelf',
+		            contentType: 'application/json;charset=utf-8',
+		            method:'post',
+		            data:JSON.stringify(params),
+		            dataType:'JSON',
+		            success:function(res){
+		                if(res.code=='0'){
+		                    layer.msg('下架成功', {
+		                        icon: 1,
+		                        time: 1000 //2秒关闭（如果不配置，默认是3秒）
+		                    },function(){
+		                        window.location.reload();
+		                    });
+		                }
+		                if(res.code=='500'){
+		                	layer.msg(res.msg)
+		                }
+		            },
+					error: function (jqXHR, textStatus, errorThrown) {
+		
+					}
+		        });
+		        layer.close(index);
+		    });
+		});
+		
+		
 
         //编辑
 		var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);

@@ -59,7 +59,7 @@ layui.use('table', function(){
             ,method:'get'
             ,cols: [[
                 {checkbox:true}
-                                ,{field:'rowId', width:80, title: 'ID', sort: true}
+                                ,{width: 20, title: '', align: 'center', templet: '#indexTpl'}
                                 ,{field:'typeName', width:80, title: '类型名称', sort: true}
                                 ,{field:'sortSq', width:80, title: '排序号', sort: true}
                                 ,{field:'right',title:'操作',toolbar:'#barDemo',width:150}
