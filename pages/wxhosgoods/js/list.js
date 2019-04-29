@@ -55,8 +55,8 @@ $("body").on("mousedown",".layui-tree a cite",function(){
             ,url:m_url+'/sys/hosgoods/listData'
             ,method:'get'
             ,cols: [[
-                {checkbox:true}
-	            ,{width: 20, title: '', align: 'center', templet: '#indexTpl'}
+				{width: 20, title: '', align: 'center', templet: '#indexTpl'}
+                ,{checkbox:true}
 	            ,{field:'goodsName', width:80, title: '菜品名称', sort: true}
 	            ,{field:'goodsPrice', width:80, title: '菜品价格', sort: true}
 	            ,{field:'goodsImgGuid', width:90, title: '菜品图片标识'}
