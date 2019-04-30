@@ -96,7 +96,6 @@ $().ready(function () {
 layui.use('table', function () {
     var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
     var table = layui.table;
-   // var loginId = window.localStorage.getItem('m_loginId').replace('"','').replace('"','');
     var loginId = JSON.parse(window.localStorage.getItem('m_loginId'));
     console.log(loginId);
     table.render({

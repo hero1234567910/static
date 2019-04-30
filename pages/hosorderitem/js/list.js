@@ -17,58 +17,54 @@ layui.use('table', function(){
             elem: '#table'
             ,height: 'full-130'
             ,even:true
-            ,url:m_url+'/sys/hosorder/listData'
+            ,url:m_url+'/sys/hosorderitem/listData'
             ,method:'get'
             ,cols: [[
                 {width: 20, title: '', align: 'center', templet: '#indexTpl'},
                 {checkbox:true}
-                                ,{field:'orderNumber', width:80, title: '订单流水号', sort: true}
-                                ,{field:'consigneeName', width:60, title: '收货人姓名', sort: true}
-                                ,{field:'consigneeMobile', width:60, title: '收货人手机号', sort: true}
-                                ,{field:'typeName', width:60, title: '订单状态', sort: true}
-                                ,{field:'createTime', width:80, title: '创建时间', sort: true}
-                                ,{field:'reserveTime', width:90, title: '预定送达时间', sort: true}
-                                ,{field:'reserveTimeSuffix', width:60, title: '预定时间', sort: true}
-                                ,{field:'orderMoney', width:50, title: '总金额', sort: true}
-                                ,{field:'remark', width:70, title: '备注', sort: true}
-                                ,{field:'sortSq', width:50, title: '排序号', sort: true}
-                                ,{field:'right',title:'修改',toolbar:'#barDemo',width:50}
+                                ,{field:'goodsGuid', width:80, title: '商品标识', sort: true}
+                                ,{field:'orderGuid', width:80, title: '订单标识', sort: true}
+                                ,{field:'itemPrice', width:90, title: '订单商品单价', sort: true}
+                                ,{field:'count', width:80, title: '数量', sort: true}
+                                ,{field:'totalMoney', width:80, title: '小计', sort: true}
+                                ,{field:'createTime', width:150, title: '创建时间', sort: true}
+                                ,{field:'sortSq', width:80, title: '排序号', sort: true}
+                                ,{field:'right',title:'操作',toolbar:'#barDemo',width:130}
             ]]
             , page: true
             , limit:10 //默认十条数据一页
             , id:'testReload'
-
         });
  
 
         //角色关键字搜索
         var $ = layui.$, active = {
             reload: function () {
-                var keyword = $('#consigneeNameKey');
+                var keyword = $('#keyword');
 
                 table.reload('testReload', {
                     where: {
-                        'consigneeNameVague': keyword.val()
+                        'name': keyword.val()
                     }
                 });
             }
         };
         //搜索绑定
-        $('#OrderFind').on('click', function () {
+        $('#OrderItemFind').on('click', function () {
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
 
 
         //新增
-        $('#OrderAdd').on('click', function(){
+        $('#OrderItemAdd').on('click', function(){
             var data = 'add';
             layer.open({
                 type: 2,
-                title: '添加订单',
+                title: '添加',
                 maxmin: true,
                 shadeClose: true, //点击遮罩关闭层
-                area : ['469px', '500px'],
+                area : ['469px', '350px'],
                 content: 'Edit.html',
                 success: function(layero, index){
                     var body = layer.getChildFrame('body',index);
@@ -83,7 +79,7 @@ layui.use('table', function(){
         });
 
         //删除
-        $('#OrderDel').on('click', function(){
+        $('#OrderItemDel').on('click', function(){
             layer.confirm('你确定删除吗！', function(index){
                 var cache = table.cache;
                 var params = new Array;
@@ -97,7 +93,7 @@ layui.use('table', function(){
                     return;
                 }
                 $.ajax({
-                    url:m_url+'/sys/hosorder/delete',
+                    url:m_url+'/sys/hosorderitem/delete',
                     contentType: 'application/json;charset=utf-8',
                     method:'post',
                     data:JSON.stringify(params),
@@ -124,8 +120,8 @@ layui.use('table', function(){
         });
 
 
+
         //编辑
-    var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
         table.on('tool(toolbar)', function (obj) {
             var value = obj.data;
             if (obj.event === 'edit') {
@@ -133,10 +129,10 @@ layui.use('table', function(){
                 var data = 'edit';
                 layer.open({
                     type: 2,
-                    title: '修改订单',
+                    title: '修改',
                     maxmin: true,
                     shadeClose: true, //点击遮罩关闭层
-                    area: ['469px', '500px'],
+                    area: ['469px', '350px'],
                     content: 'Edit.html',
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
@@ -144,16 +140,12 @@ layui.use('table', function(){
                         iframeWin.inputDataHandle(data,value.rowGuid);
                         body.find("#rowId").val(value.rowId);
                         body.find("#rowGuid").val(value.rowGuid);
-                        body.find("#orderNumber").val(value.orderNumber);
-                        body.find("#consigneeName").val(value.consigneeName);
-                        body.find("#consigneeInpatient").val(value.consigneeInpatient);
-                        body.find("#consigneeStorey").val(value.consigneeStorey);
-                        body.find("#consigneeBedNumber").val(value.consigneeBedNumber);
-                        body.find("#consigneeMobile").val(value.consigneeMobile);
-                        body.find("#reserveTime").val(value.reserveTime);
-                        body.find("#reserveTimeSuffix").val(value.reserveTimeSuffix);
-                        body.find("#orderMoney").val(value.orderMoney);
-                        body.find("#remark").val(value.remark);
+                        body.find("#goodsGuid").val(value.goodsGuid);
+                        body.find("#orderGuid").val(value.orderGuid);
+                        body.find("#itemPrice").val(value.itemPrice);
+                        body.find("#count").val(value.count);
+                        body.find("#totalMoney").val(value.totalMoney);
+                        body.find("#sortSq").val(value.sortSq);
                     },
                     end: function () {
                         //刷新页面
@@ -164,5 +156,3 @@ layui.use('table', function(){
     });
 
 });
-
-
