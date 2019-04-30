@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
-    <title>${column.comments}订单编辑</title>
+    <title>订单编辑</title>
 </head>
 <body>
 
@@ -52,14 +52,14 @@
 	    <div class="layui-form-item layui-form-pane">
 	        <label class="layui-form-label">送达时间</label>
 	        <div class="layui-input-block">
-	            <input type="text" name="reserveTime" id="reserveTime" class="layui-input icon" placeholder="请选择送达时间" style="cursor: pointer;">
+	            <input type="text" name="reserveTime" id="reserveTime" class="layui-input icon" placeholder="请选择送达时间" autocomplete="off"  style="cursor: pointer;">
 	        </div>
 	     </div>
 	     <div class="layui-form-item layui-form-pane">
 	        <label class="layui-form-label">预定时间</label>
 			 <div class="layui-input-inline layui-form-select ">
-				 <select name="reserveTimeSuffix"  id="reserveTimeSuffix" class="layui-select-title">
-					 <option value selected = "selected">请选择预定时间</option>
+				 <select name="reserveTimeSuffix"  id="reserveTimeSuffix" class="layui-select-title" autocomplete="off">
+					 <option value="请选择预定时间" selected = "selected">请选择预定时间</option>
 					 <option value="早餐" >早餐</option>
 					 <option value="中餐">中餐</option>
 					 <option value="晚餐">晚餐</option>
@@ -170,11 +170,46 @@
 
         //自定义验证规则
         form.verify({
-            /* name: function (value) {
-                 if (value.length < 3) {
-                     return '名字至少得3个字符啊';
-                 }
-             }*/
+            'consigneeName':function(value,item){
+                if (!new RegExp("^[a-zA-Z_\u4e00-\u9fa5\\s·]+$").test(value)) {
+                    return '请输入正确的收货人姓名'
+                }
+            },
+            'consigneeInpatient':function(value,item){
+                if (value == "") {
+                    return '病区不能为空'
+                }
+            },
+            'consigneeStorey':function(value,item){
+                if (value == "") {
+                    return '楼层不能为空'
+                }
+            },
+            'consigneeBedNumber':function(value,item){
+                if (value == "") {
+                    return '床位号不能为空'
+                }
+            },
+            'consigneeMobile':function(value,item){
+                if (value == "") {
+                    return '手机号不能为空'
+                }
+            },
+            'reserveTime':function(value,item){
+                if (value == "") {
+                    return '请选择预计送达时间'
+                }
+            },
+            'reserveTimeSuffix':function(value,item){
+                if (value == "") {
+                    return '请选择预定时间'
+                }
+            },
+            'orderMoney':function(value,item){
+                if (value == "") {
+                    return '请输入金额'
+                }
+            },
         });
     });
 

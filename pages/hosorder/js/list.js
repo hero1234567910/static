@@ -25,7 +25,7 @@ layui.use('table', function(){
                                 ,{field:'orderNumber', width:80, title: '订单流水号', sort: true}
                                 ,{field:'consigneeName', width:60, title: '收货人姓名', sort: true}
                                 ,{field:'consigneeMobile', width:60, title: '收货人手机号', sort: true}
-                                ,{field:'typeName', width:60, title: '订单状态', sort: true}
+                                ,{field:'orderStatusText', width:60, title: '订单状态', sort: true}
                                 ,{field:'createTime', width:80, title: '创建时间', sort: true}
                                 ,{field:'reserveTime', width:90, title: '预定送达时间', sort: true}
                                 ,{field:'reserveTimeSuffix', width:60, title: '预定时间', sort: true}
