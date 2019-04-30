@@ -17,7 +17,7 @@
 		<div class="layui-form-item  layui-form-pane">																																																									 <div class="layui-form-item">
 	        <label class="layui-form-label">菜品名称<font color="red">*</font></label>
 	        <div class="layui-input-block">
-	            <input type="text" name="goodsName" id="goodsName" lay-verify="goodsName" placeholder="请输入商品名称" autocomplete="off" class="layui-input-bloc">
+	            <input type="text" name="goodsName" id="goodsName" lay-verify="goodsName"  placeholder="请输入商品名称" autocomplete="off" class="layui-input-bloc">
 	        </div>
 	     </div>
 		 
@@ -33,7 +33,7 @@
 		<div class="layui-form-item layui-form-pane">
             <label class="layui-form-label ">商品图片</label>
             <div class="layui-input-block">
-                <input type="text" name="goodsImgGuid" id="goodsImgGuid"  lay-verify="goodsInfo" placeholder="请输入商品图片" autocomplete="off" class="layui-input-bloc">
+                <input type="text" name="goodsImgGuid" id="goodsImgGuid"  lay-verify="goodsImgGuid" placeholder="请输入商品图片" autocomplete="off" class="layui-input-bloc">
             </div>
         </div>
 		
@@ -47,7 +47,7 @@
 		 <div class="layui-form-item layui-form-pane">
 		     <label class="layui-form-label">商品价格</label>
 		     <div class="layui-input-block">
-		         <input type="text" name="goodsPrice" id="goodsPrice"  lay-verify="goodsInfo" placeholder="请输入商品价格" autocomplete="off" class="layui-input-bloc icon1" onkeyup="checkMoney(this);">
+		         <input type="text" name="goodsPrice" id="goodsPrice"  lay-verify="goodsPrice" placeholder="请输入商品价格" autocomplete="off" class="layui-input-bloc icon1" onkeyup="checkMoney(this);">
 		     </div>
 		  </div>
 		 
@@ -214,8 +214,13 @@
 				            return '该菜品名称已存在';
 				        }
 				    }
-				}
+				},
 			
+			'goodsPrice':function(value,item){
+				if (value == "") {
+				        return '菜品价格不能为空'
+				    }
+			}
         });
     });
 	
