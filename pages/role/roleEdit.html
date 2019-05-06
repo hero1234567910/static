@@ -1,254 +1,258 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
-    <title>角色编辑框</title>
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+		<title>角色编辑框</title>
+	</head>
+	<body>
 
-<form class="layui-form" action="" lay-filter="roleForm">
-    <div class="layui-form-item" style="display: none">
-        <div class="layui-input-block layui-form-pane">
-            <input type="text" name="rowId" id="rowId" lay-verify="name" autocomplete="off" class="layui-input">
-        </div>
-    </div>
+		<form class="layui-form" action="" lay-filter="roleForm">
+			<div class="layui-form-item" style="display: none">
+				<div class="layui-input-block layui-form-pane">
+					<input type="text" name="rowId" id="rowId" lay-verify="name" autocomplete="off" class="layui-input">
+				</div>
+			</div>
 
-    <div class="layui-form-item layui-form-pane">
-        <label class="layui-form-label">角色名称<font color="red">*</font></label>
-        <div class="layui-input-block">
-            <input type="text" name="roleName" id="roleName" lay-verify="roleName" placeholder="请输入角色名"
-                   autocomplete="off" class="layui-input"
-                   required>
-        </div>
-    </div>
+			<div class="layui-form-item layui-form-pane">
+				<label class="layui-form-label">角色名称<font color="red">*</font></label>
+				<div class="layui-input-block">
+					<input type="text" name="roleName" id="roleName" lay-verify="roleName" placeholder="请输入角色名" autocomplete="off"
+					 class="layui-input" required>
+				</div>
+			</div>
 
-    <div class="layui-form-item layui-form-pane">
-        <label class="layui-form-label">首页地址</label>
-        <div class="layui-input-block">
-            <input type="text" name="mainIndex" id="mainIndex" placeholder="请输入地址" autocomplete="off"
-                   class="layui-input">
-        </div>
-    </div>
+			<div class="layui-form-item layui-form-pane">
+				<label class="layui-form-label">首页地址</label>
+				<div class="layui-input-block">
+					<input type="text" name="mainIndex" id="mainIndex" placeholder="请输入地址" autocomplete="off" class="layui-input">
+				</div>
+			</div>
 
-    <div class="layui-form-item layui-form-pane">
-        <label class="layui-form-label">序号</label>
-        <div class="layui-input-block">
-            <input type="text" name="sortSq" id="sortSq" placeholder="请输入序号" autocomplete="off" class="layui-input">
-        </div>
-    </div>
+			<div class="layui-form-item layui-form-pane">
+				<label class="layui-form-label">序号</label>
+				<div class="layui-input-block">
+					<input type="text" name="sortSq" id="sortSq" placeholder="请输入序号" autocomplete="off" class="layui-input">
+				</div>
+			</div>
 
-    <div class="layui-form-button">
-        <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal" style="margin-left: 21%" lay-submit lay-filter="formDemo">立即提交
-            </button>
-        </div>
-    </div>
-</form>
+			<div class="layui-form-button">
+				<div class="layui-input-block">
+					<button class="layui-btn layui-btn-normal" style="margin-left: 21%" lay-submit lay-filter="formDemo">立即提交
+					</button>
+				</div>
+			</div>
+		</form>
 
-<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
-<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
-<script>
+		<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+		<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+		<script>
+			$.ajaxSetup({
+				headers: {
+					"Content-Type": "application/json;charset=utf-8",
+					"token": window.localStorage.getItem('m_token')
+				},
+				complete: function(res) {
+					console.log(JSON.parse(res.responseText).code);
+					if (JSON.parse(res.responseText).code == '401') {
+						window.top.location.href = '../../login.html';
+					}
+				}
+			});
 
-    $.ajaxSetup({
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            "token": window.localStorage.getItem('m_token')
-        },
-        complete: function (res) {
-            console.log(JSON.parse(res.responseText).code);
-            if (JSON.parse(res.responseText).code == '401') {
-                window.top.location.href = '../../login.html';
-            }
-        }
-    });
+			//接受父组件的值
+			var RoleName = {};
 
-    //接受父组件的值
-    function inputDataHandle(data) {
-        //新增
-        if (data == 'add') {
-            layui.use('form', function () {
-                var form = layui.form();
-                //监听提交
-                form.on('submit(formDemo)', function (data) {
-                    $.ajax({
-                        async: false,
-                        url: '/sys/role/add',
-                        contentType: 'application/json;charset=utf-8',
-                        method: 'post',
-                        data: JSON.stringify(data.field),
-                        dataType: 'JSON',
-                        success: function (res) {
-                            console.log(res)
-                            if (res.code = '0') {
-                                parent.layer.close(parent.layer.index);
-                            } else
-                                alert(res.msg);
-                        },
-                        error: function (data) {
-                            if (data.status == 0) {
-                                parent.layer.close(parent.layer.index);
-                            }
-                        }
-                    });
-                });
-            });
-        }
-        //编辑
-        if (data == 'edit') {
-            layui.use('form', function () {
-                var form = layui.form();
-                //监听提交
-                form.on('submit(formDemo)', function (data) {
-                    $.ajax({
-                        async: false,
-                        url: '/sys/role/updateRole/' + data.field.rowId,
-                        contentType: 'application/json;charset=utf-8',
-                        method: 'put',
-                        data: JSON.stringify(data.field),
-                        dataType: 'JSON',
-                        success: function (res) {
-                            if (res.code = '0') {
-                                parent.layer.close(parent.layer.index);
-                            } else
-                                alert(res.msg);
-                        },
-                        //谷歌浏览器出现Provisional headers are shown警告     
-                        error: function (data) {
-                            if (data.status == 0) {
-                                parent.layer.close(parent.layer.index);
-                            }
-                        }
-                    });
-                });
-            });
-        }
-        //角色名重复检测
+			function inputDataHandle(data, roleName) {
+				//新增
+				if (data == 'add') {
+					layui.use('form', function() {
+						var form = layui.form();
+						//监听提交
+						form.on('submit(formDemo)', function(data) {
+							$.ajax({
+								async: false,
+								url: '/sys/role/add',
+								contentType: 'application/json;charset=utf-8',
+								method: 'post',
+								data: JSON.stringify(data.field),
+								dataType: 'JSON',
+								success: function(res) {
+									console.log(res)
+									if (res.code = '0') {
+										parent.layer.close(parent.layer.index);
+									} else
+										alert(res.msg);
+								},
+								error: function(data) {
+									if (data.status == 0) {
+										parent.layer.close(parent.layer.index);
+									}
+								}
+							});
+						});
+					});
+				}
+				//编辑
+				if (data == 'edit') {
+					layui.use('form', function() {
+						var form = layui.form();
+						//监听提交
+						RoleName = roleName;
+						form.on('submit(formDemo)', function(data) {
+							$.ajax({
+								async: false,
+								url: '/sys/role/updateRole/' + data.field.rowId,
+								contentType: 'application/json;charset=utf-8',
+								method: 'put',
+								data: JSON.stringify(data.field),
+								dataType: 'JSON',
+								success: function(res) {
+									if (res.code = '0') {
+										parent.layer.close(parent.layer.index);
+									} else
+										alert(res.msg);
+								},
+								//谷歌浏览器出现Provisional headers are shown警告     
+								error: function(data) {
+									if (data.status == 0) {
+										parent.layer.close(parent.layer.index);
+									}
+								}
+							});
+						});
+					});
+				}
+				//角色名重复检测
 
-        layui.use(['form', 'layedit', 'laydate'], function () {
-            var form = layui.form()
-                , layer = layui.layer
-                , layedit = layui.layedit
-                , laydate = layui.laydate;
+				layui.use(['form', 'layedit', 'laydate'], function() {
+					var form = layui.form(),
+						layer = layui.layer,
+						layedit = layui.layedit,
+						laydate = layui.laydate;
 
-            //创建一个编辑器
-            // var editIndex = layedit.build('LAY_demo_editor');
+					//创建一个编辑器
+					// var editIndex = layedit.build('LAY_demo_editor');
 
-            //自定义验证规则
-            form.verify({
+					//自定义验证规则
+					form.verify({
 
-                'roleName': function (value) {
-                    var check;
-                    if (value == "") {
-                        return '角色名未填写'
-                    } else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
-                        return '角色名不能有特殊字符';
-                    }
-                    $.ajax({
-                        contentType: 'application/json;charset=utf-8',
-                        url: '/sys/role/checkUserByRoleName',
-                        method: 'get',
-                        async: false,
-                        data: {
-                            roleName: value
-                        },
-                        dataType: 'JSON',
-                        success: function (result) {
-                            if (result.code == 500) {
-                                check = true;
-                            }
-                        }
-                    });
-                    if (check) {
-                        return '角色名已经存在';
-                    }
-                }
+						'roleName': function(value) {
+							var check;
+							if (value == "") {
+								return '角色名未填写'
+							} else if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+								return '角色名不能有特殊字符';
+							}
+							if (value !== RoleName) {
+								$.ajax({
+									contentType: 'application/json;charset=utf-8',
+									url: '/sys/role/checkUserByRoleName',
+									method: 'get',
+									async: false,
+									data: {
+										roleName: value
+									},
+									dataType: 'JSON',
+									success: function(result) {
+										if (result.code == 500) {
+											check = true;
+										}
+									}
+								});
+								if (check) {
+									return '角色名已经存在';
+								}
+							}
+						}
 
-            });
-        });
-    }
-</script>
+					});
+				});
+			}
+		</script>
 
-<style>
-    .layui-form-checked i {
-        margin-right: 10px;
-        float: left;
-        text-align: center;
-    }
+		<style>
+			.layui-form-checked i {
+				margin-right: 10px;
+				float: left;
+				text-align: center;
+			}
 
-    .layui-table td, .layui-table th {
-        padding: 2px 8px;
-        min-height: 20px;
-        line-height: 20px;
-        border: 1px solid #e2e2e2;
-        font-size: 14px;
-    }
+			.layui-table td,
+			.layui-table th {
+				padding: 2px 8px;
+				min-height: 20px;
+				line-height: 20px;
+				border: 1px solid #e2e2e2;
+				font-size: 14px;
+			}
 
-    .layui-form-checked[lay-skin="primary"] i {
-        background-color: #01AAED;
-        color: white;
-    }
+			.layui-form-checked[lay-skin="primary"] i {
+				background-color: #01AAED;
+				color: white;
+			}
 
-    .layui-table-cell {
-        height: auto;
-        line-height: 20px;
-    }
+			.layui-table-cell {
+				height: auto;
+				line-height: 20px;
+			}
 
-    .layui-input, .layui-textarea {
-        display: block;
-        padding-left: 10px;
-        width: 100%;
-    }
+			.layui-input,
+			.layui-textarea {
+				display: block;
+				padding-left: 10px;
+				width: 100%;
+			}
 
-    .layui-input-block {
-        margin-left: 120px;
-        min-height: 36px;
-        width: 350px;
-    }
+			.layui-input-block {
+				margin-left: 120px;
+				min-height: 36px;
+				width: 350px;
+			}
 
-    .layui-form-label {
-        width: 90px;
-    }
+			.layui-form-label {
+				width: 90px;
+			}
 
-    .layui-form-item {
-        margin-top: 3px;
-        margin-left: 3px;
-        margin-bottom: 0px;
-    }
+			.layui-form-item {
+				margin-top: 3px;
+				margin-left: 3px;
+				margin-bottom: 0px;
+			}
 
-    .layui-form-pane {
-        flex: 1;
-    }
+			.layui-form-pane {
+				flex: 1;
+			}
 
-    .layui-form-button {
-        margin-top: 8px;
-    }
+			.layui-form-button {
+				margin-top: 8px;
+			}
 
-    ::-webkit-scrollbar {
-        width: 1px;
-        height: 1px;
-    }
+			::-webkit-scrollbar {
+				width: 1px;
+				height: 1px;
+			}
 
-    .layui-btn {
-        font-size: 14px;
-        background-color: #3398E5;
-        color: #fff;
-        white-space: nowrap;
-        text-align: center;
-        font-size: 14px;
-        border: none;
-        border-radius: 2px;
-        cursor: pointer;
-        opacity: .9;
-        width: 70px;
-        height: 30px;
-        line-height: 30px;
-        padding: 0 10px;
-        font-size: 13px;
-        margin-left: 10px;
-    }
-</style>
-</body>
+			.layui-btn {
+				font-size: 14px;
+				background-color: #3398E5;
+				color: #fff;
+				white-space: nowrap;
+				text-align: center;
+				font-size: 14px;
+				border: none;
+				border-radius: 2px;
+				cursor: pointer;
+				opacity: .9;
+				width: 70px;
+				height: 30px;
+				line-height: 30px;
+				padding: 0 10px;
+				font-size: 13px;
+				margin-left: 10px;
+			}
+		</style>
+	</body>
 
 
 </html>

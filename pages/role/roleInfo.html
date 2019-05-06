@@ -193,7 +193,7 @@
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
                         var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.inputDataHandle(data);
+                        iframeWin.inputDataHandle(data,value.roleName);
                         body.find("#rowId").val(value.rowId);
                         body.find("#roleName").val(value.roleName);
                         body.find("#mainIndex").val(value.mainIndex);
@@ -202,7 +202,7 @@
                     },
                     end: function () {
                         //刷新页面
-                        window.location.reload()
+                        layui.table.reload('testReload');
                     }
                 });
                 //通过角色查询用户
