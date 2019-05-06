@@ -270,7 +270,7 @@
                                 icon: 1,
                                 time: 1000 //2秒关闭（如果不配置，默认是3秒）
                             }, function () {
-                                window.location.reload();
+                                layui.table.reload('testReload');
                             });
                         } else
                             alert(res.msg);
@@ -309,7 +309,7 @@
                         console.log(res)
                         if (res.code = '0') {
                             layer.msg('启用成功')
-                            window.location.reload();
+                            layui.table.reload('testReload');
                         } else
                             alert(res.msg);
                     },
@@ -347,7 +347,7 @@
                         console.log(res)
                         if (res.code = '0') {
                             layer.msg('禁用成功')
-                            window.location.reload();
+                            layui.table.reload('testReload');
                         } else
                             alert(res.msg);
                     },
@@ -385,7 +385,7 @@
                         console.log(res)
                         if (res.code = '0') {
                             layer.msg('重置成功')
-                            window.location.reload();
+                            layui.table.reload('testReload');
                         } else
                             alert(res.msg);
                     },
@@ -426,7 +426,7 @@
                         console.log(res)
                         if (res.code = '0') {
                             layer.msg('保存成功')
-                            window.location.reload();
+                            layui.table.reload('testReload');
                         } else
                             alert(res.msg);
                     },
@@ -495,7 +495,7 @@
                 },
                 end: function () {
                     //刷新页面
-                    window.location.reload()
+                    layui.table.reload('testReload');
                 }
             });
         });
@@ -531,7 +531,7 @@
                     },
                     end: function () {
                         //刷新页面
-                        window.location.reload()
+                        layui.table.reload('testReload');
                     }
                 });
             }

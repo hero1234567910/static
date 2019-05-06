@@ -264,7 +264,7 @@ $("body").on("mousedown",".layui-tree a cite",function(){
                 var data = 'edit';
                 layer.open({
                     type: 2,
-                    title: 'iframe父子操作',
+                    title: '菜品信息修改',
                     maxmin: true,
                     shadeClose: true, //点击遮罩关闭层
                     area: ['500px', '500px'],
@@ -281,7 +281,7 @@ $("body").on("mousedown",".layui-tree a cite",function(){
 					   body.find("#goodsPrice").val(value.goodsPrice);
                        body.find("#goodsImgGuid").val(value.goodsImgGuid);
                        body.find("#goodsInfo").val(value.goodsInfo);
-                       body.find("#sortSQ").val(value.sortSq);
+                       body.find("#sortSq").val(value.sortSq);
 					   body.find("#isShelf").val(value.isShelf);
                     },
                     end: function () {

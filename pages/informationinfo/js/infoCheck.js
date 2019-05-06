@@ -163,7 +163,7 @@ layui.use('table', function () {
                 },
                 end: function () {
                     //刷新页面
-                    window.location.reload()
+                    layui.table.reload('testReload');
                 }
             });
         }

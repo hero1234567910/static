@@ -279,7 +279,7 @@ $('#InfoDel').on('click', function () {
                     body.find("#editor_id").val(value.content);
                 },
                 end:function () {
-                    window.location.reload();
+                    layui.table.reload('testReload');
                 }
             })
         }
@@ -310,7 +310,7 @@ $('#InfoDel').on('click', function () {
                     console.log(res)
                     if (res.code = '0') {
                         layer.msg('发布成功')
-                        window.location.reload();
+                        layui.table.reload('testReload');
                     } else
                         alert(res.msg);
                 },
@@ -347,7 +347,7 @@ $('#InfoDel').on('click', function () {
                     console.log(res)
                     if (res.code = '0') {
                         layer.msg('停止发布成功')
-                        window.location.reload();
+                        layui.table.reload('testReload');
                     } else
                         alert(res.msg);
                 },
@@ -390,7 +390,7 @@ $('#InfoDel').on('click', function () {
             },
             end: function () {
                 //刷新页面
-                window.location.reload()
+                layui.table.reload('testReload');
             }
         })
     })

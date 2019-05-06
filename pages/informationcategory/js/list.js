@@ -88,7 +88,7 @@ layui.use('table', function(){
                 },
                 end: function (){
                     //刷新页面
-                    window.location.reload()
+                    layui.table.reload('testReload');
                 }
             });
         });
@@ -119,7 +119,7 @@ layui.use('table', function(){
                                 icon: 1,
                                 time: 1000 //2秒关闭（如果不配置，默认是3秒）
                             },function(){
-                                window.location.reload();
+                                layui.table.reload('testReload');
                             });
                         }
                         if(res.code=='500'){
@@ -142,7 +142,7 @@ layui.use('table', function(){
                 var data = 'edit';
                 layer.open({
                     type: 2,
-                    title: 'iframe父子操作',
+                    title: '信息类别修改',
                     maxmin: true,
                     shadeClose: true, //点击遮罩关闭层
                     area: ['480px' , '400px'],
@@ -163,7 +163,7 @@ layui.use('table', function(){
                     },
                     end: function () {
                         //刷新页面
-                        window.location.reload()
+                        layui.table.reload('testReload');
                     }
                 });
             }

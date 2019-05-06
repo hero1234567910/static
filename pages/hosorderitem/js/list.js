@@ -73,7 +73,7 @@ layui.use('table', function(){
                 },
                 end: function (){
                     //刷新页面
-                    window.location.reload()
+                    layui.table.reload('testReload');
                 }
             });
         });
@@ -104,7 +104,7 @@ layui.use('table', function(){
                                 icon: 1,
                                 time: 1000 //2秒关闭（如果不配置，默认是3秒）
                             },function(){
-                                window.location.reload();
+                                layui.table.reload('testReload');
                             });
                         }
                         if(res.code=='500'){
@@ -149,7 +149,7 @@ layui.use('table', function(){
                     },
                     end: function () {
                         //刷新页面
-                        window.location.reload()
+                        layui.table.reload('testReload');
                     }
                 });
             }
