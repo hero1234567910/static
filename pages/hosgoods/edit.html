@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../Content/uploadify/uploadify.css" />
     <title>菜品编辑</title>
 </head>
 <body>
@@ -24,19 +25,12 @@
 	    <div class="layui-form-item layui-form-pane">
 	        <label class="layui-form-label">菜品类型<font color="red">*</font></label>
 	        <div class="layui-input-block">
-				<input type="text" name="goodsTypeName" id="goodsTypeName" required readonly placeholder="请选择菜品类型上级" autocomplete="off"
+				<input type="text" name="goodsTypeName" id="goodsTypeName" required readonly placeholder="请选择菜品类型" autocomplete="off"
 				       class="layui-input-bloc icon">
 	            <input type="text" name="goodsTypeGuid" id="goodsTypeGuid" lay-verify="goodsTypeGuid" placeholder="请输入商品类型标识" autocomplete="off" class="layui-input-bloc" style="display: none;">
 	        </div>
 	     </div>
 	    
-		<div class="layui-form-item layui-form-pane">
-            <label class="layui-form-label ">商品图片</label>
-            <div class="layui-input-block">
-                <input type="text" name="goodsImgGuid" id="goodsImgGuid"  lay-verify="goodsImgGuid" placeholder="请输入商品图片" autocomplete="off" class="layui-input-bloc">
-            </div>
-        </div>
-		
 	    <div class="layui-form-item layui-form-pane">
 	        <label class="layui-form-label">商品信息</label>
 	        <div class="layui-input-block">
@@ -69,6 +63,17 @@
 		     </div>
 		</div>
 		 
+		<div class="layui-form-item layui-form-pane">
+            <label class="layui-form-label ">商品图片</label>
+            <div class="layui-input-block">
+              <div>  
+			     <input type="file" name="uploadify" id="uploadFile" />  
+			     <div id="some_file_queue"></div>  
+			     <div id="fileName"></div>  
+			  </div>
+            </div>
+        </div>
+		 
 	    <div class="layui-form-button">
           <div class="layui-input-block">
             <button class="layui-btn" lay-submit style="margin-left: 21%" lay-filter="formDemo">立即提交</button>
@@ -78,6 +83,7 @@
 </form>
 
 <script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="../../Content/uploadify/jquery.uploadify.min.js"></script>
 <script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript">
    function checkMoney(obj)
@@ -101,7 +107,45 @@
             }
         }
     });
-
+	//上传图片
+	var local_data_attachGuids = new Array;
+	$(function() {  
+       $("#uploadFile").uploadify({  
+           'swf'           : '../../Content/uploadify/uploadify.swf',  
+           'uploader'      : '/sys/common/uploadFile',  //服务器端方法
+           'fileTypeExts'  : '*.jpg;*.jpge;*.png',
+           'buttonText'    : '选择图片',
+           'fileSizeLimit' : '10MB',//接受一个单位（B,KB,MB,GB）。如果是数字则默认单位为KB。设置为0时表示不限制  
+           'uploadLimit'     : 1,  //允许上传的最多张数  
+           'onUploadSuccess' : function(file, data, response) { //上传成功  
+               var jdata = $.parseJSON(data);
+               var last = jdata.type.substr('1',jdata.type.length);
+               $("#fileName").append("<div style='float:left;margin-right:30px'><a href="+jdata.url+" download="+jdata.fileName+"><em><img class='m-img' src='../../Content/images/uploadico/"+last+".png' /></em><em id="+jdata.attachRowguid+" name='fileName'  style='color:#555555'>"+jdata.fileName+"</em></a><em style='color:red;cursor:pointer;' onclick = 'deleteFile(this)' id="+jdata.attachRowguid+">删除</em></div>");
+               local_data_attachGuids.push(jdata.attachRowguid);
+            },  
+            'onFallback':function(){  
+               layer.msg("您未安装FLASH控件，无法一次性上传多个文件！请安装FLASH控件后再试。");  
+            },  
+            onSelectError:function(file, errorCode, errorMsg){ //选择失败  
+                   switch(errorCode) {  
+                       case -100:    
+                           layer.msg("上传的文件数量已经超出系统限制的"+$('#uploadFile').uploadify('settings','queueSizeLimit')+"个文件！");      
+                           break;    
+                       case -110:    
+                           layer.msg("文件 ["+file.name+"] 大小超出系统限制的"+$('#uploadFile').uploadify('settings','fileSizeLimit')+"大小！");  
+                           break;    
+                       case -120:    
+                           layer.msg("文件 ["+file.name+"] 大小异常！");  
+                           break;    
+                       case -130:    
+                           layer.msg("文件 ["+file.name+"] 类型不正确！");  
+                           break;  
+                   }  
+               }
+       });  
+	});  
+	
+	
     //接受父组件的值
 	var GoodsName = {};
     function inputDataHandle(data,goodsName,isShelf){
