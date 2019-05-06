@@ -66,7 +66,7 @@
 		<div class="layui-form-item layui-form-pane">
             <label class="layui-form-label ">商品图片</label>
             <div class="layui-input-block">
-              <div>  
+              <div style="margin-left: 20px;">  
 			     <input type="file" name="uploadify" id="uploadFile" />  
 			     <div id="some_file_queue"></div>  
 			     <div id="fileName"></div>  
@@ -118,9 +118,11 @@
            'fileSizeLimit' : '10MB',//接受一个单位（B,KB,MB,GB）。如果是数字则默认单位为KB。设置为0时表示不限制  
            'uploadLimit'     : 1,  //允许上传的最多张数  
            'onUploadSuccess' : function(file, data, response) { //上传成功  
+           		
                var jdata = $.parseJSON(data);
                var last = jdata.type.substr('1',jdata.type.length);
-               $("#fileName").append("<div style='float:left;margin-right:30px'><a href="+jdata.url+" download="+jdata.fileName+"><em><img class='m-img' src='../../Content/images/uploadico/"+last+".png' /></em><em id="+jdata.attachRowguid+" name='fileName'  style='color:#555555'>"+jdata.fileName+"</em></a><em style='color:red;cursor:pointer;' onclick = 'deleteFile(this)' id="+jdata.attachRowguid+">删除</em></div>");
+               console.log(jdata);
+               $("#fileName").append("<div style='float:left;margin-right:30px'><a href="+jdata.url+" download="+jdata.fileName+"><em><img class='m-img' src='"+jdata.url+"' /></em><em id="+jdata.attachRowguid+" name='fileName'  style='color:#555555'>"+jdata.fileName+"</em></a><em style='color:red;cursor:pointer;' onclick = 'deleteFile(this)' id="+jdata.attachRowguid+">删除</em></div>");
                local_data_attachGuids.push(jdata.attachRowguid);
             },  
             'onFallback':function(){  
@@ -295,6 +297,9 @@
     
 </script>
 <style>
+	.m-img{
+		width: 200px;
+	}
     .layui-input-block {
         min-height: 36px;
         margin-left: 140px;
