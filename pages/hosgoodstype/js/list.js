@@ -117,7 +117,7 @@ layui.use('table', function() {
 			title: '新增食品类型',
 			maxmin: true,
 			shadeClose: true, //点击遮罩关闭层
-			area: ['500px', '500px'],
+			area: ['500px', '300px'],
 			content: 'Edit.html',
 			success: function(layero, index) {
 				var body = layer.getChildFrame('body', index);
@@ -206,7 +206,7 @@ layui.use('table', function() {
 				title: '修改食品类型',
 				maxmin: true,
 				shadeClose: true, //点击遮罩关闭层
-				area: ['500px', '500px'],
+				area: ['500px', '300px'],
 				content: 'Edit.html',
 				success: function(layero, index) {
 					var body = layer.getChildFrame('body', index);
