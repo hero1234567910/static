@@ -136,6 +136,27 @@ layui.use('table', function() {
 		});
 	});
 
+	$('#OrderGet').on('click', function() {
+		var data = 'get';
+		layer.open({
+			type: 2,
+			title: '未接订单',
+			maxmin: true,
+			shadeClose: true, //点击遮罩关闭层
+			area: ['1000px', '600px'],
+			content: 'orderGet.html',
+			success: function(layero, index) {
+				var body = layer.getChildFrame('body', index);
+				var iframeWin = window[layero.find('iframe')[0]['name']];
+				//iframeWin.inputDataHandle(data);
+			},
+			end: function() {
+				//刷新页面
+				layui.table.reload('testReload');
+			}
+		});
+	});
+
 	$('#OrderExport').on('click', function() {
 		window.location.href="/sys/hosorder/exportExcel"
 	});
