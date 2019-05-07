@@ -121,7 +121,6 @@
            		
                var jdata = $.parseJSON(data);
                var last = jdata.type.substr('1',jdata.type.length);
-               console.log(jdata);
                $("#fileName").append("<div style='float:left;margin-right:30px'><a href="+jdata.url+" download="+jdata.fileName+"><em><img class='m-img' src='"+jdata.url+"' /></em><em id="+jdata.attachRowguid+" name='fileName'  style='color:#555555'>"+jdata.fileName+"</em></a><em style='color:red;cursor:pointer;' onclick = 'deleteFile(this)' id="+jdata.attachRowguid+">删除</em></div>");
                local_data_attachGuids.push(jdata.attachRowguid);
             },  

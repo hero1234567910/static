@@ -137,30 +137,8 @@ layui.use('table', function() {
 	});
 
 	$('#OrderExport').on('click', function() {
-			$.ajax({
-				async : false,
-				url: m_url + '/sys/hosorder/exportExcel',
-				contentType: 'application/json;charset=utf-8',
-				method: 'get',
-				dataType: 'JSON',
-				success: function(res) {
-					if (res.code == '0') {
-						layer.msg('导出成功', {
-							icon: 1,
-							time: 1000 //2秒关闭（如果不配置，默认是3秒）
-						}, function() {
-							//layui.table.reload('testReload');
-						});
-					}
-					if (res.code == '500') {
-						layer.msg(res.msg)
-					}
-				},
-				error: function(jqXHR, textStatus, errorThrown) {
-			
-				}
-			});
-		});
+		window.location.href="/sys/hosorder/exportExcel"
+	});
 	
 
 	//删除
