@@ -17,7 +17,7 @@ layui.use('table', function() {
 		elem: '#table',
 		height: 'full-130',
 		even: true,
-		url: m_url + '/sys/hosorder/listData',
+		url: m_url + '/sys/hosorder/listData?orderStatus='+1,
 		method: 'get',
 		cols: [
 			[{
