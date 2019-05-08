@@ -59,8 +59,7 @@ $("body").on("mousedown",".layui-tree a cite",function(){
                 ,{checkbox:true}
 	            ,{field:'goodsName', width:80, title: '菜品名称', sort: true}
 	            ,{field:'goodsPrice', width:80, title: '菜品价格', sort: true}
-	            ,{field:'goodsImgGuid', width:90, title: '菜品图片标识'}
-	            ,{field:'goodsInfo', width:80, title: '菜品信息', sort: true}
+	            ,{field:'goodsInfo', width:100, title: '菜品信息', sort: true}
 	            ,{field:'isShelf', width:80, title: '是否上架', sort: true,templet:'#checkShelf'}
 				,{field:'sortSq', width:80, title: '排序号', sort: true}
 	            ,{field:'right',title:'操作',toolbar:'#barDemo',width:150}
@@ -272,7 +271,7 @@ $("body").on("mousedown",".layui-tree a cite",function(){
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
                         var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.inputDataHandle(data,value.goodsName,value.isShelf);
+                        iframeWin.inputDataHandle(data,value.goodsName,value.isShelf,value.rowGuid);
                        body.find("#rowId").val(value.rowId);
                        body.find("#rowGuid").val(value.rowGuid);
                        body.find("#goodsName").val(value.goodsName);

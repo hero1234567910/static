@@ -41,9 +41,10 @@
                             , children: res.data
                         }]
                         , click: function (node) {
+							console.log(node.name);
                             $('#pgoodsTypeName', parent.document).val(node.name);//获取父页面dom
                             $('#pgoodsTypeCode', parent.document).val(node.goodsTypeCode);
-							$('#goodsTypeName',parent.document).val(node.typeName);
+							$('#goodsTypeName',parent.document).val(node.name);
 							$('#goodsTypeGuid',parent.document).val(node.rowGuid);
                             parent.layer.close(parent.layer.index);
                         }

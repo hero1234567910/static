@@ -9,10 +9,11 @@
 <body>
 
 <form class="layui-form" action="" lay-filter="layform">
-  	 	<div class="layui-form-item " style="display: none;">
-  	 		<div class="layui-input-block">
-  	 			<input type="text" name="rowGuid" id="rowGuid" placeholder="请输入标题" autocomplete="off" class="layui-input-block">
-  	 		</div>
+  	 	<div class="layui-form-item " style="display: none">
+  	 	    <div class="layui-input-block layui-form-pane">
+  	 	        <input type="text" name="rowGuid" id="rowGuid" lay-verify="name" autocomplete="off"
+  	 	               class="layui-input">
+  	 	    </div>
   	 	</div>
 																																																												 
 		<div class="layui-form-item  layui-form-pane">																																																									 <div class="layui-form-item">
@@ -41,7 +42,7 @@
 		 <div class="layui-form-item layui-form-pane">
 		     <label class="layui-form-label">商品价格</label>
 		     <div class="layui-input-block">
-		         <input type="number" name="goodsPrice" id="goodsPrice"  lay-verify="goodsPrice" maxlength="6" min="0.01" placeholder="请输入商品价格" autocomplete="off" class="layui-input-bloc icon1" onkeyup="checkMoney(this);">
+		         <input type="text" name="goodsPrice" id="goodsPrice"  lay-verify="goodsPrice" maxlength="6"  placeholder="请输入商品价格" autocomplete="off" class="layui-input-bloc icon1" onkeyup="checkMoney(this);">
 		     </div>
 		  </div>
 		 

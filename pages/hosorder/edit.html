@@ -110,6 +110,7 @@
                 //监听提交
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
+						async: false,
                         url:m_url+'/sys/hosorder/add',
                         contentType: 'application/json;charset=utf-8',
                         method:'post',
@@ -137,6 +138,7 @@
                 //监听提交
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
+						async: false,
                         url:m_url+'/sys/hosorder/update',
                         contentType: 'application/json;charset=utf-8',
                         method:'put',
