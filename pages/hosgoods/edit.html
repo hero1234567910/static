@@ -109,6 +109,7 @@
     });
 	//上传图片
 	var local_data_attachGuids = new Array;
+	var uploadLimit = 1;
 	$(function() {  
        $("#uploadFile").uploadify({  
            'swf'           : '../../Content/uploadify/uploadify.swf',  
@@ -116,7 +117,7 @@
            'fileTypeExts'  : '*.jpg;*.jpge;*.png',
            'buttonText'    : '选择图片',
            'fileSizeLimit' : '10MB',//接受一个单位（B,KB,MB,GB）。如果是数字则默认单位为KB。设置为0时表示不限制  
-           'uploadLimit'     : 1,  //允许上传的最多张数  
+           'uploadLimit'     : uploadLimit,  //允许上传的最多张数
            'onUploadSuccess' : function(file, data, response) { //上传成功  
            		
                var jdata = $.parseJSON(data);
@@ -146,6 +147,31 @@
        });  
 	});  
 	
+	//删除文件
+	function deleteFile(ele){
+		var guids = new Array;
+		guids.push(ele.id)
+		$.ajax({
+        	async:true,
+            url:'/sys/frameAttach/delete',
+            contentType: 'application/json;charset=utf-8',
+            method:'post',
+            data:JSON.stringify(guids),
+            dataType:'JSON',
+            success:function(res){
+                if(res.code=='0'){
+                	//移除
+                	$('#uploadFile').uploadify('settings','uploadLimit', ++uploadLimit);
+                	console.log(uploadLimit);
+                	local_data_attachGuids.splice(local_data_attachGuids.indexOf(ele.id),1);
+                    ele.parentElement.setAttribute('style','display: none;')
+                }
+                if(res.code=='500'){
+                	layer.msg(res.msg)
+                }
+            }
+        }) ;	
+	}
 	
     //接受父组件的值
 	var GoodsName = {};
@@ -157,6 +183,7 @@
                 var form = layui.form();
                 //监听提交
                 form.on('submit(formDemo)', function(data){
+                	data.field['goodsImgGuid'] = local_data_attachGuids[0];
                     $.ajax({
 						async: false,
                         url:m_url+'/sys/hosgoods/add',
