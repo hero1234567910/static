@@ -40,21 +40,6 @@ layui.use('table', function() {
 					title: '订餐用户手机号',
 					sort: true
 				}, {
-					field: 'hosInpatient',
-					width: 90,
-					title: '订餐用户病区',
-					sort: true
-				}, {
-					field: 'hosStorey',
-					width: 90,
-					title: '订餐用户楼层',
-					sort: true
-				}, {
-					field: 'hosBedNumber',
-					width: 110,
-					title: '订餐用户床位号',
-					sort: true
-				}, {
 					field: 'sortSq',
 					width: 90,
 					title: '排序号',
@@ -103,7 +88,7 @@ layui.use('table', function() {
 			title: '订餐用户信息添加',
 			maxmin: true,
 			shadeClose: true, //点击遮罩关闭层
-			area: ['500px', '450px'],
+			area: ['500px', '300px'],
 			content: 'Edit.html',
 			success: function(layero, index) {
 				var body = layer.getChildFrame('body', index);
@@ -171,7 +156,7 @@ layui.use('table', function() {
 				title: '订餐用户信息修改',
 				maxmin: true,
 				shadeClose: true, //点击遮罩关闭层
-				area: ['500px', '450px'],
+				area: ['500px', '300px'],
 				content: 'Edit.html',
 				success: function(layero, index) {
 					var body = layer.getChildFrame('body', index);
@@ -183,9 +168,6 @@ layui.use('table', function() {
 					body.find("#hosUserName").val(value.hosUserName);
 					body.find("#openid").val(value.openid);
 					body.find("#hosUserMobile").val(value.hosUserMobile);
-					body.find("#hosInpatient").val(value.hosInpatient);
-					body.find("#hosStorey").val(value.hosStorey);
-					body.find("#hosBedNumber").val(value.hosBedNumber);
 				},
 				end: function() {
 					//刷新页面
