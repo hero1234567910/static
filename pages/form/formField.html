@@ -95,16 +95,18 @@
 //		    	console.log(table.checkStatus('deptTable'))新版本才有
                     var cache = table.cache;
                     var params = new Array;
+                    var fieldNames = new Array;
                     var map  ={};
                     map['tableName']=physicalName;
 
                     $.each(cache.testReload, function (index, value) {
                         if (value.LAY_CHECKED != undefined && value.LAY_CHECKED == true) {
                             params.push(value.rowId);
+                            fieldNames.push(value.fieldName)
                         }
-                        map['fieldName']=value.fieldName;
                     });
-                    if (params.length == 0) {
+                    map['fieldNames'] = fieldNames;
+                    if (params.length == 0 || fieldNames.length == 0) {
                         layer.msg("请先选择");
                         return;
                     }
