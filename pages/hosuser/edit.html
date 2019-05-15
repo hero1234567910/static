@@ -69,7 +69,7 @@
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
 						async: false,
-                        url:m_url+'/sys/hosuser/add',
+                        url:m_url+'/wx/sys/hosuser/add',
                         contentType: 'application/json;charset=utf-8',
                         method:'post',
                         data:JSON.stringify(data.field),
@@ -100,7 +100,7 @@
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
 						async: false,
-                        url:m_url+'/sys/hosuser/update',
+                        url:m_url+'/wx/sys/hosuser/update',
                         contentType: 'application/json;charset=utf-8',
                         method:'put',
                         data:JSON.stringify(data.field),

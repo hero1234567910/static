@@ -12,7 +12,7 @@ $.ajaxSetup({
 $().ready(function () {
 	var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
         $.ajax({
-            url: m_url+'/sys/hosgoodstype/getGoodsTypeTrees',
+            url: m_url+'/wx/sys/hosgoodstype/getGoodsTypeTrees',
             contentType: 'application/json;charset=utf-8',
             method: 'post',
             dataType: 'JSON',
@@ -52,7 +52,7 @@ $("body").on("mousedown",".layui-tree a cite",function(){
             elem: '#table'
             ,height: 'full-130'
             ,even:true
-            ,url:m_url+'/sys/hosgoods/listData'
+            ,url:m_url+'/wx/sys/hosgoods/listData'
             ,method:'get'
             ,cols: [[
 				{width: 20, title: '', align: 'center', templet: '#indexTpl'}
@@ -126,7 +126,7 @@ $("body").on("mousedown",".layui-tree a cite",function(){
                     return;
                 }
                 $.ajax({
-                    url:m_url+'/sys/hosgoods/delete',
+                    url:m_url+'/wx/sys/hosgoods/delete',
                     contentType: 'application/json;charset=utf-8',
                     method:'post',
                     data:JSON.stringify(params),
@@ -206,7 +206,7 @@ $("body").on("mousedown",".layui-tree a cite",function(){
 		            return;
 		        }
 		        $.ajax({
-		            url:m_url+'/sys/hosgoods/goodsDownShelf',
+		            url:m_url+'/wx/sys/hosgoods/goodsDownShelf',
 		            contentType: 'application/json;charset=utf-8',
 		            method:'post',
 		            data:JSON.stringify(params),
@@ -240,7 +240,7 @@ $("body").on("mousedown",".layui-tree a cite",function(){
             var value = obj.data;
 			var GoodsTypeName = "";
 			$.ajax({
-			    url: m_url+'/sys/hosgoods/getTypeNameByGuid/' + value.goodsTypeGuid,
+			    url: m_url+'/wx/sys/hosgoods/getTypeNameByGuid/' + value.goodsTypeGuid,
 			    contentType: 'application/json;charset=utf-8',
 			    method: 'get',
 			    data: JSON.stringify(value.goodsTypeGuid),
