@@ -184,7 +184,7 @@
                 var form = layui.form();
                 //监听提交
                 form.on('submit(formDemo)', function(data){
-                	data.field['goodsImgGuid'] = local_data_attachGuids[0];
+                	data.field['uploadImgGuid'] = local_data_attachGuids[0];
                     $.ajax({
 						async: false,
                         url:m_url+'/sys/hosgoods/add',
