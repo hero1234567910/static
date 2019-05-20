@@ -154,7 +154,7 @@
 		guids.push(ele.id)
 		$.ajax({
         	async:true,
-            url:'/sys/frameAttach/delete',
+            url:'/wx/sys/frameAttach/delete',
             contentType: 'application/json;charset=utf-8',
             method:'post',
             data:JSON.stringify(guids),
@@ -187,7 +187,7 @@
                 	data.field['uploadImgGuid'] = local_data_attachGuids[0];
                     $.ajax({
 						async: false,
-                        url:m_url+'/sys/hosgoods/add',
+                        url:m_url+'/wx/sys/hosgoods/add',
                         contentType: 'application/json;charset=utf-8',
                         method:'post',
                         data:JSON.stringify(data.field),
@@ -223,7 +223,7 @@
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
 						async: false,
-                        url:m_url+'/sys/hosgoods/update',
+                        url:m_url+'/wx/sys/hosgoods/update',
                         contentType: 'application/json;charset=utf-8',
                         method:'put',
                         data:JSON.stringify(data.field),
@@ -268,7 +268,7 @@
 				    param['goodsName'] = value;
 				    if (value !== GoodsName) {
 				        $.ajax({
-				            url: '/sys/hosgoods/checkGoods',
+				            url: '/wx/sys/hosgoods/checkGoods',
 				            contentType: 'application/json;charset=utf-8',
 				            type: 'post',
 				            data: JSON.stringify(param),
