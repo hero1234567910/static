@@ -41,7 +41,7 @@ layui.use('table', function() {
 				}, {
 					field: 'consigneeMobile',
 					width: 60,
-					title: '收货人手机号',
+					title: '手机号',
 					sort: true
 				}, {
 					field: 'orderStatusText',
@@ -54,18 +54,13 @@ layui.use('table', function() {
 					title: '创建时间',
 					sort: true
 				}, {
-					field: 'reserveTime',
-					width: 90,
-					title: '预定送达时间',
-					sort: true
-				}, {
 					field: 'reserveTimeSuffix',
-					width: 60,
+					width: 80,
 					title: '预定时间',
 					sort: true
 				}, {
 					field: 'orderMoney',
-					width: 50,
+					width: 60,
 					title: '总金额',
 					sort: true
 				}, {
@@ -158,7 +153,7 @@ layui.use('table', function() {
 	});
 
 	$('#OrderExport').on('click', function() {
-		window.location.href="/sys/hosorder/exportExcel"
+		window.location.href="/wx/sys/hosorder/exportExcel"
 	});
 	
 

@@ -114,7 +114,7 @@ layui.use('table', function() {
 		var data = 'add';
 		layer.open({
 			type: 2,
-			title: '新增食品类型',
+			title: '新增菜品类型',
 			maxmin: true,
 			shadeClose: true, //点击遮罩关闭层
 			area: ['500px', '300px'],
@@ -203,7 +203,7 @@ layui.use('table', function() {
 			var data = 'edit';
 			layer.open({
 				type: 2,
-				title: '修改食品类型',
+				title: '修改菜品类型',
 				maxmin: true,
 				shadeClose: true, //点击遮罩关闭层
 				area: ['500px', '300px'],

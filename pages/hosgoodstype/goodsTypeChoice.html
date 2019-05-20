@@ -41,9 +41,17 @@
                             , children: res.data
                         }]
                         , click: function (node) {
-                            $('#pgoodsTypeName', parent.document).val(node.name)//获取父页面dom
-                            $('#pgoodsTypeCode', parent.document).val(node.goodsTypeCode)
-                            parent.layer.close(parent.layer.index);
+							if(node.pgoodsTypeCode =="0"||node.pgoodsTypeCode==null){
+								$('#pgoodsTypeName', parent.document).val(node.name)//获取父页面dom
+								$('#pgoodsTypeCode', parent.document).val(node.goodsTypeCode)
+								parent.layer.close(parent.layer.index);
+							}else{
+								layer.msg('只能选择饭点或者总目录',{
+									icon: 2,
+									time: 1500
+								});
+							}
+                            
                         }
                     });
                 } else
