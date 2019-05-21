@@ -20,7 +20,7 @@
         <div class="layui-main">
             <!-- logo区域 -->
             <div class="admin-logo-box">
-                <a class="logo" href="#">网信工作综合业务系统</a>
+                <a class="logo" href="#">食堂订餐系统</a>
                 <div class="larry-side-menu">
                     <i class="fa fa-bars" aria-hidden="true"></i>
                 </div>
@@ -119,29 +119,29 @@
 <script type="text/javascript" src="Scripts/vue.js"></script>
 
 <script> 
-    var socket;  
-    if(typeof(WebSocket) == "undefined") {  
-        console.log("您的浏览器不支持WebSocket");  
-    }else{  
-        console.log("您的浏览器支持WebSocket");  
-        	//实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接  
-            //等同于socket = new WebSocket("ws://localhost:8083/checkcentersys/websocket/20");  
-            socket = new WebSocket("ws://localhost:9090/websocket/20".replace("http","ws"));  
-            //打开事件  
-            socket.onopen = function() {  
-                console.log("Socket 已打开");  
-                //socket.send("这是来自客户端的消息" + location.href + new Date());  
-            };  
-            //关闭事件  
-            socket.onclose = function() {  
-                console.log("Socket已关闭");  
-            };  
-            //发生了错误事件  
-            socket.onerror = function() {  
-                alert("Socket发生了错误");  
-                //此时可以尝试刷新页面
-            }  
-    }
+//  var socket;  
+//  if(typeof(WebSocket) == "undefined") {  
+//      console.log("您的浏览器不支持WebSocket");  
+//  }else{  
+//      console.log("您的浏览器支持WebSocket");  
+//      	//实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接  
+//          //等同于socket = new WebSocket("ws://localhost:8083/checkcentersys/websocket/20");  
+//          socket = new WebSocket("ws://localhost:9090/websocket/20".replace("http","ws"));  
+//          //打开事件  
+//          socket.onopen = function() {  
+//              console.log("Socket 已打开");  
+//              //socket.send("这是来自客户端的消息" + location.href + new Date());  
+//          };  
+//          //关闭事件  
+//          socket.onclose = function() {  
+//              console.log("Socket已关闭");  
+//          };  
+//          //发生了错误事件  
+//          socket.onerror = function() {  
+//              alert("Socket发生了错误");  
+//              //此时可以尝试刷新页面
+//          }  
+//  }
 </script>
 
 <script>
