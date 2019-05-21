@@ -94,10 +94,12 @@ layui.use('table', function() {
 		active = {
 			reload: function() {
 				var keyword = $('#consigneeNameKey');
-
+				var keyword2 = $('#orderStatus');
+				console.log(keyword2.val());
 				table.reload('testReload', {
 					where: {
-						'consigneeNameVague': keyword.val()
+						'consigneeNameVague': keyword.val(),
+						'orderStatus':keyword2.val()
 					}
 				});
 			}
