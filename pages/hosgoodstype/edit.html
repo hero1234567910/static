@@ -91,7 +91,7 @@
                     map['goodsTypeCode'] = $("#goodsTypeCode").val();
                     $.ajax({
 						async: false,
-                        url:m_url+'/wx/sys/hosgoodstype/add',
+                        url:m_url+'/sys/hosgoodstype/add',
                         contentType: 'application/json;charset=utf-8',
                         method:'post',
                         data:JSON.stringify(map),
@@ -122,7 +122,7 @@
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
 						async: false,
-                        url:m_url+'/wx/sys/hosgoodstype/update',
+                        url:m_url+'/sys/hosgoodstype/update',
                         contentType: 'application/json;charset=utf-8',
                         method:'put',
                         data:JSON.stringify(data.field),
@@ -166,7 +166,7 @@
                         param['rowGuid'] = param2;
                         if (value !== GoodsTypeCode) {
                             $.ajax({
-                                url: '/wx/sys/hosgoodstype/checkGoodsType',
+                                url: '/sys/hosgoodstype/checkGoodsType',
                                 contentType: 'application/json;charset=utf-8',
                                 type: 'post',
                                 data: JSON.stringify(param),
@@ -201,7 +201,7 @@
                         }
                         if (value !== GoodsTypeName) {
                             $.ajax({
-                                url: '/wx/sys/hosgoodstype/checkGoodsType',
+                                url: '/sys/hosgoodstype/checkGoodsType',
                                 contentType: 'application/json;charset=utf-8',
                                 type: 'post',
                                 data: JSON.stringify(param),

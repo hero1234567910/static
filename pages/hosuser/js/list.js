@@ -17,7 +17,7 @@ layui.use('table', function() {
 		elem: '#table',
 		height: 'full-130',
 		even: true,
-		url: m_url + '/wx/sys/hosuser/listData',
+		url: m_url + '/sys/hosuser/listData',
 		method: 'get',
 		cols: [
 			[{
@@ -117,7 +117,7 @@ layui.use('table', function() {
 				return;
 			}
 			$.ajax({
-				url: m_url + '/wx/sys/hosuser/delete',
+				url: m_url + '/sys/hosuser/delete',
 				contentType: 'application/json;charset=utf-8',
 				method: 'post',
 				data: JSON.stringify(params),

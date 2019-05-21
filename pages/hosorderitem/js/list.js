@@ -17,7 +17,7 @@ layui.use('table', function(){
             elem: '#table'
             ,height: 'full-130'
             ,even:true
-            ,url:m_url+'/wx/sys/hosorderitem/listData'
+            ,url:m_url+'/sys/hosorderitem/listData'
             ,method:'get'
             ,cols: [[
                 {width: 20, title: '', align: 'center', templet: '#indexTpl'},
@@ -93,7 +93,7 @@ layui.use('table', function(){
                     return;
                 }
                 $.ajax({
-                    url:m_url+'/wx/sys/hosorderitem/delete',
+                    url:m_url+'/sys/hosorderitem/delete',
                     contentType: 'application/json;charset=utf-8',
                     method:'post',
                     data:JSON.stringify(params),

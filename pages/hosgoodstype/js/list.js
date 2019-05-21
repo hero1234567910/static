@@ -13,7 +13,7 @@ $.ajaxSetup({
 var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
 $().ready(function() {
 	$.ajax({
-		url: m_url + '/wx/sys/hosgoodstype/getGoodsTypeTrees',
+		url: m_url + '/sys/hosgoodstype/getGoodsTypeTrees',
 		contentType: 'application/json;charset=utf-8',
 		method: 'post',
 		dataType: 'JSON',
@@ -55,7 +55,7 @@ layui.use('table', function() {
 		elem: '#table',
 		height: 'full-130',
 		even: true,
-		url: m_url + '/wx/sys/hosgoodstype/listData',
+		url: m_url + '/sys/hosgoodstype/listData',
 		method: 'get',
 		cols: [
 			[{
@@ -146,7 +146,7 @@ layui.use('table', function() {
 				return;
 			}
 			$.ajax({
-				url: m_url + '/wx/sys/hosgoodstype/delete',
+				url: m_url + '/sys/hosgoodstype/delete',
 				contentType: 'application/json;charset=utf-8',
 				method: 'post',
 				data: JSON.stringify(params),
@@ -180,7 +180,7 @@ layui.use('table', function() {
 		var value = obj.data;
 		var GoodsTypeCode = "";
 		$.ajax({
-			url: m_url + '/wx/sys/hosgoodstype/getByGoodsTypeCode/' + value.pgoodsTypeCode,
+			url: m_url + '/sys/hosgoodstype/getByGoodsTypeCode/' + value.pgoodsTypeCode,
 			contentType: 'application/json;charset=utf-8',
 			method: 'get',
 			data: JSON.stringify(value.pgoodsTypeCode),

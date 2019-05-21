@@ -1,412 +1,419 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
-    <link rel="stylesheet" href="../../Content/uploadify/uploadify.css" />
-    <title>菜品编辑</title>
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="../../Scripts/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../Content/uploadify/uploadify.css" />
+		<title>菜品编辑</title>
+	</head>
+	<body>
 
-<form class="layui-form" action="" lay-filter="layform">
-  	 	<div class="layui-form-item " style="display: none">
-  	 	    <div class="layui-input-block layui-form-pane">
-  	 	        <input type="text" name="rowGuid" id="rowGuid" lay-verify="name" autocomplete="off"
-  	 	               class="layui-input">
-  	 	    </div>
-  	 	</div>
-																																																												 
-		<div class="layui-form-item  layui-form-pane">																																																									 <div class="layui-form-item">
-	        <label class="layui-form-label">菜品名称<font color="red">*</font></label>
-	        <div class="layui-input-block">
-	            <input type="text" name="goodsName" id="goodsName" lay-verify="goodsName"  placeholder="请输入商品名称" autocomplete="off" class="layui-input-bloc">
-	        </div>
-	     </div>
-		 
-	    <div class="layui-form-item layui-form-pane">
-	        <label class="layui-form-label">菜品类型<font color="red">*</font></label>
-	        <div class="layui-input-block">
-				<input type="text" name="goodsTypeName" id="goodsTypeName" required readonly placeholder="请选择菜品类型" autocomplete="off"
-				       class="layui-input-bloc icon">
-	            <input type="text" name="goodsTypeGuid" id="goodsTypeGuid" lay-verify="goodsTypeGuid" placeholder="请输入商品类型标识" autocomplete="off" class="layui-input-bloc" style="display: none;">
-	        </div>
-	     </div>
-	    
-	    <div class="layui-form-item layui-form-pane">
-	        <label class="layui-form-label">商品信息</label>
-	        <div class="layui-input-block">
-	            <input type="text" name="goodsInfo" id="goodsInfo"  lay-verify="goodsInfo" placeholder="请输入商品信息" autocomplete="off" class="layui-input-bloc">
-	        </div>
-	     </div>
-		 
-		 <div class="layui-form-item layui-form-pane">
-		     <label class="layui-form-label">商品价格</label>
-		     <div class="layui-input-block">
-		         <input type="text" name="goodsPrice" id="goodsPrice"  lay-verify="goodsPrice" maxlength="6"  placeholder="请输入商品价格" autocomplete="off" class="layui-input-bloc icon1" onkeyup="checkMoney(this);">
-		     </div>
-		  </div>
-		 
-	    <div class="layui-form-item layui-form-pane">
-	        <label class="layui-form-label">是否上架<font color="red">*</font></label>
-	        <div class="layui-input-block">
-				<div class="layui-input-block "
-				     style="border-color:#e6e6e6!important;height:38px;">
-				    <input type="radio" name="isShelf" value="0" title="上架" checked="" id="isShelf0">
-				    <input type="radio" name="isShelf" value="1" title="下架" id ="isShelf1">
+		<form class="layui-form" action="" lay-filter="layform">
+			<div class="layui-form-item " style="display: none">
+				<div class="layui-input-block layui-form-pane">
+					<input type="text" name="rowGuid" id="rowGuid" lay-verify="name" autocomplete="off" class="layui-input">
 				</div>
-	        </div>
-	     </div>
-		 
-		<div class="layui-form-item layui-form-pane">
-		     <label class="layui-form-label">排序号</label>
-		     <div class="layui-input-block">
-		         <input type="text" name="sortSq" id="sortSq"  placeholder="请输入排序号" autocomplete="off" class="layui-input-bloc">
-		     </div>
-		</div>
-		 
-		<div class="layui-form-item layui-form-pane">
-            <label class="layui-form-label ">商品图片</label>
-            <div class="layui-input-block">
-              <div style="margin-left: 20px;">  
-			     <input type="file" name="uploadify" id="uploadFile" />  
-			     <div id="some_file_queue"></div>  
-			     <div id="fileName"></div>  
-			  </div>
-            </div>
-        </div>
-		 
-	    <div class="layui-form-button">
-          <div class="layui-input-block">
-            <button class="layui-btn" lay-submit style="margin-left: 21%" lay-filter="formDemo">立即提交</button>
-          </div>
-       </div>
-	 </div>
-</form>
+			</div>
 
-<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="../../Content/uploadify/jquery.uploadify.min.js"></script>
-<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
-<script type="text/javascript">
-   function checkMoney(obj)
-   {   
-     if(/^\d+\.?\d{0,2}$/.test(obj.value)){
-        obj.value = obj.value;
-     }else{
-        obj.value = obj.value.substring(0,obj.value.length-1);
-     }     
-   }
-</script>
-<script>
-	$.ajaxSetup({
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            "token": window.localStorage.getItem('m_token')
-        },
-        complete: function (res) {
-            if (JSON.parse(res.responseText).code == '401') {
-                window.top.location.href = '../../login.html';
-            }
-        }
-    });
-	//上传图片
-	var local_data_attachGuids = new Array;
-	var uploadLimit = 1;
-	$(function() {  
-       $("#uploadFile").uploadify({  
-           'swf'           : '../../Content/uploadify/uploadify.swf',  
-           'uploader'      : '/sys/common/uploadFile',  //服务器端方法
-           'fileTypeExts'  : '*.jpg;*.jpge;*.png',
-           'buttonText'    : '选择图片',
-           'fileSizeLimit' : '10MB',//接受一个单位（B,KB,MB,GB）。如果是数字则默认单位为KB。设置为0时表示不限制  
-           'uploadLimit'     : uploadLimit,  //允许上传的最多张数
-           'onUploadSuccess' : function(file, data, response) { //上传成功  
-           		
-               var jdata = $.parseJSON(data);
-               var last = jdata.type.substr('1',jdata.type.length);
-               $("#fileName").append("<div style='float:left;margin-right:30px'><a href="+jdata.url+" download="+jdata.fileName+"><em><img class='m-img' src='"+jdata.url+"' /></em><em id="+jdata.attachRowguid+" name='fileName'  style='color:#555555'>"+jdata.fileName+"</em></a><em style='color:red;cursor:pointer;' onclick = 'deleteFile(this)' id="+jdata.attachRowguid+">删除</em></div>");
-               local_data_attachGuids.push(jdata.attachRowguid);
-            },  
-            'onFallback':function(){  
-               layer.msg("您未安装FLASH控件，无法一次性上传多个文件！请安装FLASH控件后再试。");  
-            },  
-            onSelectError:function(file, errorCode, errorMsg){ //选择失败  
-                   switch(errorCode) {  
-                       case -100:    
-                           layer.msg("上传的文件数量已经超出系统限制的"+$('#uploadFile').uploadify('settings','queueSizeLimit')+"个文件！");      
-                           break;    
-                       case -110:    
-                           layer.msg("文件 ["+file.name+"] 大小超出系统限制的"+$('#uploadFile').uploadify('settings','fileSizeLimit')+"大小！");  
-                           break;    
-                       case -120:    
-                           layer.msg("文件 ["+file.name+"] 大小异常！");  
-                           break;    
-                       case -130:    
-                           layer.msg("文件 ["+file.name+"] 类型不正确！");  
-                           break;  
-                   }  
-               }
-       });  
-	});  
-	
-	//删除文件
-	function deleteFile(ele){
-		var guids = new Array;
-		guids.push(ele.id)
-		$.ajax({
-        	async:true,
-            url:'/wx/sys/frameAttach/delete',
-            contentType: 'application/json;charset=utf-8',
-            method:'post',
-            data:JSON.stringify(guids),
-            dataType:'JSON',
-            success:function(res){
-                if(res.code=='0'){
-                	//移除
-                	$('#uploadFile').uploadify('settings','uploadLimit', ++uploadLimit);
-                	console.log(uploadLimit);
-                	local_data_attachGuids.splice(local_data_attachGuids.indexOf(ele.id),1);
-                    ele.parentElement.setAttribute('style','display: none;')
-                }
-                if(res.code=='500'){
-                	layer.msg(res.msg)
-                }
-            }
-        }) ;	
-	}
-	
-    //接受父组件的值
-	var GoodsName = {};
-    function inputDataHandle(data,goodsName,isShelf){
-    var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
-        //新增
-        if(data == 'add'){
-            layui.use('form', function(){
-                var form = layui.form();
-                //监听提交
-                form.on('submit(formDemo)', function(data){
-                	data.field['uploadImgGuid'] = local_data_attachGuids[0];
-                    $.ajax({
-						async: false,
-                        url:m_url+'/wx/sys/hosgoods/add',
-                        contentType: 'application/json;charset=utf-8',
-                        method:'post',
-                        data:JSON.stringify(data.field),
-                        dataType:'JSON',
-                        success:function(res){
-                            if(res.code=='0'){
-                               var index = parent.layer.getFrameIndex(window.name);
-                               parent.layer.close(index);
-                            }
-                            else
-                                layer.msg(res.msg);
-                        },
-                        error:function (data) {
-                            if(data.status == 0){
-                                parent.layer.close(parent.layer.index);
-                            }
-                        }
-                    }) ;
-                });
-            });
-        }
-        //编辑
-        if(data == 'edit'){
-            layui.use('form', function(){
-				if(isShelf==0)
-				    $("#isShelf0").attr("checked",true);
-				else
-				    $("#isShelf1").attr("checked",true);
-                var form = layui.form();
-				form.render();
-				GoodsName = goodsName;
-                //监听提交
-                form.on('submit(formDemo)', function(data){
-                    $.ajax({
-						async: false,
-                        url:m_url+'/wx/sys/hosgoods/update',
-                        contentType: 'application/json;charset=utf-8',
-                        method:'put',
-                        data:JSON.stringify(data.field),
-                        dataType:'JSON',
-                        success:function(res){
-                            if(res.code=='0'){
-                               var index = parent.layer.getFrameIndex(window.name);
-                               parent.layer.close(index);
-                            }
-                             if(res.code=='500'){
-	                        	layer.msg(res.msg)
-	                        }
-                        },
-                        //谷歌浏览器出现Provisional headers are shown警告     
-                        error:function (data) {
-                            if(data.status == 0){
-                                parent.layer.close(parent.layer.index);
-                            }
-                        }
-                    }) ;
-                });
-            });
-        }
-    }
-    layui.use(['form', 'layedit', 'laydate'], function () {
-        var form = layui.form()
-            , layer = layui.layer
-            , layedit = layui.layedit
-            , laydate = layui.laydate;
+			<div class="layui-form-item  layui-form-pane">
+				<div class="layui-form-item">
+					<label class="layui-form-label">菜品名称<font color="red">*</font></label>
+					<div class="layui-input-block">
+						<input type="text" name="goodsName" id="goodsName" lay-verify="goodsName" placeholder="请输入商品名称" autocomplete="off"
+						 class="layui-input-bloc">
+					</div>
+				</div>
 
-        //创建一个编辑器
-        // var editIndex = layedit.build('LAY_demo_editor');
+				<div class="layui-form-item layui-form-pane">
+					<label class="layui-form-label">菜品类型<font color="red">*</font></label>
+					<div class="layui-input-block">
+						<input type="text" name="goodsTypeName" id="goodsTypeName" required readonly placeholder="请选择菜品类型" autocomplete="off"
+						 class="layui-input-bloc icon">
+						<input type="text" name="goodsTypeGuid" id="goodsTypeGuid" lay-verify="goodsTypeGuid" placeholder="请输入商品类型标识"
+						 autocomplete="off" class="layui-input-bloc" style="display: none;">
+					</div>
+				</div>
 
-        //自定义验证规则
-        form.verify({
-            'goodsName':function(value,item){
-				if (value == "") {
-				        return '菜品名称不能为空'
-				    }
-				    var msg = "";
-				    var param = {};
-				    param['goodsName'] = value;
-				    if (value !== GoodsName) {
-				        $.ajax({
-				            url: '/wx/sys/hosgoods/checkGoods',
-				            contentType: 'application/json;charset=utf-8',
-				            type: 'post',
-				            data: JSON.stringify(param),
-				            dataType: 'JSON',
-				            async: false,
-				            success: function (result) {
-				                if (result.code == 500) {
-				                    msg = result.code;
-				                }
-				            },
-				            error: function (error) {
-				            
-				            }
-				        });
-				        if (msg == 500) {
-				            return '该菜品名称已存在';
-				        }
-				    }
-				},
-			
-			'goodsPrice':function(value,item){
-				if (value == "") {
-				        return '菜品价格不能为空'
-				    }
-                if (!new RegExp("(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)").test(value)) {
-                    return '菜品价格格式不正确！';
-                }
+				<div class="layui-form-item layui-form-pane">
+					<label class="layui-form-label">商品信息</label>
+					<div class="layui-input-block">
+						<input type="text" name="goodsInfo" id="goodsInfo" lay-verify="goodsInfo" placeholder="请输入商品信息" autocomplete="off"
+						 class="layui-input-bloc">
+					</div>
+				</div>
+
+				<div class="layui-form-item layui-form-pane">
+					<label class="layui-form-label">商品价格</label>
+					<div class="layui-input-block">
+						<input type="text" name="goodsPrice" id="goodsPrice" lay-verify="goodsPrice" maxlength="6" placeholder="请输入商品价格"
+						 autocomplete="off" class="layui-input-bloc icon1" onkeyup="checkMoney(this);">
+					</div>
+				</div>
+
+				<div class="layui-form-item layui-form-pane">
+					<label class="layui-form-label">是否上架<font color="red">*</font></label>
+					<div class="layui-input-block">
+						<div class="layui-input-block " style="border-color:#e6e6e6!important;height:38px;">
+							<input type="radio" name="isShelf" value="0" title="上架" checked="" id="isShelf0">
+							<input type="radio" name="isShelf" value="1" title="下架" id="isShelf1">
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-form-item layui-form-pane">
+					<label class="layui-form-label">排序号</label>
+					<div class="layui-input-block">
+						<input type="text" name="sortSq" id="sortSq" placeholder="请输入排序号" autocomplete="off" class="layui-input-bloc">
+					</div>
+				</div>
+
+				<div class="layui-form-item layui-form-pane">
+					<label class="layui-form-label ">商品图片</label>
+					<div class="layui-input-block">
+						<div style="margin-left: 20px;">
+							<input type="file" name="uploadify" id="uploadFile" />
+							<div id="some_file_queue"></div>
+							<div id="fileName"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-form-button">
+					<div class="layui-input-block">
+						<button class="layui-btn" lay-submit style="margin-left: 21%" lay-filter="formDemo">立即提交</button>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="../../Content/uploadify/jquery.uploadify.min.js"></script>
+		<script src="../../Scripts/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript">
+			function checkMoney(obj) {
+				if (/^\d+\.?\d{0,2}$/.test(obj.value)) {
+					obj.value = obj.value;
+				} else {
+					obj.value = obj.value.substring(0, obj.value.length - 1);
+				}
 			}
-        });
-    });
-	
-	$("#goodsTypeName").on('click', function () {
-	    layer.open({
-	        type: 2,
-	        title: '选择菜品类型',
-	        zIndex: '19891015',
-	        maxmin: true,
-	        shadeClose: true, //点击遮罩关闭层
-	        area: ['300px', '400px'],
-	        content: 'goodsTypeChoice.html',
-	        success: function (layero, index) {
-				var body = layer.getChildFrame('body', index);
-				var iframeWin = window[layero.find('iframe')[0]['name']];
-				//iframeWin.inputDataHandle(data);
-				$("#typeName").val(iframeWin.goodsTypeName);
-				$("#rowGuid").val(iframeWin.goodsTypeGuid);
-	        },
-	        end: function () {
-	
-	        }
-	    })
-	})
-    
-</script>
-<style>
-	.m-img{
-		width: 200px;
-	}
-    .layui-input-block {
-        min-height: 36px;
-        margin-left: 140px;
-    }
-    
-    .layui-form-label {
-        margin-left: 2px;
-        width: 90px;
-    }
-    
-    .layui-form-item {
-        margin-top: 3px;
-        margin-bottom: 0px;
-        width: 100%;
-    }
-    
-    .layui-form-pane {
-        flex: 1;
-        width: 100%;
-    }
-    
-    .layui-form-button {
-        margin-top: 5px;
-    }
-    
-    .layui-btn {
-    
-        font-size: 14px;
-        background-color: #3398E5;
-        color: #fff;
-        white-space: nowrap;
-        text-align: center;
-        font-size: 14px;
-        border: none;
-        border-radius: 2px;
-        cursor: pointer;
-        opacity: .9;
-        width: 70px;
-        height: 30px;
-        line-height: 30px;
-        padding: 0 10px;
-        font-size: 13px;
-        margin-left: 10px;
-    }
-    
-    .layui-btn-normal {
-        margin-left: 10px;
-    }
-    
-    .layui-btn + .layui-btn {
-        margin-left: 10px;
-        margin-top: 3px;
-        margin-bottom: 0px;
-    }
-    
-    .layui-input-bloc {
-        min-height: 36px;
-        padding-left: 9px;
-        width: 95%;
-        border-radius: 0 2px 2px 0;
-        border: 1px solid #e6e6e6;
-    }
-    
-    .layui-textarea {
-        width: 98%;
-    }
-    
-    .icon {
-        background-position: right;
-        background-repeat: no-repeat;
-        background-image: url("../../Content/images/dept.png");
-    }
-	
-	.icon1 {
-	    background-position: right;
-	    background-repeat: no-repeat;
-	    background-image: url("../../Content/images/money.png");
-	}
-</style>
-</body>
+		</script>
+		<script>
+			$.ajaxSetup({
+				headers: {
+					"Content-Type": "application/json;charset=utf-8",
+					"token": window.localStorage.getItem('m_token')
+				},
+				complete: function(res) {
+					if (JSON.parse(res.responseText).code == '401') {
+						window.top.location.href = '../../login.html';
+					}
+				}
+			});
+			//上传图片
+			var local_data_attachGuids = new Array;
+			var uploadLimit = 1;
+			$(function() {
+				$("#uploadFile").uploadify({
+					'swf': '../../Content/uploadify/uploadify.swf',
+					'uploader': '/sys/common/uploadFile', //服务器端方法
+					'fileTypeExts': '*.jpg;*.jpge;*.png',
+					'buttonText': '选择图片',
+					'fileSizeLimit': '10MB', //接受一个单位（B,KB,MB,GB）。如果是数字则默认单位为KB。设置为0时表示不限制  
+					'uploadLimit': uploadLimit, //允许上传的最多张数
+					'onUploadSuccess': function(file, data, response) { //上传成功  
+
+						var jdata = $.parseJSON(data);
+						var last = jdata.type.substr('1', jdata.type.length);
+						$("#fileName").append("<div style='float:left;margin-right:30px'><a href=" + jdata.url + " download=" +
+							jdata.fileName + "><em><img class='m-img' src='" + jdata.url + "' /></em><em id=" + jdata.attachRowguid +
+							" name='fileName'  style='color:#555555'>" + jdata.fileName +
+							"</em></a><em style='color:red;cursor:pointer;' onclick = 'deleteFile(this)' id=" + jdata.attachRowguid +
+							">删除</em></div>");
+						local_data_attachGuids.push(jdata.attachRowguid);
+					},
+					'onFallback': function() {
+						layer.msg("您未安装FLASH控件，无法一次性上传多个文件！请安装FLASH控件后再试。");
+					},
+					onSelectError: function(file, errorCode, errorMsg) { //选择失败  
+						switch (errorCode) {
+							case -100:
+								layer.msg("上传的文件数量已经超出系统限制的" + $('#uploadFile').uploadify('settings', 'queueSizeLimit') + "个文件！");
+								break;
+							case -110:
+								layer.msg("文件 [" + file.name + "] 大小超出系统限制的" + $('#uploadFile').uploadify('settings', 'fileSizeLimit') +
+									"大小！");
+								break;
+							case -120:
+								layer.msg("文件 [" + file.name + "] 大小异常！");
+								break;
+							case -130:
+								layer.msg("文件 [" + file.name + "] 类型不正确！");
+								break;
+						}
+					}
+				});
+			});
+
+			//删除文件
+			function deleteFile(ele) {
+				var guids = new Array;
+				guids.push(ele.id)
+				$.ajax({
+					async: true,
+					url: '/sys/frameAttach/delete',
+					contentType: 'application/json;charset=utf-8',
+					method: 'post',
+					data: JSON.stringify(guids),
+					dataType: 'JSON',
+					success: function(res) {
+						if (res.code == '0') {
+							//移除
+							$('#uploadFile').uploadify('settings', 'uploadLimit', ++uploadLimit);
+							console.log(uploadLimit);
+							local_data_attachGuids.splice(local_data_attachGuids.indexOf(ele.id), 1);
+							ele.parentElement.setAttribute('style', 'display: none;')
+						}
+						if (res.code == '500') {
+							layer.msg(res.msg)
+						}
+					}
+				});
+			}
+
+			//接受父组件的值
+			var GoodsName = {};
+
+			function inputDataHandle(data, goodsName, isShelf) {
+				var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
+				//新增
+				if (data == 'add') {
+					layui.use('form', function() {
+						var form = layui.form();
+						//监听提交
+						form.on('submit(formDemo)', function(data) {
+							data.field['uploadImgGuid'] = local_data_attachGuids[0];
+							$.ajax({
+								async: false,
+								url: m_url + '/sys/hosgoods/add',
+								contentType: 'application/json;charset=utf-8',
+								method: 'post',
+								data: JSON.stringify(data.field),
+								dataType: 'JSON',
+								success: function(res) {
+									if (res.code == '0') {
+										var index = parent.layer.getFrameIndex(window.name);
+										parent.layer.close(index);
+									} else
+										layer.msg(res.msg);
+								},
+								error: function(data) {
+									if (data.status == 0) {
+										parent.layer.close(parent.layer.index);
+									}
+								}
+							});
+						});
+					});
+				}
+				//编辑
+				if (data == 'edit') {
+					layui.use('form', function() {
+						if (isShelf == 0)
+							$("#isShelf0").attr("checked", true);
+						else
+							$("#isShelf1").attr("checked", true);
+						var form = layui.form();
+						form.render();
+						GoodsName = goodsName;
+						//监听提交
+						form.on('submit(formDemo)', function(data) {
+							$.ajax({
+								async: false,
+								url: m_url + '/sys/hosgoods/update',
+								contentType: 'application/json;charset=utf-8',
+								method: 'put',
+								data: JSON.stringify(data.field),
+								dataType: 'JSON',
+								success: function(res) {
+									if (res.code == '0') {
+										var index = parent.layer.getFrameIndex(window.name);
+										parent.layer.close(index);
+									}
+									if (res.code == '500') {
+										layer.msg(res.msg)
+									}
+								},
+								//谷歌浏览器出现Provisional headers are shown警告     
+								error: function(data) {
+									if (data.status == 0) {
+										parent.layer.close(parent.layer.index);
+									}
+								}
+							});
+						});
+					});
+				}
+			}
+			layui.use(['form', 'layedit', 'laydate'], function() {
+				var form = layui.form(),
+					layer = layui.layer,
+					layedit = layui.layedit,
+					laydate = layui.laydate;
+
+				//创建一个编辑器
+				// var editIndex = layedit.build('LAY_demo_editor');
+
+				//自定义验证规则
+				form.verify({
+					'goodsName': function(value, item) {
+						if (value == "") {
+							return '菜品名称不能为空'
+						}
+						var msg = "";
+						var param = {};
+						param['goodsName'] = value;
+						if (value !== GoodsName) {
+							$.ajax({
+								url: '/sys/hosgoods/checkGoods',
+								contentType: 'application/json;charset=utf-8',
+								type: 'post',
+								data: JSON.stringify(param),
+								dataType: 'JSON',
+								async: false,
+								success: function(result) {
+									if (result.code == 500) {
+										msg = result.code;
+									}
+								},
+								error: function(error) {
+
+								}
+							});
+							if (msg == 500) {
+								return '该菜品名称已存在';
+							}
+						}
+					},
+
+					'goodsPrice': function(value, item) {
+						if (value == "") {
+							return '菜品价格不能为空'
+						}
+						if (!new RegExp("(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)").test(value)) {
+							return '菜品价格格式不正确！';
+						}
+					}
+				});
+			});
+
+			$("#goodsTypeName").on('click', function() {
+				layer.open({
+					type: 2,
+					title: '选择菜品类型',
+					zIndex: '19891015',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭层
+					area: ['300px', '400px'],
+					content: 'goodsTypeChoice.html',
+					success: function(layero, index) {
+						var body = layer.getChildFrame('body', index);
+						var iframeWin = window[layero.find('iframe')[0]['name']];
+						//iframeWin.inputDataHandle(data);
+						$("#typeName").val(iframeWin.goodsTypeName);
+						$("#rowGuid").val(iframeWin.goodsTypeGuid);
+					},
+					end: function() {
+
+					}
+				})
+			})
+		</script>
+		<style>
+			.m-img {
+				width: 200px;
+			}
+
+			.layui-input-block {
+				min-height: 36px;
+				margin-left: 140px;
+			}
+
+			.layui-form-label {
+				margin-left: 2px;
+				width: 90px;
+			}
+
+			.layui-form-item {
+				margin-top: 3px;
+				margin-bottom: 0px;
+				width: 100%;
+			}
+
+			.layui-form-pane {
+				flex: 1;
+				width: 100%;
+			}
+
+			.layui-form-button {
+				margin-top: 5px;
+			}
+
+			.layui-btn {
+
+				font-size: 14px;
+				background-color: #3398E5;
+				color: #fff;
+				white-space: nowrap;
+				text-align: center;
+				font-size: 14px;
+				border: none;
+				border-radius: 2px;
+				cursor: pointer;
+				opacity: .9;
+				width: 70px;
+				height: 30px;
+				line-height: 30px;
+				padding: 0 10px;
+				font-size: 13px;
+				margin-left: 10px;
+			}
+
+			.layui-btn-normal {
+				margin-left: 10px;
+			}
+
+			.layui-btn+.layui-btn {
+				margin-left: 10px;
+				margin-top: 3px;
+				margin-bottom: 0px;
+			}
+
+			.layui-input-bloc {
+				min-height: 36px;
+				padding-left: 9px;
+				width: 95%;
+				border-radius: 0 2px 2px 0;
+				border: 1px solid #e6e6e6;
+			}
+
+			.layui-textarea {
+				width: 98%;
+			}
+
+			.icon {
+				background-position: right;
+				background-repeat: no-repeat;
+				background-image: url("../../Content/images/dept.png");
+			}
+
+			.icon1 {
+				background-position: right;
+				background-repeat: no-repeat;
+				background-image: url("../../Content/images/money.png");
+			}
+		</style>
+	</body>
 
 
 </html>

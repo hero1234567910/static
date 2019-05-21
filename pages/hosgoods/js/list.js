@@ -12,7 +12,7 @@ $.ajaxSetup({
 $().ready(function() {
 	var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
 	$.ajax({
-		url: m_url + '/wx/sys/hosgoodstype/getGoodsTypeTrees',
+		url: m_url + '/sys/hosgoodstype/getGoodsTypeTrees',
 		contentType: 'application/json;charset=utf-8',
 		method: 'post',
 		dataType: 'JSON',
@@ -52,7 +52,7 @@ layui.use('table', function() {
 		elem: '#table',
 		height: 'full-130',
 		even: true,
-		url: m_url + '/wx/sys/hosgoods/listData',
+		url: m_url + '/sys/hosgoods/listData',
 		method: 'get',
 		cols: [
 			[{
@@ -77,14 +77,14 @@ layui.use('table', function() {
 					width: 80,
 					title: '菜品信息',
 					sort: true
-				}, {
+				}, 
+				{
 					field: 'goodsImgGuid',
 					title: '菜品图片',
 					sort: true,
-					templet: '#showimg'
-				}
-
-				, {
+					templet: '#showImg'
+				},
+				 {
 					field: 'isShelf',
 					width: 70,
 					title: '是否上架',
@@ -115,6 +115,25 @@ layui.use('table', function() {
 		}
 	});
 
+	//角色关键字搜索
+	var $ = layui.$,
+		active = {
+			reload: function() {
+				var keyword = $('#goodsNamekey');
+	
+				table.reload('testReload', {
+					where: {
+						'goodsNameVague': keyword.val()
+					}
+				});
+			}
+		};
+	//搜索绑定
+	$('#goodsFind').on('click', function() {
+		var type = $(this).data('type');
+		active[type] ? active[type].call(this) : '';
+	});
+
 	function hoverOpenImg() {
 		var img_show = null; // tips提示
 		$('td img').hover(function() {
@@ -132,26 +151,6 @@ layui.use('table', function() {
 		$('td img').attr('style', 'max-width:70px;display:block!important');
 	}
 	//显示大图片
-
-	//角色关键字搜索
-	var $ = layui.$,
-		active = {
-			reload: function() {
-				var keyword = $('#goodsNameKey');
-
-				table.reload('testReload', {
-					where: {
-						goodsNameVague: keyword.val()
-					}
-				});
-			}
-		};
-	//搜索绑定
-	$('#goodsFind').on('click', function() {
-		var type = $(this).data('type');
-		active[type] ? active[type].call(this) : '';
-	});
-
 
 	//新增
 	$('#goodsAdd').on('click', function() {
@@ -190,7 +189,7 @@ layui.use('table', function() {
 				return;
 			}
 			$.ajax({
-				url: m_url + '/wx/sys/hosgoods/delete',
+				url: m_url + '/sys/hosgoods/delete',
 				contentType: 'application/json;charset=utf-8',
 				method: 'post',
 				data: JSON.stringify(params),
@@ -270,7 +269,7 @@ layui.use('table', function() {
 				return;
 			}
 			$.ajax({
-				url: m_url + '/wx/sys/hosgoods/goodsDownShelf',
+				url: m_url + '/sys/hosgoods/goodsDownShelf',
 				contentType: 'application/json;charset=utf-8',
 				method: 'post',
 				data: JSON.stringify(params),
@@ -304,7 +303,7 @@ layui.use('table', function() {
 		var value = obj.data;
 		var GoodsTypeName = "";
 		$.ajax({
-			url: m_url + '/wx/sys/hosgoods/getTypeNameByGuid/' + value.goodsTypeGuid,
+			url: m_url + '/sys/hosgoods/getTypeNameByGuid/' + value.goodsTypeGuid,
 			contentType: 'application/json;charset=utf-8',
 			method: 'get',
 			data: JSON.stringify(value.goodsTypeGuid),

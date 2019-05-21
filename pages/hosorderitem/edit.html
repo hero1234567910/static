@@ -81,7 +81,7 @@
                 //监听提交
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
-                        url:m_url+'/wx/sys/hosorderitem/add',
+                        url:m_url+'/sys/hosorderitem/add',
                         contentType: 'application/json;charset=utf-8',
                         method:'post',
                         data:JSON.stringify(data.field),
@@ -110,7 +110,7 @@
                 //监听提交
                 form.on('submit(formDemo)', function(data){
                     $.ajax({
-                        url:m_url+'/wx/sys/hosorderitem/update',
+                        url:m_url+'/sys/hosorderitem/update',
                         contentType: 'application/json;charset=utf-8',
                         method:'put',
                         data:JSON.stringify(data.field),
