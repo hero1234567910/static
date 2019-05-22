@@ -79,7 +79,7 @@ layui.use('table', function() {
 					sort: true
 				}, 
 				{
-					field: 'goodsImgGuid',
+					field: 'goodsUrl',
 					title: '菜品图片',
 					sort: true,
 					templet: '#showImg'
