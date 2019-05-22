@@ -119,29 +119,117 @@
 <script type="text/javascript" src="Scripts/vue.js"></script>
 
 <script> 
-//  var socket;  
-//  if(typeof(WebSocket) == "undefined") {  
-//      console.log("您的浏览器不支持WebSocket");  
-//  }else{  
-//      console.log("您的浏览器支持WebSocket");  
-//      	//实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接  
-//          //等同于socket = new WebSocket("ws://localhost:8083/checkcentersys/websocket/20");  
-//          socket = new WebSocket("ws://localhost:9090/websocket/20".replace("http","ws"));  
-//          //打开事件  
-//          socket.onopen = function() {  
-//              console.log("Socket 已打开");  
-//              //socket.send("这是来自客户端的消息" + location.href + new Date());  
-//          };  
-//          //关闭事件  
-//          socket.onclose = function() {  
-//              console.log("Socket已关闭");  
-//          };  
-//          //发生了错误事件  
-//          socket.onerror = function() {  
-//              alert("Socket发生了错误");  
-//              //此时可以尝试刷新页面
-//          }  
-//  }
+var lockReconnect = false;  //避免ws重复连接
+var ws = null;          // 判断当前浏览器是否支持WebSocket
+var wsUrl = "ws://ey.nxjnjc.com/websocket/20".replace("http","ws");
+createWebSocket(wsUrl);   //连接ws
+
+
+function createWebSocket(url) {
+    try{
+        if('WebSocket' in window){
+            ws = new WebSocket(url);
+        }else if('MozWebSocket' in window){  
+            ws = new MozWebSocket(url);
+        }else{
+            layui.use(['layer'],function(){
+               var layer = layui.layer;
+              layer.alert("您的浏览器不支持websocket协议,建议使用新版谷歌、火狐等浏览器，请勿使用IE10以下浏览器，360浏览器请使用极速模式，不要使用兼容模式！"); 
+            });
+        }
+        initEventHandle();
+    }catch(e){
+        reconnect(url);
+        console.log(e);
+    }     
+}
+
+function initEventHandle() {
+    ws.onclose = function () {
+        reconnect(wsUrl);
+        console.log("ws连接关闭!"+new Date().toUTCString());
+    };
+    ws.onerror = function () {
+        reconnect(wsUrl);
+        console.log("ws连接错误!");
+    };
+    ws.onopen = function () {
+        heartCheck.reset().start();      //心跳检测重置
+        console.log("ws连接成功!"+new Date().toUTCString());
+    };
+    ws.onmessage = function (event) {    //如果获取到消息，心跳检测重置
+        heartCheck.reset().start();      //拿到任何消息都说明当前连接是正常的
+        console.log(event.data);
+        if(event.data == '您有新的订单'){
+        	playSound();
+        	layui.use(['layer'],function(){
+               var layer = layui.layer;
+              layer.msg("您有新的订单"); 
+            });
+        }
+    };
+}
+// 监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+window.onbeforeunload = function() {
+    ws.close();
+}  
+
+function reconnect(url) {
+    if(lockReconnect) return;
+    lockReconnect = true;
+    setTimeout(function () {     //没连接上会一直重连，设置延迟避免请求过多
+        createWebSocket(url);
+        lockReconnect = false;
+    }, 2000);
+}
+
+//心跳检测
+var heartCheck = {
+    timeout: 540000,        //9分钟发一次心跳
+    timeoutObj: null,
+    serverTimeoutObj: null,
+    reset: function(){
+        clearTimeout(this.timeoutObj);
+        clearTimeout(this.serverTimeoutObj);
+        return this;
+    },
+    start: function(){
+        var self = this;
+        this.timeoutObj = setTimeout(function(){
+            //这里发送一个心跳，后端收到后，返回一个心跳消息，
+            //onmessage拿到返回的心跳就说明连接正常
+            ws.send("ping");
+            self.serverTimeoutObj = setTimeout(function(){//如果超过一定时间还没重置，说明后端主动断开了
+                ws.close();     //如果onclose会执行reconnect，我们执行ws.close()就行了.如果直接执行reconnect 会触发onclose导致重连两次
+            }, self.timeout)
+        }, this.timeout)
+    }
+}
+
+//声音提示
+function playSound(){
+     var borswer = window.navigator.userAgent.toLowerCase();
+     if ( borswer.indexOf( "ie" ) >= 0 ){
+       //IE内核浏览器
+       var strEmbed = '<embed name="embedPlay" src="Content/dingdong.mp3" autostart="true" hidden="true" loop="false"></embed>';
+       if ( $( "body" ).find( "embed" ).length <= 0 )
+         $( "body" ).append( strEmbed );
+       var embed = document.embedPlay;
+
+       //浏览器不支持 audion，则使用 embed 播放
+       embed.volume = 100;
+       //embed.play();这个不需要
+     } else{
+       //非IE内核浏览器
+       var strAudio = "<audio id='audioPlay' src='Content/dingdong.mp3' hidden='true'>";
+       if ( $( "body" ).find( "audio" ).length <= 0 )
+         $( "body" ).append( strAudio );
+       var audio = document.getElementById( "audioPlay" );
+
+       //浏览器支持 audion
+       audio.play();
+     }
+   }
 </script>
 
 <script>
