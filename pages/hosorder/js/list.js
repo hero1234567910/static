@@ -88,7 +88,6 @@ layui.use('table', function() {
 
 	});
 
-
 	//角色关键字搜索
 	var $ = layui.$,
 		active = {
@@ -239,5 +238,4 @@ layui.use('table', function() {
 			});
 		}
 	});
-
 });

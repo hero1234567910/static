@@ -117,6 +117,11 @@
 <script type="text/javascript" src="Scripts/index.js"></script>
 <script type="text/javascript" src="Scripts/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="Scripts/vue.js"></script>
+<script language="javascript" src="Scripts/lodop/LodopFuncs.js"></script>
+<object  id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0> 
+       <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+</object>
+<script src="Scripts/local.js"></script>
 
 <script> 
 var lockReconnect = false;  //避免ws重复连接
@@ -160,11 +165,14 @@ function initEventHandle() {
     ws.onmessage = function (event) {    //如果获取到消息，心跳检测重置
         heartCheck.reset().start();      //拿到任何消息都说明当前连接是正常的
         console.log(event.data);
-        if(event.data == '您有新的订单'){
+        if(event.data.substring(0,6) == '您有新的订单'){
         	playSound();
         	layui.use(['layer'],function(){
                var layer = layui.layer;
-              layer.msg("您有新的订单"); 
+              layer.msg("您有新的订单");
+              //调用打印机去打印订单
+              var ele = JSON.parse(event.data.substring(6));
+              myPrint(ele);
             });
         }
     };
