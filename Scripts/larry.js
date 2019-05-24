@@ -76,8 +76,7 @@ $(function(){
             });
         }
     })
-
-
+	
     //个人信息
     $("#liuser").click(function () {
         var $a = $(this).children('a');
