@@ -38,6 +38,7 @@
                 <button id="infoFind" class="layui-btn layui-btn-normal" data-type="reload">查询</button>
                 <button id="infoAdd" class="layui-btn layui-btn-normal">添加</button>
                 <button id="infoDel" class="layui-btn layui-btn-normal">删除</button>
+				<button id="infoDelivery" class="layui-btn layui-btn-normal">信息发布</button>
             </div>
         </fieldset>
     </div>
@@ -59,6 +60,13 @@
 <script src="js/infoNotice.js" charset="utf-8"></script>
 <script type="text/html" id="indexTpl">
     {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script type="text/html" id="statusTpl">
+    {{# if(d.sortSq == 1){ }}
+    <span style="color: green;">已发布</span>
+    {{# } else if(d.sortSq == 0) { }}
+    <span style="color: red;">未发布</span>
+    {{# } }}
 </script>
 <style>
     .layui-table {

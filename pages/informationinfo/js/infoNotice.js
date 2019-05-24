@@ -57,8 +57,9 @@ layui.use('table', function () {
             , {field: 'title', width: 200, title: '标题', sort: true}
             , {field: 'createUserName', width: 80, title: '创建人', sort: true}
             , {field: 'infoDate', width: 90, title: '信息日期', sort: true,templet: '<div>{{ layui.laytpl.toDateString(d.infoDate,"yyyy-MM-dd") }}</div>'}
-            , {field: 'right', title: '修改', toolbar: '#Demo', width: 80}
-            , {field: 'right', title: '操作', toolbar: '#barDemo', width: 80}
+            , {field: 'sort_sq', width: 90, title: '发布状态', sort: true,templet:'#statusTpl'}
+			, {field: 'right', title: '修改', toolbar: '#Demo', width: 80}
+            , {field: 'right', title: '查看', toolbar: '#barDemo', width: 80}
         ]]
         , page: true
         , limit: 10 //默认十条数据一页
@@ -142,28 +143,72 @@ layui.use('table', function () {
         });
     });
 
+	$('#infoDelivery').on('click', function () {
+	        layer.confirm('确定发布？', function (index) {
+	//		    	console.log(table.checkStatus('deptTable'))新版本才有
+	            var cache = table.cache;
+	            var params = new Array;
+	            $.each(cache.testReload, function (index, value) {
+	                if (value.LAY_CHECKED != undefined && value.LAY_CHECKED == true) {
+	                    params.push(value.rowId);
+	                }
+	            });
+	            if (params.length == 0) {
+	                layer.msg("请先选择");
+	                return;
+	            }else if(params.length>=2){
+					layer.msg("只能选择一项发布");
+					return;
+				}
+	            $.ajax({
+	                url: '/sys/informationinfo/infoDelivery/'+params,
+	                contentType: 'application/json;charset=utf-8',
+	                method: 'post',
+	                data: JSON.stringify(params),
+	                dataType: 'JSON',
+	                success: function (res) {
+	                    console.log(res)
+	                    if (res.code = '0') {
+	                        layer.msg('发布成功', {
+	                            icon: 1,
+	                            time: 1000 //2秒关闭（如果不配置，默认是3秒）
+	                        }, function () {
+	                            layui.table.reload('testReload');
+	                        });
+	                    } else
+	                        alert(res.msg);
+	                },
+	                error: function (jqXHR, textStatus, errorThrown) {
+	
+	                }
+	            });
+	            layer.close(index);
+	        });
+	    });
+
     table.on('tool(toolbar)',function (obj) {
         var value = obj.data;
         if(obj.event ==='find'){
             //查看信息
             var data ='find';
-            if(value.infoUrl!=""){
-                layer.open({
-                    type: 2,
-                    title: '外部链接',
-                    shadeClose: true,
-                    shade: false,
-                    maxmin: true, //开启最大化最小化按钮
-                    area: ['1000px', '600px'],
-                    content: '//'+value.infoUrl+'/'
-                });
-            }else if(value.infoUrl=="") {
+            // if(value.infoUrl!=""){
+            //     layer.open({
+            //         type: 2,
+            //         title: '外部链接',
+            //         shadeClose: true,
+            //         shade: false,
+            //         maxmin: true, //开启最大化最小化按钮
+            //         area: ['1000px', '600px'],
+            //         content: '//'+value.infoUrl+'/'
+            //     });
+            // }else 
+			// if(value.infoUrl=="") {
                 layer.open({
                     type: 2,
                     title: '详细信息',
                     maxmin: true,
                     shadeClose: true, //点击遮罩关闭层
-                    area: ['1000px', '600px'],
+                    area: ['800px', '400px'],
                     content: 'infoDetail.html',
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
@@ -179,7 +224,7 @@ layui.use('table', function () {
                     end: function () {
                     }
                 });
-            }
+            //}
         }else if(obj.event ==='edit'){
             var attach= new Array;
             var param = {};
