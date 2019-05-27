@@ -51,7 +51,7 @@ layui.define(function(exports){
       //今日流量趋势
       {
         title: {
-          text: '今日流量趋势',
+          text: '今日订单',
           x: 'center',
           textStyle: {
             fontSize: 14
@@ -72,50 +72,17 @@ layui.define(function(exports){
           type : 'value'
         }],
         series : [{
-          name:'PV',
+          name:'下单数量',
           type:'line',
           smooth:true,
           itemStyle: {normal: {areaStyle: {type: 'default'}}},
           data: [111,222,333,444,555,666,3333,33333,55555,66666,33333,3333,6666,11888,26666,38888,56666,42222,39999,28888,17777,9666,6555,5555,3333,2222,3111,6999,5888,2777,1666,999,888,777]
         },{
-          name:'UV',
+          name:'订单完成数量',
           type:'line',
           smooth:true,
           itemStyle: {normal: {areaStyle: {type: 'default'}}},
           data: [11,22,33,44,55,66,333,3333,5555,12666,3333,333,666,1188,2666,3888,6666,4222,3999,2888,1777,966,655,555,333,222,311,699,588,277,166,99,88,77]
-        }]
-      },
-      
-      //访客浏览器分布
-      { 
-        title : {
-          text: '访客浏览器分布',
-          x: 'center',
-          textStyle: {
-            fontSize: 14
-          }
-        },
-        tooltip : {
-          trigger: 'item',
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-        legend: {
-          orient : 'vertical',
-          x : 'left',
-          data:['Chrome','Firefox','IE 8.0','Safari','其它浏览器']
-        },
-        series : [{
-          name:'访问来源',
-          type:'pie',
-          radius : '55%',
-          center: ['50%', '50%'],
-          data:[
-            {value:9052, name:'Chrome'},
-            {value:1610, name:'Firefox'},
-            {value:3200, name:'IE 8.0'},
-            {value:535, name:'Safari'},
-            {value:1700, name:'其它浏览器'}
-          ]
         }]
       },
       
