@@ -47,6 +47,38 @@ layui.define(function(exports){
     ,carousel = layui.carousel
     ,echarts = layui.echarts;
     
+    var re = [];
+    $.ajax({
+    	async:false,
+        url: '/sys/hosorder/orderStatistical',
+        contentType: 'application/json;charset=utf-8',
+        method: 'get',
+        dataType: 'JSON',
+        success: function (res) {
+            if (res.code == '0') {
+                re = res.data;
+            }
+        }
+    });
+	var dateToTime = function(str){
+		return str.replace(':',''); //用/替换日期中的-是为了解决Safari的兼容
+    }
+    for(var i=0; i < re.length; i++){
+        re[i].publishTimeNew = parseInt(dateToTime(re[i].time));
+    }
+    re.sort(function(a, b) {
+        return b.publishTimeNew< a.publishTimeNew ? 1 : -1;
+    });
+    //数据操作
+	var timeArray = [];
+	var timeCount = [];
+	for(var i=0;i<re.length;i++){
+		//获取时间点
+		timeArray.push(re[i].time); 
+		timeCount.push(re[i].Count);
+	}
+
+	
     var echartsApp = [], options = [
       //今日流量趋势
       {
@@ -66,7 +98,7 @@ layui.define(function(exports){
         xAxis : [{
           type : 'category',
           boundaryGap : false,
-          data: ['06:00','06:30','07:00','07:30','08:00','08:30','09:00','09:30','10:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30','21:00','21:30','22:00','22:30','23:00','23:30']
+          data: timeArray
         }],
         yAxis : [{
           type : 'value'
@@ -76,41 +108,43 @@ layui.define(function(exports){
           type:'line',
           smooth:true,
           itemStyle: {normal: {areaStyle: {type: 'default'}}},
-          data: [111,222,333,444,555,666,3333,33333,55555,66666,33333,3333,6666,11888,26666,38888,56666,42222,39999,28888,17777,9666,6555,5555,3333,2222,3111,6999,5888,2777,1666,999,888,777]
-        },{
-          name:'订单完成数量',
-          type:'line',
-          smooth:true,
-          itemStyle: {normal: {areaStyle: {type: 'default'}}},
-          data: [11,22,33,44,55,66,333,3333,5555,12666,3333,333,666,1188,2666,3888,6666,4222,3999,2888,1777,966,655,555,333,222,311,699,588,277,166,99,88,77]
-        }]
-      },
-      
-      //新增的用户量
-      {
-        title: {
-          text: '最近一周新增的用户量',
-          x: 'center',
-          textStyle: {
-            fontSize: 14
-          }
-        },
-        tooltip : { //提示框
-          trigger: 'axis',
-          formatter: "{b}<br>新增用户：{c}"
-        },
-        xAxis : [{ //X轴
-          type : 'category',
-          data : ['11-07', '11-08', '11-09', '11-10', '11-11', '11-12', '11-13']
-        }],
-        yAxis : [{  //Y轴
-          type : 'value'
-        }],
-        series : [{ //内容
-          type: 'line',
-          data:[200, 300, 400, 610, 150, 270, 380],
-        }]
-      }
+          data: timeCount
+        }
+//      {
+//        name:'订单完成数量',
+//        type:'line',
+//        smooth:true,
+//        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+//        data: [11,22,33,44,55,66,333,3333,5555,12666,3333,333,666,1188,2666,3888,6666,4222,3999,2888,1777,966,655,555,333,222,311,699,588,277,166,99,88,77]
+//      }
+        ]
+    }
+//    
+//    //新增的用户量
+//    {
+//      title: {
+//        text: '最近一周新增的用户量',
+//        x: 'center',
+//        textStyle: {
+//          fontSize: 14
+//        }
+//      },
+//      tooltip : { //提示框
+//        trigger: 'axis',
+//        formatter: "{b}<br>新增用户：{c}"
+//      },
+//      xAxis : [{ //X轴
+//        type : 'category',
+//        data : ['11-07', '11-08', '11-09', '11-10', '11-11', '11-12', '11-13']
+//      }],
+//      yAxis : [{  //Y轴
+//        type : 'value'
+//      }],
+//      series : [{ //内容
+//        type: 'line',
+//        data:[200, 300, 400, 610, 150, 270, 380],
+//      }]
+//    }
     ]
     ,elemDataView = $('#LAY-index-dataview').children('div')
     ,renderDataView = function(index){
@@ -184,3 +218,4 @@ layui.define(function(exports){
   
   exports('console', {})
 });
+

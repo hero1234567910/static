@@ -33,19 +33,19 @@ var LODOP; //声明为全局变量
 		LODOP.ADD_PRINT_TEXT(20,60,130,30,"#订 单#");       
 		LODOP.SET_PRINT_STYLE("FontName","宋体");       
 		LODOP.SET_PRINT_STYLE("FontSize",10);		       
-		LODOP.ADD_PRINT_TEXT(58,11,200,30,"【订单编号】: "+ele.orderNumber);       
-		LODOP.ADD_PRINT_TEXT(96,11,200,30,"【创建时间】: "+format(ele.createTime));       
-		LODOP.ADD_PRINT_TEXT(134,11,200,30,"【送达时间】: "+ele.reserveTimeSuffix);
+		LODOP.ADD_PRINT_TEXT(58,5,200,30,"【订单编号】: "+ele.orderNumber);       
+		LODOP.ADD_PRINT_TEXT(96,5,200,30,"【创建时间】: "+format(ele.createTime));       
+		LODOP.ADD_PRINT_TEXT(134,5,200,30,"【送达时间】: "+ele.reserveTimeSuffix);
 		LODOP.SET_PRINT_STYLE("FontSize",12);
-		LODOP.ADD_PRINT_TEXT(172,11,200,20,"收货人: "+ele.consigneeName);
-		LODOP.ADD_PRINT_TEXT(200,11,200,40,"收货人手机号: "+ele.consigneeMobile);
+		LODOP.ADD_PRINT_TEXT(172,5,200,20,"收货人: "+ele.consigneeName);
+		LODOP.ADD_PRINT_TEXT(200,5,200,40,"收货人手机号: "+ele.consigneeMobile);
 		LODOP.SET_PRINT_STYLE("FontSize",10);
-		LODOP.ADD_PRINT_TEXT(248,11,200,30,"【收货地址】: "+ele.consigneeInpatient+ele.consigneeStorey+ele.consigneeBedNumber);
+		LODOP.ADD_PRINT_TEXT(248,5,200,30,"【收货地址】: "+ele.consigneeInpatient+ele.consigneeStorey+ele.consigneeBedNumber);
 		LODOP.SET_PRINT_STYLE("FontSize",14);
-		LODOP.ADD_PRINT_TEXT(286,11,200,20,"总计:¥"+ele.orderMoney);
+		LODOP.ADD_PRINT_TEXT(286,5,200,20,"总计:¥"+ele.orderMoney);
 		LODOP.SET_PRINT_STYLE("FontSize",16);
-		LODOP.ADD_PRINT_TEXT(314,11,200,150,ele.remark);
-//		LODOP.SET_PRINT_PAGESIZE(3,210,45,"")
+		LODOP.ADD_PRINT_TEXT(314,5,200,150,ele.remark);
+		LODOP.SET_PRINT_PAGESIZE(3,500,25,"")
 	};            
 //	function myAddHtml() {       
 //		LODOP=getLodop();         
@@ -99,3 +99,15 @@ function needCLodop(){
         return false;
     } catch(err) {return true;};
 };
+
+$.ajaxSetup({
+    beforeSend: function(xhr){
+    	xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");
+    	xhr.setRequestHeader("token", window.localStorage.getItem('m_token')); 
+    },
+    complete: function (res) {
+        if (JSON.parse(res.responseText).code == '401') {
+            window.top.location.href = 'login.html';
+        }
+    }
+});

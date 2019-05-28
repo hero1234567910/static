@@ -12,8 +12,7 @@
   <link rel="stylesheet" href="../../Content/layuiadmin/style/admin.css" media="all">
 </head>
 <body>
-  
-  <div class="layui-fluid">
+  <div class="layui-fluid" id="vueConfig">
     <div class="layui-row layui-col-space15">
       <div class="layui-col-md12">
         <div class="layui-row layui-col-space15">
@@ -91,19 +90,19 @@
                       <li class="layui-col-xs6">
                         <a lay-href="app/content/comment.html" class="layadmin-backlog-body">
                           <h3>待配送订单</h3>
-                          <p><cite>66</cite></p>
+                          <p><cite>{{orderCount.receiveCount}}</cite></p>
                         </a>
                       </li>
                       <li class="layui-col-xs6">
                         <a lay-href="app/forum/list.html" class="layadmin-backlog-body">
                           <h3>待完成订单</h3>
-                          <p><cite>12</cite></p>
+                          <p><cite>{{orderCount.alreadyDeliveryCount}}</cite></p>
                         </a>
                       </li>
                       <li class="layui-col-xs6">
                         <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
                           <h3>待支付订单</h3>
-                          <p><cite>99</cite></p>
+                          <p><cite>{{orderCount.readyPayCount}}</cite></p>
                         </a>
                       </li>
                       <li class="layui-col-xs6">
@@ -126,7 +125,7 @@
                 <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-dataview">
                   <div carousel-item id="LAY-index-dataview">
                     <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
-                    <div></div>
+                    <!--<div></div>-->
                   </div>
                 </div>
                 
@@ -155,8 +154,11 @@
     </div>
   </div>
 	
-	<!--<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>-->
+	<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+	<script src="../../Scripts/vue.js"></script>
 	<script src="../../Content/layuiadmin/layui/layui.js?t=1" charset="utf-8"></script>
+	<script src="../../Scripts/local.js"></script>
+	<script src="js/console.js"></script>
   <script>
   layui.config({
     base: '../../Content/layuiadmin/' //静态资源所在路径

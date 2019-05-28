@@ -99,6 +99,7 @@
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;" onclick="refresh()" class="refresh refreshThis"><i class="layui-icon">&#x1002;</i>
                             刷新当前</a></dd>
+                        <!--<dd><a href="javascript:;" onclick="myPrint()">dayin</a></dd>-->
                     </dl>
                 </li>
             </ul>
@@ -110,7 +111,6 @@
         </div>
     </div>
 </div>
-
 <!-- 加载js文件-->
 <script type="text/javascript" src="Scripts/layui/layui.js"></script>
 <script type="text/javascript" src="Scripts/larry.js"></script>
@@ -242,9 +242,9 @@ function playSound(){
 
 <script>
     $.ajaxSetup({
-        headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            "token": window.localStorage.getItem('m_token')
+        beforeSend: function(xhr){
+        	xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");
+        	xhr.setRequestHeader("token", window.localStorage.getItem('m_token')); 
         },
         complete: function (res) {
             if (JSON.parse(res.responseText).code == '401') {
@@ -252,12 +252,6 @@ function playSound(){
             }
         }
     });
-	
-//	layui.config({
-//	    base: 'Content/layuiadmin/' //静态资源所在路径
-//	  }).extend({
-//	    index: 'lib/index' //主入口模块
-//	  }).use('index');
 	
     function changePwd() {
         var data = 'change';
