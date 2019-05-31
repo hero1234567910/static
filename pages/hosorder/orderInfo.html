@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>订单详细信息</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../Content/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="../../Content/layuiadmin/style/admin.css" media="all">
+  <link rel="stylesheet" href="css/orderInfo.css"/>
+</head>
+<body>
+	<div id="vueConfig">
+	  <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+	    <div class="layui-card">
+			  <div class="layui-card-header">菜品信息</div>
+			  <div class="layui-card-body m" v-for="orderitem in orderInfo.hosOrderitems">
+			  	<div class="orderInfo-container">
+				  	<div class="orderInfo-left">
+				  		<img :src="orderitem.hosGoods.goodsUrl" class="goodsImg" width="150px" height="130px"/>
+				  	</div>
+				  	<div class="orderInfo-right">
+				  		<div class="layui-form-item m">
+					      <label class="layui-form-label">菜品名称:</label>
+					      <div class="layui-input-inline">
+					        <p>{{orderitem.hosGoods.goodsName}}</p>
+					      </div>
+					    </div>
+					    <div class="layui-form-item m">
+					      <label class="layui-form-label">菜品单价:</label>
+					      <div class="layui-input-inline">
+					        <p>{{orderitem.hosGoods.goodsPrice}}</p>
+					      </div>
+					    </div>
+					    <div class="layui-form-item m">
+					      <label class="layui-form-label">菜品数量:</label>
+					      <div class="layui-input-inline">
+					        <p>{{orderitem.count}}</p>
+					      </div>
+					    </div>
+					    <!--<div class="layui-form-item m">
+					      <label class="layui-form-label">小计:</label>
+					      <div class="layui-input-inline">
+					        <p>{{orderitem.totalMoney}}</p>
+					      </div>
+					    </div>-->
+				  	</div>
+			  	</div>
+			  </div>
+			</div>
+			
+			<div class="layui-card">
+			  <div class="layui-card-header">订单信息</div>
+			  <div class="layui-card-body">
+				  		<div class="layui-form-item">
+					      <label class="layui-form-label">订单编号</label>
+					      <div class="layui-input-inline m">
+					        <input type="text" name="username" readonly="readonly" :value="orderInfo.orderNumber" class="layui-input">
+					      </div>
+					    </div>
+					    <div class="layui-form-item">
+					      <label class="layui-form-label">创建时间</label>
+					      <div class="layui-input-inline m">
+					        <input type="text" name="phone" readonly="readonly" :value="orderInfo.createTime" class="layui-input">
+					      </div>
+					    </div>
+					    <div class="layui-form-item">
+					      <label class="layui-form-label">送达时间</label>
+					      <div class="layui-input-inline m">
+					        <input type="text" name="phone" readonly="readonly" :value="orderInfo.reserveTimeSuffix" class="layui-input">
+					      </div>
+					    </div>
+					    <div class="layui-form-item">
+					      <label class="layui-form-label">订单状态</label>
+					      <div class="layui-input-inline m">
+					        <input type="text" name="email" readonly="readonly" :value="orderInfo.orderStatusText" class="layui-input">
+					      </div>
+					    </div>
+					    <div class="layui-form-item">
+					      <label class="layui-form-label">地址</label>
+					      <div class="layui-input-inline m">
+					        <input type="text" name="email" readonly="readonly" :value="orderInfo.consigneeInpatient+orderInfo.consigneeStorey+orderInfo.consigneeBedNumber" class="layui-input">
+					      </div>
+					    </div>
+					    <div class="layui-form-item">
+					      <label class="layui-form-label">收货人姓名</label>
+					      <div class="layui-input-inline m">
+					        <input type="text" name="email" readonly="readonly" :value="orderInfo.consigneeName" class="layui-input">
+					      </div>
+					    </div>
+					    <div class="layui-form-item">
+					      <label class="layui-form-label">收货人手机号</label>
+					      <div class="layui-input-inline m">
+					        <input type="text" name="email" readonly="readonly" :value="orderInfo.consigneeMobile" class="layui-input">
+					      </div>
+					    </div>
+					    <div class="layui-form-item">
+					      <label class="layui-form-label">总计金额</label>
+					      <div class="layui-input-inline m">
+					        <input type="text" name="email" readonly="readonly" :value="orderInfo.orderMoney" class="layui-input">
+					      </div>
+					    </div>
+					    <div class="layui-form-item">
+					      <label class="layui-form-label">备注</label>
+					      <div class="layui-input-inline m">
+					         <textarea name="desc" :value="orderInfo.remark" class="layui-textarea"></textarea>
+					      </div>
+					    </div>
+				  	</div>
+			</div>
+	  </div>
+	</div>
+  <script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
+	<script src="../../Scripts/vue.js"></script>
+	<script src="../../Content/layuiadmin/layui/layui.js" charset="utf-8"></script>
+	<script src="../../Scripts/local.js"></script> 
+	<script src="js/orderInfo.js"></script>
+  <script>
+
+  </script>
+</body>
+</html>

@@ -83,7 +83,7 @@ layui.define(function(exports){
       //今日流量趋势
       {
         title: {
-          text: '今日订单',
+          text: '昨日订单',
           x: 'center',
           textStyle: {
             fontSize: 14

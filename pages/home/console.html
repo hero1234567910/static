@@ -81,7 +81,7 @@
           </div>
           <div class="layui-col-md6">
             <div class="layui-card">
-              <div class="layui-card-header">待办事项</div>
+              <div class="layui-card-header">所有事项</div>
               <div class="layui-card-body">
 
                 <div class="layui-carousel layadmin-carousel layadmin-backlog">
@@ -95,7 +95,7 @@
                       </li>
                       <li class="layui-col-xs6">
                         <a lay-href="app/forum/list.html" class="layadmin-backlog-body">
-                          <h3>待完成订单</h3>
+                          <h3>已完成订单</h3>
                           <p><cite>{{orderCount.alreadyDeliveryCount}}</cite></p>
                         </a>
                       </li>
@@ -106,9 +106,11 @@
                         </a>
                       </li>
                       <li class="layui-col-xs6">
-                        <a href="javascript:;" onclick="layer.tips('不跳转', this, {tips: 3});" class="layadmin-backlog-body">
+                        <a href="javascript:;" class="layadmin-backlog-body">
                           <h3>开启/关闭接单</h3>
-                          <p><cite>20</cite></p>
+                          <!--<p><cite>20</cite></p>-->
+                          <button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm" onclick="changeOrder(1)">开启</button>
+                          <button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-danger" onclick="changeOrder(0)">关闭</button>
                         </a>
                       </li>
                     </ul>

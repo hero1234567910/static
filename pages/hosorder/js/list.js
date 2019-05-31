@@ -69,15 +69,15 @@ layui.use('table', function() {
 					title: '备注',
 					sort: true
 				}, {
-					field: 'sortSq',
-					width: 50,
-					title: '排序号',
-					sort: true
-				}, {
 					field: 'right',
 					title: '修改',
 					toolbar: '#barDemo',
 					width: 50
+				},{
+					field: 'tool',
+					title: '工具栏',
+					toolbar: '#barTool',
+					width: 70
 				}
 			]
 		],
@@ -157,6 +157,36 @@ layui.use('table', function() {
 		window.location.href="/wx/sys/hosorder/exportExcel"
 	});
 	
+	//批量更新状态为已完成
+	$('#OrderUpdate').on('click',function(){
+		var cache = table.cache;
+		var params = new Array;
+		$.each(cache.testReload, function(index, value) {
+			if (value.LAY_CHECKED != undefined && value.LAY_CHECKED == true) {
+				params.push(value.rowGuid);
+			}
+		});
+		if (params.length == 0) {
+			layer.msg("请先选择");
+			return;
+		}
+		$.ajax({
+				url:'/sys/hosorder/updateOrderStatus',
+				contentType: 'application/json;charset=utf-8',
+				method: 'put',
+				data: JSON.stringify(params),
+				dataType: 'JSON',
+				success: function(res) {
+					if (res.code == '0') {
+						layer.msg("更新成功")
+						layui.table.reload('testReload');
+					}
+					if (res.code == '500') {
+						layer.msg(res.msg)
+					}
+				}
+			});
+	})
 
 	//删除
 	$('#OrderDel').on('click', function() {
@@ -236,6 +266,42 @@ layui.use('table', function() {
 					layui.table.reload('testReload');
 				}
 			});
+		}
+		
+		if(obj.event == 'detail'){
+			layer.open({
+				type: 2,
+				title: '订单详细信息',
+				maxmin: true,
+				shadeClose: true, //点击遮罩关闭层
+				area: ['800px', '500px'],
+				content: 'orderInfo.html',
+				success: function(layero, index) {
+					var body = layer.getChildFrame('body', index);
+					var iframeWin = window[layero.find('iframe')[0]['name']];
+					iframeWin.inputDataHandle(value.rowGuid);
+//					body.find("#rowId").val(value.rowId);
+//					body.find("#rowGuid").val(value.rowGuid);
+//					body.find("#orderNumber").val(value.orderNumber);
+//					body.find("#consigneeName").val(value.consigneeName);
+//					body.find("#consigneeInpatient").val(value.consigneeInpatient);
+//					body.find("#consigneeStorey").val(value.consigneeStorey);
+//					body.find("#consigneeBedNumber").val(value.consigneeBedNumber);
+//					body.find("#consigneeMobile").val(value.consigneeMobile);
+//					body.find("#reserveTime").val(value.reserveTime);
+//					body.find("#reserveTimeSuffix").val(value.reserveTimeSuffix);
+//					body.find("#orderMoney").val(value.orderMoney);
+//					body.find("#remark").val(value.remark);
+				},
+				end: function() {
+					//刷新页面
+					layui.table.reload('testReload');
+				}
+			});
+		}
+		if(obj.event == 'print'){
+			var value = obj.data;
+			myPrint(value);
 		}
 	});
 });

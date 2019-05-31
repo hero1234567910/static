@@ -41,14 +41,19 @@
 						<button id="OrderFind" class="layui-btn layui-btn-normal" data-type="reload">查询</button>
 						<button id="OrderDel" class="layui-btn layui-btn-normal">删除</button>
 						<button id="OrderExport" class="layui-btn layui-btn-normal">订单导出</button>
+						<button id="OrderUpdate" class="layui-btn layui-btn-normal">完成订单</button>
 					</div>
 				</fieldset>
 			</div>
 			<table class="layui-hide" id="table" lay-filter="toolbar"></table>
-
+			
 			<script type="text/html" id="barDemo">
 				<img src="../../Scripts/layui/images/face/edit.gif" lay-event="edit" style="cursor: pointer;">
-	    </script>
+	    	</script>
+	    	<script type="text/html" id="barTool">
+				<img src="../../Content/images/使用文档.svg" lay-event="detail" style="cursor: pointer;width: 25px;">
+				<img src="../../Content/images/打印.svg" lay-event="print" style="cursor:pointer;width: 25px;"/>
+	    	</script>
 		</div>
 
 		<script type="text/javascript" src="../../Scripts/jquery-3.3.1.min.js"></script>

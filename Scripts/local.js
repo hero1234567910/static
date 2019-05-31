@@ -1,6 +1,6 @@
 //打印
 var LODOP; //声明为全局变量       
-	function myPrint(ele) {		       
+	function myPrint(ele) {
 		CreatePrintPage(ele);       
 		LODOP.PRINT();		       
 	};         

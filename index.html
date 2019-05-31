@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8">
-    <title>后台模板</title>
+    <title>食堂订餐系统</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -25,6 +25,9 @@
                     <i class="fa fa-bars" aria-hidden="true"></i>
                 </div>
             </div>
+            <div id="s" style="width:100%;position:absolute; white-space:nowrap; overflow:hidden; height:20px;top: 50px;"> 
+				<div id="noticeList" style="position:absolute; top:0; height:20px;"><span id="ms"></span></div> 
+			</div>
             <div class="pf-user">
                 <div class="pf-user-photo">
                     <img src="Scripts/layui/images/face/user.png" width="40">
@@ -99,7 +102,7 @@
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;" onclick="refresh()" class="refresh refreshThis"><i class="layui-icon">&#x1002;</i>
                             刷新当前</a></dd>
-                        <!--<dd><a href="javascript:;" onclick="myPrint()">dayin</a></dd>-->
+                       <dd><a href="javascript:;" onclick="goScroll()">dayin</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -118,6 +121,7 @@
 <script type="text/javascript" src="Scripts/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="Scripts/vue.js"></script>
 <script language="javascript" src="Scripts/lodop/LodopFuncs.js"></script>
+<script src="Scripts/textScroll.js"
 <object  id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0> 
        <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
 </object>
@@ -172,7 +176,7 @@ function initEventHandle() {
               layer.msg("您有新的订单");
               //调用打印机去打印订单
               var ele = JSON.parse(event.data.substring(6));
-              myPrint(ele);
+              //myPrint(ele);
             });
         }
     };
@@ -253,6 +257,13 @@ function playSound(){
         }
     });
 	
+	goScroll();
+	
+	function goScroll(){
+		//横向滚动
+		$("#s").textScroll();
+	}
+	
     function changePwd() {
         var data = 'change';
         layer.open({
@@ -297,12 +308,33 @@ function playSound(){
         el: '#vueConfig',
         data: {
             // 数据创建
-            roles: []
+            roles: [],
         },
         created() {
-            this.getMenu()
+            this.getMenu(),
+            this.getReciveOrder()
         },
         methods: {
+        	//查询订单接收状态
+        	getReciveOrder(){
+        		let self = this;
+        		$.ajax({
+                    url: '/sys/config/queryReceiveOrder',
+                    contentType: 'application/json;charset=utf-8',
+                    method: 'get',
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if (res.code == '0') {
+                           	if(res.data.configValue == 0){
+                           		$('#ms').text('【已关闭接单】');
+                           	}
+                           	if(res.data.configValue == 1){
+                           		$('#ms').text('【正在接单中】');
+                           	}
+                        }
+                    }
+                });
+        	},
             getMenu() {
                 let self = this;
                 //获取用户对象

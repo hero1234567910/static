@@ -1,0 +1,19 @@
+.orderInfo-left{
+	flex-shrink: 0;
+	width: 150px;
+}
+.orderInfo-right{
+	flex: 1;
+}
+.orderInfo-container{
+	display: flex;
+}
+.layui-card-body.m{
+	border: 2px solid rgba(0, 0, 0, 0.16);
+}
+.layui-form-item.m{
+	line-height: 38px;
+}
+.layui-input-inline.m{
+	width: 300px;
+}
