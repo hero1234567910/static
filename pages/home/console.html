@@ -88,19 +88,19 @@
                   <div carousel-item>
                     <ul class="layui-row layui-col-space10">
                       <li class="layui-col-xs6">
-                        <a lay-href="app/content/comment.html" class="layadmin-backlog-body">
+                        <a hero-href="pages/hosorder/list.html" class="layadmin-backlog-body">
                           <h3>待配送订单</h3>
                           <p><cite>{{orderCount.receiveCount}}</cite></p>
                         </a>
                       </li>
                       <li class="layui-col-xs6">
-                        <a lay-href="app/forum/list.html" class="layadmin-backlog-body">
+                        <a hero-href="pages/hosorder/list.html" class="layadmin-backlog-body">
                           <h3>已完成订单</h3>
                           <p><cite>{{orderCount.alreadyDeliveryCount}}</cite></p>
                         </a>
                       </li>
                       <li class="layui-col-xs6">
-                        <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+                        <a hero-href="pages/hosorder/list.html" class="layadmin-backlog-body">
                           <h3>待支付订单</h3>
                           <p><cite>{{orderCount.readyPayCount}}</cite></p>
                         </a>
@@ -108,7 +108,6 @@
                       <li class="layui-col-xs6">
                         <a href="javascript:;" class="layadmin-backlog-body">
                           <h3>开启/关闭接单</h3>
-                          <!--<p><cite>20</cite></p>-->
                           <button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-warm" onclick="changeOrder(1)">开启</button>
                           <button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-danger" onclick="changeOrder(0)">关闭</button>
                         </a>
