@@ -280,18 +280,6 @@ layui.use('table', function() {
 					var body = layer.getChildFrame('body', index);
 					var iframeWin = window[layero.find('iframe')[0]['name']];
 					iframeWin.inputDataHandle(value.rowGuid);
-//					body.find("#rowId").val(value.rowId);
-//					body.find("#rowGuid").val(value.rowGuid);
-//					body.find("#orderNumber").val(value.orderNumber);
-//					body.find("#consigneeName").val(value.consigneeName);
-//					body.find("#consigneeInpatient").val(value.consigneeInpatient);
-//					body.find("#consigneeStorey").val(value.consigneeStorey);
-//					body.find("#consigneeBedNumber").val(value.consigneeBedNumber);
-//					body.find("#consigneeMobile").val(value.consigneeMobile);
-//					body.find("#reserveTime").val(value.reserveTime);
-//					body.find("#reserveTimeSuffix").val(value.reserveTimeSuffix);
-//					body.find("#orderMoney").val(value.orderMoney);
-//					body.find("#remark").val(value.remark);
 				},
 				end: function() {
 					//刷新页面
@@ -301,7 +289,19 @@ layui.use('table', function() {
 		}
 		if(obj.event == 'print'){
 			var value = obj.data;
-			myPrint(value);
+			//根据行标获取
+            $.ajax({
+                url: '/sys/hosorder/getOrderDetailByGuid',
+                contentType: 'application/json;charset=utf-8',
+                method: 'post',
+                data:value.rowGuid,
+                dataType: 'JSON',
+                success: function (res) {
+                    if (res.code == '0') {
+                        myPrint(res.data)
+                    }
+                }
+            });
 		}
 	});
 });

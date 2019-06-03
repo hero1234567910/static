@@ -102,7 +102,7 @@
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;" onclick="refresh()" class="refresh refreshThis"><i class="layui-icon">&#x1002;</i>
                             刷新当前</a></dd>
-                       <dd><a href="javascript:;" onclick="goScroll()">dayin</a></dd>
+                       <dd><a href="javascript:;" onclick="ceshi()">dayin</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -121,18 +121,16 @@
 <script type="text/javascript" src="Scripts/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="Scripts/vue.js"></script>
 <script language="javascript" src="Scripts/lodop/LodopFuncs.js"></script>
-<script src="Scripts/textScroll.js"
+<script src="Scripts/textScroll.js"></script>
 <object  id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0> 
        <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
 </object>
 <script src="Scripts/local.js"></script>
-
 <script> 
 var lockReconnect = false;  //避免ws重复连接
 var ws = null;          // 判断当前浏览器是否支持WebSocket
 var wsUrl = "ws://ey.nxjnjc.com/websocket/20".replace("http","ws");
 createWebSocket(wsUrl);   //连接ws
-
 
 function createWebSocket(url) {
     try{
@@ -176,7 +174,7 @@ function initEventHandle() {
               layer.msg("您有新的订单");
               //调用打印机去打印订单
               var ele = JSON.parse(event.data.substring(6));
-              //myPrint(ele);
+                myPrint(ele);
             });
         }
     };
@@ -257,53 +255,7 @@ function playSound(){
         }
     });
 	
-	goScroll();
-	
-	function goScroll(){
-		//横向滚动
-		$("#s").textScroll();
-	}
-	
-    function changePwd() {
-        var data = 'change';
-        layer.open({
-            type: 2,
-            title: '修改密码',
-            maxmin: true,
-            shadeClose: true, //点击遮罩关闭层
-            area: ['400px', '250px'],
-            content: 'changePassWord.html',
-            success: function (layero, index) {
-                var body = layer.getChildFrame('body', index);
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-            },
-            end: function () {
-                //刷新页面
-            }
-        });
-    }
-
-    function userInfo() {
-        var data = 'edit';
-        layer.open({
-            type: 2,
-            title: '个人资料',
-            maxmin: true,
-            shadeClose: true, //点击遮罩关闭层
-            area: ['400px', '310px'],
-            content: 'userInfo.html',
-            success: function (layero, index) {
-                var body = layer.getChildFrame('body', index);
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-            },
-            end: function () {
-                //刷新页面
-                //window.location.reload()
-            }
-        });
-    }
-	
-    //创建vue实例化对象
+	//创建vue实例化对象
     var vm = new Vue({
         el: '#vueConfig',
         data: {
@@ -353,14 +305,57 @@ function playSound(){
                         if (res.code == '0') {
                             self.roles = res.data;
                         }
-                        // else
-                        //     layer.msg(res.msg);
                     }
                 });
             }
         }
 
     })
+	
+	goScroll();
+	function goScroll(){
+		//横向滚动
+		$("#s").textScroll();
+	}
+	
+    function changePwd() {
+        var data = 'change';
+        layer.open({
+            type: 2,
+            title: '修改密码',
+            maxmin: true,
+            shadeClose: true, //点击遮罩关闭层
+            area: ['400px', '250px'],
+            content: 'changePassWord.html',
+            success: function (layero, index) {
+                var body = layer.getChildFrame('body', index);
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+            },
+            end: function () {
+                //刷新页面
+            }
+        });
+    }
+
+    function userInfo() {
+        var data = 'edit';
+        layer.open({
+            type: 2,
+            title: '个人资料',
+            maxmin: true,
+            shadeClose: true, //点击遮罩关闭层
+            area: ['400px', '310px'],
+            content: 'userInfo.html',
+            success: function (layero, index) {
+                var body = layer.getChildFrame('body', index);
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+            },
+            end: function () {
+                //刷新页面
+                //window.location.reload()
+            }
+        });
+    }
 	
 	function refresh(){
 		//获取当前iframe并刷新

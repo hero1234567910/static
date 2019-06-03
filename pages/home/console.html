@@ -136,8 +136,8 @@
             <div class="layui-card">
               <div class="layui-tab layui-tab-brief layadmin-latestData">
                 <ul class="layui-tab-title">
-                  <li class="layui-this">今日热搜</li>
-                  <li>今日热帖</li>
+                  <li class="layui-this">通告信息</li>
+                  <!--<li>今日热帖</li>-->
                 </ul>
                 <div class="layui-tab-content">
                   <div class="layui-tab-item layui-show">
@@ -159,6 +159,19 @@
 	<script type="text/javascript" src="../../Scripts/jquery-1.11.3.min.js"></script>
 	<script src="../../Scripts/vue.js"></script>
 	<script src="../../Content/layuiadmin/layui/layui.js?t=1" charset="utf-8"></script>
+	<script>
+		$.ajaxSetup({
+	    beforeSend: function(xhr){
+	    	xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");
+	    	xhr.setRequestHeader("token", window.localStorage.getItem('m_token')); 
+	    },
+	    complete: function (res) {
+	        if (JSON.parse(res.responseText).code == '401') {
+				window.top.location.href = '../../login.html';
+	        }
+	    }
+		});
+	</script>
 	<script src="../../Scripts/local.js"></script>
 	<script src="js/console.js"></script>
   <script>

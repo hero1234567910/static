@@ -1,8 +1,9 @@
 //打印
 var LODOP; //声明为全局变量       
 	function myPrint(ele) {
-		CreatePrintPage(ele);       
-		LODOP.PRINT();		       
+//		CreatePrintPage(ele);       
+//		LODOP.PRINT();		       
+		console.log("aaaaa")
 	};         
 //	function myPrintA() {		       
 //		CreatePrintPage();       
@@ -43,9 +44,15 @@ var LODOP; //声明为全局变量
 		LODOP.ADD_PRINT_TEXT(248,5,200,30,"【收货地址】: "+ele.consigneeInpatient+ele.consigneeStorey+ele.consigneeBedNumber);
 		LODOP.SET_PRINT_STYLE("FontSize",14);
 		LODOP.ADD_PRINT_TEXT(286,5,200,20,"总计:¥"+ele.orderMoney);
+		LODOP.SET_PRINT_STYLE("FontSize",10);
+		var o=0;
+		for(var i=0;i<ele.hosOrderitems.length;i++){
+			LODOP.ADD_PRINT_TEXT(286+(i+1)*28,5,200,30,"【"+ele.hosOrderitems[i].hosGoods.goodsName+"】   数量:"+ele.hosOrderitems[i].count);
+			o++;
+		}
 		LODOP.SET_PRINT_STYLE("FontSize",16);
-		LODOP.ADD_PRINT_TEXT(314,5,200,150,ele.remark);
-		LODOP.SET_PRINT_PAGESIZE(3,500,25,"")
+		LODOP.ADD_PRINT_TEXT(286+(o+1)*28,5,200,150,ele.remark);
+		LODOP.SET_PRINT_PAGESIZE(3,500+(o+1)*28,25,"")
 	};            
 //	function myAddHtml() {       
 //		LODOP=getLodop();         
@@ -99,15 +106,3 @@ function needCLodop(){
         return false;
     } catch(err) {return true;};
 };
-
-$.ajaxSetup({
-    beforeSend: function(xhr){
-    	xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");
-    	xhr.setRequestHeader("token", window.localStorage.getItem('m_token')); 
-    },
-    complete: function (res) {
-        if (JSON.parse(res.responseText).code == '401') {
-            window.top.location.href = 'login.html';
-        }
-    }
-});

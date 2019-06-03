@@ -214,7 +214,7 @@
                     },
                     end: function () {
                         //刷新页面
-                        layui.table.reload('testReload');
+                        window.location.reload();
                     }
                 });
             }
@@ -238,7 +238,7 @@
                 },
                 end: function () {
                     //刷新页面
-                    layui.table.reload('testReload');
+                    window.location.reload();
                 }
             });
         });
@@ -271,13 +271,10 @@
                                 icon: 1,
                                 time: 1000 //2秒关闭（如果不配置，默认是3秒）
                             }, function () {
-                                layui.table.reload('testReload');
+                                window.location.reload();
                             });
                         } else
                             alert(res.msg);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-
                     }
                 });
                 layer.close(index);

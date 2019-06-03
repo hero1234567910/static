@@ -13,7 +13,7 @@ var vm = new Vue({
     methods: {
         getOrderInfo() {
             let self = this;
-            //根据用户行标获取角色权限菜单
+            //根据行标获取
             $.ajax({
                 url: '/sys/hosorder/getOrderDetailByGuid',
                 contentType: 'application/json;charset=utf-8',

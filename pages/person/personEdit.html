@@ -52,7 +52,7 @@
                        class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item layui-form-pane" style="height: 38.5px;">
+        <div class="layui-form-item layui-form-pane" style="height: 38.5px;" id="m-pass">
             <label class="layui-form-label ">输入密码</label>
             <div class="layui-input-block">
                 <input type="password" name="password" id="password1" lay-verify="pass" placeholder="请输入密码"
@@ -199,6 +199,7 @@
         }
 
         if (data == 'edit') {
+        	$('#m-pass').css('display','none');
             layui.use('form', function () {
                 //先获取该用户所拥有的角色
                 var arr = [];
