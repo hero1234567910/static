@@ -242,9 +242,10 @@
                         arr[i] = $(this).val();
                     });
                     var params = {};
+                    data.field.rowGuid = rowGuid;
                     params['roleGuids'] = arr;
                     params['roleUser'] = data.field;
-                    console.log(JSON.stringify(data.field))
+                    
                     $.ajax({
                         async: false,
                         url: '/sys/user/update',
