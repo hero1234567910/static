@@ -1,9 +1,8 @@
 //打印
 var LODOP; //声明为全局变量       
 	function myPrint(ele) {
-//		CreatePrintPage(ele);       
-//		LODOP.PRINT();		       
-		console.log("aaaaa")
+		CreatePrintPage(ele);       
+		LODOP.PRINT();		       
 	};         
 //	function myPrintA() {		       
 //		CreatePrintPage();       
