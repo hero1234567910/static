@@ -174,8 +174,11 @@
                 dataType: 'JSON',
                 success: function (res) {
                     //console.log(res.data);
-                    if (res.code = '0') {
+                    if (res.code == '0') {
                         DeptCode =res.data;
+                        if(DeptCode == null){
+                            DeptCode = "根目录";
+                        }
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -484,7 +487,7 @@
     }
     .layui-table tr {
         transition: all .3s;
-        -webkit-transition: all .3s
+        -webkit-transition: all .3s;
         height:26px;
     }
 </style>

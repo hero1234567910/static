@@ -47,7 +47,8 @@ layui.use('table', function() {
 					field: 'orderStatusText',
 					width: 60,
 					title: '订单状态',
-					sort: true
+					sort: true,
+					templet: '#OrderStatus'
 				}, {
 					field: 'createTime',
 					width: 80,

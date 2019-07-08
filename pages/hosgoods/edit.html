@@ -80,7 +80,8 @@
 
 				<div class="layui-form-button">
 					<div class="layui-input-block">
-						<button class="layui-btn" lay-submit style="margin-left: 21%" lay-filter="formDemo">立即提交</button>
+						<button class="layui-btn" lay-submit style="margin-left: 21%;margin-top: 10px;
+						width: 100px;height: 50px;" lay-filter="formDemo">立即提交</button>
 					</div>
 				</div>
 			</div>
@@ -184,7 +185,7 @@
 			//接受父组件的值
 			var GoodsName = {};
 
-			function inputDataHandle(data, goodsName, isShelf) {
+			function inputDataHandle(data, goodsName, isShelf,rowGuid) {
 				var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
 				//新增
 				if (data == 'add') {

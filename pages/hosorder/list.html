@@ -68,6 +68,19 @@
 		<script type="text/html" id="indexTpl">
 			{{d.LAY_TABLE_INDEX+1}}
 	</script>
+	<script type="text/html" id="OrderStatus">
+		{{# if(d.orderStatusText == "待支付"){ }}
+		<span style="color: orange;">待支付</span>
+		{{# } else if(d.orderStatusText == "已支付"){ }}
+		<span style="color: green;">已支付</span>
+		{{# } else if(d.orderStatusText == "已接单") { }}
+		<span style="color: black;">已接单</span>
+		{{# } else if(d.orderStatusText == "已取消") { }}
+		<span style="color: red;">已取消</span>
+		{{# } else if(d.orderStatusText == "已完成") { }}
+		<span style="color: blue;">已完成</span>
+		{{# } }}
+	</script>
 		<style>
 			.layui-table {
 				margin: 0px 0;
@@ -222,7 +235,8 @@
 
 			.layui-table tr {
 				transition: all .3s;
-				-webkit-transition: all .3s height:26px;
+				-webkit-transition: all .3s ;
+				height:26px;
 			}
 
 			.layui-btn {

@@ -261,15 +261,15 @@ layui.use('table', function () {
                     body.find("#rowGuid").val(value.rowGuid);
                     body.find("#title").val(value.title);
                     body.find("#infoDate").val(layui.laytpl.toDateString(value.infoDate, "yyyy-MM-dd"));
-					if(findKey(getCodeValue(),value.infoType.toString()) == '链接类型'){
-						body.find("#addurl").css('display','');
-		            }
-                    body.find("#infoUrl").val(value.infoUrl);
+					// if(findKey(getCodeValue(),value.infoType.toString()) == '链接类型'){
+					// 	body.find("#addurl").css('display','');
+		            // }
+                    // body.find("#infoUrl").val(value.infoUrl);
 //                  body.find('#editor_id').val(value.content);
-                    for(var i=0;i<attach.length;i++){
-                    	var last = attach[i].contentType.substr('1',attach[i].contentType.length);
-                    	body.find("#fileName").append("<div style='float:left;margin-right:30px'><a href="+attach[i].url+" download="+attach[i].attachName+"><em><img class='m-img' src='../../Content/images/uploadico/"+last+".png' /></em><em id="+attach[i].rowGuid+" name='fileName'  style='color:#555555'>"+attach[i].attachName+"</em></a><em style='color:red;cursor:pointer;' onclick = 'deleteFile(this)' id="+attach[i].rowGuid+">删除</em></div>");
-                    }
+                    // for(var i=0;i<attach.length;i++){
+                    // 	var last = attach[i].contentType.substr('1',attach[i].contentType.length);
+                    // 	body.find("#fileName").append("<div style='float:left;margin-right:30px'><a href="+attach[i].url+" download="+attach[i].attachName+"><em><img class='m-img' src='../../Content/images/uploadico/"+last+".png' /></em><em id="+attach[i].rowGuid+" name='fileName'  style='color:#555555'>"+attach[i].attachName+"</em></a><em style='color:red;cursor:pointer;' onclick = 'deleteFile(this)' id="+attach[i].rowGuid+">删除</em></div>");
+                    // }
                     body.find("#editor_id").val(value.content);
                 },
                 end:function () {
@@ -287,7 +287,7 @@ layui.use('table', function () {
             maxmin: true,
             shadeClose: true, //点击遮罩关闭层
             area: ['800px', '600px'],
-            content: 'delivery.html',
+            content: '../../information/delivery.html',
             success: function (layero, index) {
                 var body = layer.getChildFrame('body', index);
                 var iframeWin = window[layero.find('iframe')[0]['name']];

@@ -19,7 +19,7 @@
             "token": window.localStorage.getItem('m_token')
         },
         complete: function (res) {
-            console.log(JSON.parse(res.responseText).code);
+            //console.log(JSON.parse(res.responseText).code);
             if (JSON.parse(res.responseText).code == '401') {
                 window.top.location.href = '../../login.html';
             }
