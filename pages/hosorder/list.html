@@ -79,6 +79,8 @@
 		<span style="color: red;">已取消</span>
 		{{# } else if(d.orderStatusText == "已完成") { }}
 		<span style="color: blue;">已完成</span>
+		{{# } else if(d.orderStatusText == "已退款") { }}
+		<span style="color: grey;">已退款</span>
 		{{# } }}
 	</script>
 		<style>
