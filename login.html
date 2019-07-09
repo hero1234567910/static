@@ -52,6 +52,7 @@
 <script type="text/javascript" src="Scripts/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="Scripts/layui/layui.js"></script>
 <script>
+    var map= {};
     layui.use(['form','layer'], function(){
         var form = layui.form();
         var layer = layui.layer;
@@ -74,7 +75,7 @@
                 success:function(res){
                     if(res.code == 0){
                         //获取token，并存储在localstorage
-                        console.log(res.data.user)
+                        //console.log(res.data.user)
                         window.localStorage.setItem('m_token',res.data.token);
                         window.localStorage.setItem('m_user_rowGuid',JSON.stringify(res.data.userRowGuid));
                         window.localStorage.setItem('m_user_userName',JSON.stringify(res.data.userName));
@@ -83,7 +84,6 @@
                         window.localStorage.setItem('m_deptGuid',JSON.stringify(res.data.deptGuid));
                         window.localStorage.setItem('m_deptName',JSON.stringify(res.data.deptName));
                         window.localStorage.setItem('m_loginId',JSON.stringify(res.data.loginId));
-                        //跳转至主页
                         location.href = 'index.html';
                     }
                     else
@@ -94,20 +94,11 @@
                     }
                 }
             }) ;
-            console.log(data.field)
+            //console.log(data.field)
         });
-//		     //自定义验证规则
-//	        form.verify({
-//	            'loginId': function (value,item) {
-//	            	console.log(item)
-//	            	console.log(value)
-//	                if(value == ''){
-//	                	layer.tips('不能为空', '#loginId');
-//	                	return;
-//	                }
-//	            }
-//	        });
     });
+
+    
 </script>
 
 </body>

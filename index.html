@@ -264,7 +264,8 @@ function playSound(){
         },
         created() {
             this.getMenu(),
-            this.getReciveOrder()
+            this.getReciveOrder(),
+            this.updateLoginTime()
         },
         methods: {
         	//查询订单接收状态
@@ -307,6 +308,29 @@ function playSound(){
                         }
                     }
                 });
+            },
+            updateLoginTime(){
+                var map={};
+                map['rowGuid'] = JSON.parse(window.localStorage.getItem('m_user_rowGuid'));
+            $.ajax({
+                async:false,
+                        url:'/sys/user/updateLoginTime',
+                        contentType: 'application/json;charset=utf-8',
+                        method:'put',
+                        data:JSON.stringify(map),
+                        dataType:'JSON',
+                        success:function(res){
+                            if(res.code == '0'){
+                                console.log("success");
+                            }
+                            else
+                                layer.msg(res.msg);
+                        },
+                        //谷歌浏览器出现Provisional headers are shown警告     
+                        error:function (data) {
+
+                        }
+            });
             }
         }
 

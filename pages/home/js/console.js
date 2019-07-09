@@ -6,25 +6,37 @@ var vm = new Vue({
     },
     created() {
         this.getRthing();
-    },
+	},
+	mounted() {
+		if(this.timer){
+			clearInterval(this.timer);
+		}else{
+			this.timer = setInterval(()=>{
+				this.getRthing();
+			},15000);//15秒刷新
+		}
+	},
+	destroyed() {
+		clearInterval(this.timer);
+	},
     methods: {
       //代办事项
       getRthing(){
-      	let self = this;
-      	$.ajax({
-			url:'/sys/hosorder/statistical',
-			contentType: 'application/json;charset=utf-8',
-			method: 'get',
-			dataType: 'JSON',
-			success: function(res) {
-				if (res.code == '0') {
-					self.orderCount = res.data;
+		let self = this;
+			$.ajax({
+				url:'/sys/hosorder/statistical',
+				contentType: 'application/json;charset=utf-8',
+				method: 'get',
+				dataType: 'JSON',
+				success: function(res) {
+					if (res.code == '0') {
+						self.orderCount = res.data;
+					}
+					if (res.code == '500') {
+						layer.msg(res.msg)
+					}
 				}
-				if (res.code == '500') {
-					layer.msg(res.msg)
-				}
-			}
-		});
+			}); 
       }
     }
 })
