@@ -25,7 +25,7 @@ $().ready(function() {
 						children: res.data
 					}],
 					click: function(node) {
-						console.log(node) //node即为当前点击的节点数据
+						//console.log(node) //node即为当前点击的节点数据
 						layui.table.reload('testReload', {
 							where: {
 								goodsTypeGuid: node.rowGuid
@@ -324,6 +324,7 @@ layui.use('table', function() {
 		if (obj.event === 'edit') {
 			//更新
 			var data = 'edit';
+			setTimeout(function(){
 			layer.open({
 				type: 2,
 				title: '菜品信息修改',
@@ -351,6 +352,7 @@ layui.use('table', function() {
 					layui.table.reload('testReload');
 				}
 			});
+		},1000);
 		}
 	});
 

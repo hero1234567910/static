@@ -175,32 +175,36 @@ layui.use('table', function() {
 
 
 	//编辑
+	var GoodsTypeCode;
 	var m_url = location.protocol + '\\\\' + location.hostname + ':' + (location.port == '' ? 80 : location.port);
 	table.on('tool(toolbar)', function(obj) {
+		
 		var value = obj.data;
-		var GoodsTypeCode = "";
-		$.ajax({
-			url: m_url + '/sys/hosgoodstype/getByGoodsTypeCode/' + value.pgoodsTypeCode,
-			contentType: 'application/json;charset=utf-8',
-			method: 'get',
-			data: JSON.stringify(value.pgoodsTypeCode),
-			dataType: 'JSON',
-			success: function(res) {
-				if (res.code = '0') {
-					if (res.data != null) {
-						GoodsTypeCode = res.data;
-					} else {
-						GoodsTypeCode = "菜品类别";
-					}
-				}
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-
-			}
-		});
+		
 		if (obj.event === 'edit') {
 			//更新
+			$.ajax({
+				url: m_url + '/sys/hosgoodstype/getByGoodsTypeCode/' + value.pgoodsTypeCode,
+				contentType: 'application/json;charset=utf-8',
+				method: 'get',
+				data: JSON.stringify(value.pgoodsTypeCode),
+				dataType: 'JSON',
+				success: function(res) {
+					if (res.code == '0') {
+						if (res.data != null) {
+							GoodsTypeCode = res.data;
+						} else {
+							GoodsTypeCode = "菜品类别";
+						}
+						//console.log(GoodsTypeCode);
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+	
+				}
+			});
 			var data = 'edit';
+			setTimeout(function(){
 			layer.open({
 				type: 2,
 				title: '修改菜品类型',
@@ -212,6 +216,7 @@ layui.use('table', function() {
 					var body = layer.getChildFrame('body', index);
 					var iframeWin = window[layero.find('iframe')[0]['name']];
 					iframeWin.inputDataHandle(data, value.goodsTypeCode, value.typeName);
+					//console.log(GoodsTypeCode+"1");
 					body.find("#rowId").val(value.rowId);
 					body.find("#rowGuid").val(value.rowGuid);
 					body.find("#goodsTypeCode").val(value.goodsTypeCode); //要修改的每个td的值存为变量传进去
@@ -222,9 +227,12 @@ layui.use('table', function() {
 				},
 				end: function() {
 					//刷新页面
+					// GoodsTypeCode.remove();
+					//console.log(GoodsTypeCode+"2");
 					layui.table.reload('testReload');
 				}
 			});
+		},1000);
 		}
 	});
 
