@@ -32,7 +32,7 @@
                 <div class="pf-user-photo">
                     <img src="Scripts/layui/images/face/user.png" width="40">
                 </div>
-                <h4 class="pf-user-name ellipsis">管理员</h4>
+                <h4 class="pf-user-name ellipsis" id="UserName"></h4>
                 <i style="font-size: 5px" class="layui-icon">&#xe61a;</i>
 
                 <div class="pf-user-panel">
@@ -130,8 +130,9 @@
 var lockReconnect = false;  //避免ws重复连接
 var ws = null;          // 判断当前浏览器是否支持WebSocket
 var wsUrl = "ws://ey.nxjnjc.com/websocket/20".replace("http","ws");
-createWebSocket(wsUrl);   //连接ws
-
+createWebSocket(wsUrl); //连接ws
+var reg = new RegExp('"','g');  
+$('#UserName').append(localStorage.getItem("m_user_userName").replace(reg,""));
 function createWebSocket(url) {
     try{
         if('WebSocket' in window){
