@@ -197,7 +197,7 @@
                         param['typeName'] = value;
                         param['rowGuid'] = param2;
                         if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
-                            return '部门名不能有特殊字符';
+                            return '菜品名不能有特殊字符';
                         }
                         if (value !== GoodsTypeName) {
                             $.ajax({
@@ -281,8 +281,8 @@
         border-radius: 2px;
         cursor: pointer;
         opacity: .9;
-        width: 70px;
-        height: 30px;
+        width: 90px;
+        height: 42px;
         line-height: 30px;
         padding: 0 10px;
         font-size: 13px;
