@@ -28,6 +28,8 @@
 							<option value="2">已接单</option>
 							<option value="3">已取消</option>
 							<option value="4">已完成</option>
+							<option value="5">已退款</option>
+							<option value="6">货到付款</option>
 							<option value="">所有</option>
 						</select>
 						
@@ -81,6 +83,8 @@
 		<span style="color: blue;">已完成</span>
 		{{# } else if(d.orderStatusText == "已退款") { }}
 		<span style="color: grey;">已退款</span>
+		{{# } else if(d.orderStatusText == "货到付款") { }}
+		<span style="color: orange;">货到付款</span>
 		{{# } }}
 	</script>
 		<style>

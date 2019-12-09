@@ -100,7 +100,13 @@
 					      <div class="layui-input-inline m">
 					        <input type="text" name="email" readonly="readonly" :value="orderInfo.orderMoney" class="layui-input">
 					      </div>
-					    </div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">付款类型</label>
+							<div class="layui-input-inline m">
+							  <input type="text" name="methodOfPayment" readonly="readonly" :value="orderInfo.methodOfPayment |checkMethodOfPayment" class="layui-input">
+							</div>
+						  </div>
 					    <div class="layui-form-item">
 					      <label class="layui-form-label">备注</label>
 					      <div class="layui-input-inline m">
