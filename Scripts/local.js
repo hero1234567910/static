@@ -53,6 +53,8 @@ var LODOP; //声明为全局变量
 		LODOP.SET_PRINT_STYLE("FontSize",10);
 		LODOP.ADD_PRINT_TEXT(320,5,200,20,"付款方式: "+ checkMethodOfPayment(ele.methodOfPayment));
 		LODOP.SET_PRINT_STYLE("FontSize",10);
+		LODOP.ADD_PRINT_TEXT(345,5,200,20,"所属科室: "+ ele.department);
+		LODOP.SET_PRINT_STYLE("FontSize",10);
 		var o=0;
 		for(var i=0;i<ele.hosOrderitems.length;i++){
 			LODOP.ADD_PRINT_TEXT(286+(i+1)*28,5,200,30,"【"+ele.hosOrderitems[i].hosGoods.goodsName+"】   数量:"+ele.hosOrderitems[i].count);
